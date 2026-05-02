@@ -53,7 +53,13 @@ Keep [.env.example](.env.example) as a template for **local** `.env` (gitignored
 
 For **anonymous** visitors on `/site/...`, the app calls `getVibeWebsites` / `getVibePages` with **`x-blocks-key` only** (no session Bearer) when those collections allow public reads.
 
-In **Blocks Cloud → Data Gateway** ([overview](https://cloud.seliseblocks.com/services/data-gateway)), open each Vibe collection → **Schema Access** → **View** tab → set access to **Public** → confirm. At minimum set **View** to Public for **VibeWebsite**, **VibePage**, and **VibeAsset** (and any other schema your published site queries anonymously). Leave **Create** / **Edit** / **Delete** restricted to logged-in users unless you intend otherwise.
+In **Blocks Cloud → Data Gateway** ([overview](https://cloud.seliseblocks.com/services/data-gateway)), open each Vibe collection → **Schema Access** → **View** tab → set access to **Public** → confirm for the collections the **anonymous `/site/...` app actually queries**.
+
+This app loads published sites with **`getVibeWebsites`** and **`getVibePages`** only (see `findPublishedPage` in the repo). Set **View** to **Public** for **VibeWebsite** and **VibePage** so incognito users can read those collections with **`x-blocks-key` only**.
+
+Keep **VibeAsset** (and any other schema) at **All logged in users** for **View** unless you add anonymous GraphQL that reads them: asset **metadata** is loaded in the editor via **`getVibeAssets`** with a user session; published page layouts embed **direct image URLs**, not gateway asset rows.
+
+Leave **Create** / **Edit** / **Delete** restricted to logged-in users unless you intend otherwise.
 
 **Security:** Public **View** exposes read access to those records to anyone with the project key (already in the client bundle). Ensure published payloads do not contain secrets.
 
