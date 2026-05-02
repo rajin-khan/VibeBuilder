@@ -1,0 +1,911 @@
+import { VibePageLayout, VibeBlock } from '../types';
+import { createId } from '../utils/slug';
+
+export type StarterTemplate = {
+  id: 'blank' | 'landing' | 'portfolio' | 'pricing' | 'local' | 'event';
+  name: string;
+  description: string;
+  build: () => VibePageLayout;
+};
+
+const block = (
+  type: VibeBlock['type'],
+  props: Record<string, unknown> = {}
+): VibeBlock => ({
+  id: createId('block'),
+  type,
+  props,
+});
+
+/** Consistent vertical rhythm + readable measure (inner max-width). */
+const wide = { maxWidth: 'wide' as const, paddingX: 'md' as const };
+const major = { paddingTop: 'xl' as const, paddingBottom: 'xl' as const, ...wide };
+const heroPad = { paddingTop: '2xl' as const, paddingBottom: '2xl' as const, ...wide };
+const compactY = { paddingTop: 'md' as const, paddingBottom: 'md' as const, paddingX: 'md' as const };
+const band = { paddingTop: 'lg' as const, paddingBottom: 'lg' as const, ...wide };
+
+/* ─── Themes (per-template palettes) ─── */
+const landing = {
+  bg: '#050814',
+  surface: '#0B1224',
+  surfaceAlt: '#0E172C',
+  accent: '#2DD4BF',
+  accent2: '#C5F74F',
+  cta: '#FF6B5B',
+};
+
+const portfolio = {
+  bg: '#09090B',
+  surface: '#121215',
+  surfaceAlt: '#18181C',
+  accent: '#EBFF4D',
+  accent2: '#FF8F6B',
+  cta: '#EBFF4D',
+};
+
+const pricing = {
+  bg: '#06080F',
+  surface: '#0C101C',
+  accent: '#FF6B5B',
+  accent2: '#2DD4BF',
+};
+
+const localBiz = {
+  bg: '#14110C',
+  surface: '#1C1812',
+  accent: '#F5C043',
+  accent2: '#E07A5F',
+};
+
+const summit = {
+  bg: '#070B14',
+  surface: '#0F1626',
+  accent: '#C5F74F',
+  accent2: '#3EE2C9',
+};
+
+const pricingPlans = [
+  {
+    name: 'Starter',
+    price: '$0',
+    period: 'forever',
+    body: 'Proof, publish, and iterate without a credit card.',
+    cta: 'Start free',
+    featured: false,
+    features: ['1 site · 8 pages', 'Autosaved layouts', 'Public renderer'],
+  },
+  {
+    name: 'Team',
+    price: '$34',
+    period: '/mo',
+    body: 'When drafts, reviews, and launches move in parallel.',
+    cta: 'Start trial',
+    featured: true,
+    features: ['Unlimited pages', 'Custom domains', 'Priority support'],
+  },
+  {
+    name: 'Scale',
+    price: 'Let’s talk',
+    period: '',
+    body: 'Complex roles, many sites, and success on retainer.',
+    cta: 'Book a walkthrough',
+    featured: false,
+    features: ['Workspace controls', 'Audit trail', 'Dedicated support'],
+  },
+];
+
+export const starterTemplates: StarterTemplate[] = [
+  {
+    id: 'blank',
+    name: 'Blank canvas',
+    description: 'Start from scratch with an empty page.',
+    build: () => ({ version: 2, blocks: [] }),
+  },
+  {
+    id: 'landing',
+    name: 'SaaS landing',
+    description: 'Product story with proof, pricing, and FAQ — cool teal and lime accents.',
+    build: () => ({
+      version: 2,
+      blocks: [
+        block('navbar', {
+          brand: 'Aurora Ops',
+          cta: 'Start free',
+          url: '#pricing',
+          sticky: true,
+          background: landing.bg,
+          accent: landing.accent,
+          paddingTop: 'sm',
+          paddingBottom: 'sm',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            { label: 'Product', url: '#product' },
+            { label: 'Customers', url: '#proof' },
+            { label: 'Pricing', url: '#pricing' },
+            { label: 'FAQ', url: '#faq' },
+          ],
+        }),
+        block('breadcrumbs', {
+          background: landing.surface,
+          accent: landing.accent,
+          ...compactY,
+          maxWidth: 'wide',
+          items: [
+            { label: 'Product', url: '#' },
+            { label: 'Aurora Ops', url: '#' },
+            { label: 'Overview', url: '' },
+          ],
+        }),
+        block('hero', {
+          eyebrow: 'Operations, without the spreadsheet sprawl',
+          headline: 'Ship calm customer journeys from one focused surface',
+          body: 'Aurora Ops helps lean teams plan workflows, assemble reusable pages, and publish with confidence — without losing the story in docs and decks.',
+          cta: 'Build a workspace',
+          secondaryCta: 'View sample site',
+          background: landing.bg,
+          accent: landing.accent,
+          heroLayout: 'split',
+          align: 'left',
+          heroHeight: 680,
+          headlineSize: 'lg',
+          primaryButtonStyle: 'solid',
+          paddingTop: '2xl',
+          paddingBottom: '2xl',
+          paddingX: 'md',
+          maxWidth: 'wide',
+        }),
+        block('badgeRow', {
+          background: landing.surfaceAlt,
+          accent: landing.accent2,
+          ...compactY,
+          maxWidth: 'wide',
+          badges: [
+            { label: 'SOC2-ready posture' },
+            { label: 'EU hosting' },
+            { label: '99.9% target uptime' },
+            { label: 'Visual editor' },
+          ],
+        }),
+        block('marquee', {
+          text: '  Trusted by product, marketing, and launch teams · Ship drafts privately · Publish when ready · ',
+          seconds: 28,
+          background: landing.surface,
+          accent: landing.accent,
+          paddingTop: 'sm',
+          paddingBottom: 'sm',
+        }),
+        block('logoStrip', {
+          eyebrow: 'Teams shipping with Aurora',
+          layout: 'cards',
+          background: landing.surfaceAlt,
+          accent: landing.accent2,
+          ...band,
+          items: [
+            { name: 'SignalCraft' },
+            { name: 'OrbitWorks' },
+            { name: 'Northline' },
+            { name: 'ModuLab' },
+            { name: 'StudioFold' },
+          ],
+        }),
+        block('features', {
+          eyebrow: 'Product',
+          title: 'Everything stays legible, even on launch week',
+          body: 'Structured blocks, predictable spacing, and a renderer that respects what you designed.',
+          columns: 3,
+          cardStyle: 'solid',
+          iconStyle: 'tile',
+          background: landing.bg,
+          accent: landing.accent,
+          anchorId: 'product',
+          paddingTop: '2xl',
+          paddingBottom: '2xl',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            {
+              icon: 'Sparkles',
+              title: 'Guided composition',
+              body: 'Turn goals into sections visitors can scan in seconds — no mystery padding or mystery fonts.',
+            },
+            { icon: 'Zap', title: 'Fast iteration', body: 'Draft privately, preview on real breakpoints, publish once.' },
+            {
+              icon: 'ShieldCheck',
+              title: 'Governed output',
+              body: 'Reuse blocks so brand, accessibility, and SEO stay aligned as pages multiply.',
+            },
+          ],
+        }),
+        block('stats', {
+          eyebrow: 'Proof',
+          title: 'Teams report shorter, saner launches',
+          background: landing.surface,
+          accent: landing.accent2,
+          anchorId: 'proof',
+          align: 'left',
+          ...major,
+          items: [
+            { value: '−38%', label: 'avg. time from draft to public page' },
+            { value: '12k+', label: 'published sections this quarter' },
+            { value: '4.9', label: 'median internal satisfaction (teams)' },
+            { value: '24h', label: 'from blank canvas to first shareable URL' },
+          ],
+        }),
+        block('testimonialCarousel', {
+          title: 'What launch leads say',
+          intervalSec: 7,
+          background: landing.bg,
+          accent: landing.accent,
+          ...major,
+          items: [
+            {
+              quote: 'We stopped duplicating hero sections in three tools. Aurora is our single source of truth.',
+              name: 'Maya Ortega',
+              role: 'Head of Product Marketing',
+              image: '',
+            },
+            {
+              quote: 'Designers and engineers finally review the same URL. Publishing feels safe again.',
+              name: 'Jonah Reeves',
+              role: 'Engineering lead',
+              image: '',
+            },
+            {
+              quote: 'The preset spacing alone saved us a week of CSS whack-a-mole.',
+              name: 'Sofi Adeyemi',
+              role: 'Brand director',
+              image: '',
+            },
+          ],
+        }),
+        block('pricingTable', {
+          eyebrow: 'Pricing',
+          title: 'Plans that respect how you grow',
+          body: 'Start on the free tier. Add collaboration when pages and people multiply.',
+          background: landing.surfaceAlt,
+          accent: landing.cta,
+          anchorId: 'pricing',
+          ...major,
+          items: pricingPlans,
+        }),
+        block('faq', {
+          eyebrow: 'FAQ',
+          title: 'Details teams ask before they commit',
+          body: 'Straight answers about drafts, publishing, and who can change what.',
+          background: landing.bg,
+          accent: landing.accent,
+          anchorId: 'faq',
+          ...major,
+          items: [
+            {
+              question: 'Can I edit after publishing?',
+              answer: 'Yes. Draft and published versions stay separate until you explicitly ship again.',
+            },
+            {
+              question: 'Do you support custom domains?',
+              answer: 'Yes on paid tiers — point DNS once, we handle TLS and cache-friendly delivery.',
+            },
+            {
+              question: 'Is content exportable?',
+              answer: 'Layouts are durable JSON you can version, diff, and store alongside your codebase.',
+            },
+            {
+              question: 'What about reduced motion?',
+              answer: 'Motion blocks honor prefers-reduced-motion and fall back to static presentation.',
+            },
+          ],
+        }),
+        block('footer', {
+          brand: 'Aurora Ops',
+          tagline: 'A sharper operating layer for teams that ship in public.',
+          copyright: '© 2026 Aurora Ops',
+          background: '#03050C',
+          accent: landing.accent,
+          paddingTop: 'xl',
+          paddingBottom: 'xl',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            {
+              heading: 'Product',
+              links: [
+                { label: 'Overview', url: '#' },
+                { label: 'Changelog', url: '#' },
+                { label: 'Security', url: '#' },
+              ],
+            },
+            {
+              heading: 'Company',
+              links: [
+                { label: 'About', url: '#' },
+                { label: 'Careers', url: '#' },
+                { label: 'Press', url: '#' },
+              ],
+            },
+            {
+              heading: 'Legal',
+              links: [
+                { label: 'Privacy', url: '#' },
+                { label: 'Terms', url: '#' },
+              ],
+            },
+          ],
+        }),
+      ],
+    }),
+  },
+  {
+    id: 'portfolio',
+    name: 'Agency portfolio',
+    description: 'Bold studio site with motion headline, work grid, and testimonials.',
+    build: () => ({
+      version: 2,
+      blocks: [
+        block('navbar', {
+          brand: 'Holloway Studio',
+          cta: 'Book a call',
+          url: '#contact',
+          sticky: true,
+          background: portfolio.bg,
+          accent: portfolio.accent,
+          paddingTop: 'sm',
+          paddingBottom: 'sm',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            { label: 'Work', url: '#work' },
+            { label: 'Process', url: '#process' },
+            { label: 'Team', url: '#team' },
+            { label: 'Contact', url: '#contact' },
+          ],
+        }),
+        block('hero', {
+          eyebrow: 'Brand systems · campaign pages · launch rituals',
+          headline: 'We design launches people remember — and can actually use',
+          body: 'Holloway partners with founders and in-house teams to ship cinematic, fast pages without sacrificing clarity.',
+          cta: 'See selected work',
+          secondaryCta: 'Download capabilities',
+          background: portfolio.bg,
+          accent: portfolio.accent,
+          heroLayout: 'overlay',
+          align: 'left',
+          heroHeight: 720,
+          headlineSize: 'xl',
+          overlayStrength: 48,
+          ...heroPad,
+        }),
+        block('animatedHeadline', {
+          text: 'Clarity first. Drama second.',
+          sub: 'Motion, type, and layout that behave on every breakpoint.',
+          style: 'gradientShift',
+          background: portfolio.surface,
+          accent: portfolio.accent2,
+          ...major,
+        }),
+        block('gallery', {
+          title: 'Selected work',
+          body: 'Recent launches across SaaS, culture, hospitality, and commerce.',
+          layout: 'masonry',
+          columns: 3,
+          background: portfolio.surfaceAlt,
+          accent: portfolio.accent,
+          paddingTop: '2xl',
+          paddingBottom: '2xl',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            { caption: 'Atlas — product reveal', image: '' },
+            { caption: 'Velvet Room — reservations', image: '' },
+            { caption: 'Mono Rail — beta waitlist', image: '' },
+            { caption: 'Field Note — editorial', image: '' },
+          ],
+        }),
+        block('iconList', {
+          title: 'How we collaborate',
+          background: portfolio.bg,
+          accent: portfolio.accent2,
+          ...band,
+          items: [
+            { icon: 'MessageSquareQuote', text: 'Async briefs and tight feedback windows — no 40-message threads.' },
+            { icon: 'Palette', text: 'Art direction and components that survive handoff to engineering.' },
+            { icon: 'Rocket', text: 'Launch-day support until analytics look sane.' },
+          ],
+        }),
+        block('process', {
+          eyebrow: 'Process',
+          title: 'A clear path from messy brief to polished URL',
+          body: 'You bring the constraints; we bring sequencing, narrative, and production craft.',
+          layout: 'cards',
+          background: portfolio.surface,
+          accent: portfolio.accent,
+          anchorId: 'process',
+          ...major,
+          items: [
+            { title: 'Immersion', body: 'Stakeholder interviews, competitive reads, and tone calibration.' },
+            { title: 'Design systems', body: 'Type, color, motion, and section recipes scoped to your launch.' },
+            { title: 'Build & ship', body: 'Responsive pages, accessibility passes, and analytics-ready markup.' },
+          ],
+        }),
+        block('testimonialCarousel', {
+          title: 'Warm words from cold launches',
+          intervalSec: 6,
+          background: portfolio.surfaceAlt,
+          accent: portfolio.accent2,
+          ...major,
+          items: [
+            {
+              quote: 'They made our Series B story feel inevitable — not loud.',
+              name: 'Elena Cho',
+              role: 'CEO, Lattice Owl',
+              image: '',
+            },
+            {
+              quote: 'Our engineers stopped rebuilding hero spacing every sprint.',
+              name: 'Marcus Bell',
+              role: 'CTO, Plainrail',
+              image: '',
+            },
+            {
+              quote: 'The portfolio does not oversell. That is why we hired them.',
+              name: 'Priya Nanda',
+              role: 'Brand lead, Sundial',
+              image: '',
+            },
+          ],
+        }),
+        block('team', {
+          eyebrow: 'Team',
+          title: 'Senior practitioners, small footprint',
+          layout: 'cards',
+          background: portfolio.bg,
+          accent: portfolio.accent,
+          anchorId: 'team',
+          ...major,
+          items: [
+            { name: 'Noah Holloway', role: 'Creative director', image: '' },
+            { name: 'Iris Van', role: 'Design lead', image: '' },
+            { name: 'Tej Kapoor', role: 'Frontend partner', image: '' },
+          ],
+        }),
+        block('contact', {
+          title: 'Tell us about the launch that cannot fail',
+          body: 'Drop context, timeline, and links. We reply within two business days.',
+          background: portfolio.surface,
+          accent: portfolio.accent,
+          anchorId: 'contact',
+          ...major,
+        }),
+        block('footer', {
+          brand: 'Holloway Studio',
+          tagline: 'Visual systems for teams who care how the scroll feels.',
+          copyright: '© 2026 Holloway Studio',
+          background: '#05050A',
+          accent: portfolio.accent,
+          paddingTop: 'xl',
+          paddingBottom: 'xl',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            {
+              heading: 'Studio',
+              links: [
+                { label: 'Work', url: '#' },
+                { label: 'Process', url: '#' },
+                { label: 'Contact', url: '#' },
+              ],
+            },
+            {
+              heading: 'Social',
+              links: [
+                { label: 'Instagram', url: '#' },
+                { label: 'LinkedIn', url: '#' },
+              ],
+            },
+          ],
+        }),
+      ],
+    }),
+  },
+  {
+    id: 'pricing',
+    name: 'Product pricing',
+    description: 'Conversion-focused pricing with comparison, table, and proof.',
+    build: () => ({
+      version: 2,
+      blocks: [
+        block('breadcrumbs', {
+          background: pricing.bg,
+          accent: pricing.accent2,
+          ...compactY,
+          maxWidth: 'wide',
+          items: [
+            { label: 'Product', url: '#' },
+            { label: 'Pricing', url: '' },
+          ],
+        }),
+        block('hero', {
+          eyebrow: 'Pricing',
+          headline: 'Fewer surprises. More shipping.',
+          body: 'Choose a tier that matches your stage — upgrade when collaborators and pages multiply.',
+          cta: 'Start free',
+          secondaryCta: 'Compare below',
+          background: pricing.bg,
+          accent: pricing.accent,
+          heroLayout: 'center',
+          align: 'center',
+          heroHeight: 560,
+          headlineSize: 'lg',
+          ...heroPad,
+        }),
+        block('starRating', {
+          maxStars: 5,
+          value: 4.8,
+          showNumeric: true,
+          label: 'Average rating from onboarding interviews',
+          background: pricing.surface,
+          accent: pricing.accent2,
+          ...band,
+        }),
+        block('pricingTable', {
+          eyebrow: 'Plans',
+          title: 'Pick what matches your runway',
+          body: 'Every tier includes the canvas, JSON backups, and the live renderer.',
+          background: pricing.bg,
+          accent: pricing.accent,
+          ...major,
+          items: pricingPlans.map((p, i) =>
+            i === 1 ? { ...p, featured: true } : { ...p, featured: false }
+          ),
+        }),
+        block('comparison', {
+          eyebrow: 'Why teams switch',
+          title: 'From scattered tools to one publishing spine',
+          background: pricing.surface,
+          accent: pricing.accent2,
+          style: 'cards',
+          ...major,
+          leftTitle: 'Before',
+          leftBody: 'Copy, visuals, approvals, and live URLs drift across drives, tickets, and chat.',
+          rightTitle: 'After',
+          rightBody: 'A single structured layout source with drafts, review, and deliberate publish.',
+        }),
+        block('simpleTable', {
+          caption: 'Feature snapshot',
+          striped: true,
+          background: pricing.bg,
+          accent: pricing.accent2,
+          ...band,
+          headers: [{ text: 'Capability' }, { text: 'Starter' }, { text: 'Team' }, { text: 'Scale' }],
+          rows: [
+            { cells: [{ text: 'Websites' }, { text: '1' }, { text: '5' }, { text: 'Unlimited' }] },
+            { cells: [{ text: 'Custom domains' }, { text: '—' }, { text: 'Yes' }, { text: 'Yes' }] },
+            { cells: [{ text: 'SSO / SCIM' }, { text: '—' }, { text: 'Add-on' }, { text: 'Included' }] },
+            { cells: [{ text: 'Success manager' }, { text: '—' }, { text: '—' }, { text: 'Yes' }] },
+          ],
+        }),
+        block('socialProof', {
+          title: 'Teams that outgrew duct-taped stacks',
+          background: pricing.surface,
+          accent: pricing.accent,
+          ...major,
+          rating: 5,
+          items: [
+            {
+              quote: 'We finally know which version is live. Sounds small — saved us constantly.',
+              name: 'Avery Lin',
+              role: 'PM, Coalesce',
+            },
+            {
+              quote: 'Pricing tracked usage honestly. No gotchas in month three.',
+              name: 'River Santos',
+              role: 'Finance, Driftmine',
+            },
+            {
+              quote: 'Comparison charts convinced our CFO in one pass.',
+              name: 'Kim Okoro',
+              role: 'RevOps',
+            },
+          ],
+        }),
+        block('faq', {
+          eyebrow: 'FAQ',
+          title: 'Billing & rollout questions',
+          body: 'Everything we hear during procurement, condensed.',
+          background: pricing.bg,
+          accent: pricing.accent2,
+          ...major,
+          items: [
+            {
+              question: 'Can we start on Starter and migrate later?',
+              answer: 'Yes. Upgrades preserve layout JSON; we never lock your content.',
+            },
+            {
+              question: 'Do you offer annual invoicing?',
+              answer: 'Annual contracts with net-30 are available on Team and Scale.',
+            },
+            {
+              question: 'What happens if we pause?',
+              answer: 'Sites stay readable; editing pauses until you reactivate.',
+            },
+          ],
+        }),
+        block('cta', {
+          eyebrow: 'Next step',
+          title: 'Create a site in minutes',
+          body: 'Import a starter, tune tokens, and invite collaborators when you are ready.',
+          cta: 'Start free',
+          background: pricing.surface,
+          accent: pricing.accent,
+          align: 'center',
+          style: 'solid',
+          ...major,
+        }),
+      ],
+    }),
+  },
+  {
+    id: 'local',
+    name: 'Restaurant / local',
+    description: 'Warm hospitality layout with marquee, menu cards, and map.',
+    build: () => ({
+      version: 2,
+      blocks: [
+        block('navbar', {
+          brand: 'Kin & Copper',
+          cta: 'Reserve',
+          url: '#contact',
+          sticky: true,
+          background: localBiz.bg,
+          accent: localBiz.accent,
+          paddingTop: 'sm',
+          paddingBottom: 'sm',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            { label: 'Menu', url: '#menu' },
+            { label: 'Visit', url: '#visit' },
+            { label: 'Stories', url: '#stories' },
+          ],
+        }),
+        block('hero', {
+          eyebrow: 'Neighborhood kitchen · natural wine',
+          headline: 'Slow plates, sharp flavors, room to stay awhile',
+          body: 'Kin & Copper serves coastal dinners, weekend brunch, and private tables — lit softly, paced generously.',
+          cta: 'Reserve a table',
+          secondaryCta: 'View menu',
+          background: localBiz.bg,
+          accent: localBiz.accent,
+          heroLayout: 'split',
+          align: 'left',
+          heroHeight: 700,
+          ...heroPad,
+        }),
+        block('marquee', {
+          text: '  Tuscan wines · Wood-fired bread · Walk-ins welcome after 21:00 · Tuesday vinyl nights · ',
+          seconds: 30,
+          background: localBiz.surface,
+          accent: localBiz.accent2,
+          paddingTop: 'sm',
+          paddingBottom: 'sm',
+        }),
+        block('cardGrid', {
+          eyebrow: 'Menu highlights',
+          title: 'What guests linger over',
+          background: localBiz.bg,
+          accent: localBiz.accent2,
+          anchorId: 'menu',
+          ...major,
+          items: [
+            {
+              tag: 'Dinner',
+              title: 'Charred brassica & brown butter',
+              body: 'Hazelnut, anchovy pangrattato, lemon.',
+              url: '#',
+            },
+            {
+              tag: 'Brunch',
+              title: 'Ricotta, stone fruit, brioche',
+              body: 'Basil honey, flaky salt, espresso on the side.',
+              url: '#',
+            },
+            {
+              tag: 'Pairing',
+              title: 'Pet-nat by the glass',
+              body: 'Rotating small producers — ask your server.',
+              url: '#',
+            },
+          ],
+        }),
+        block('iconList', {
+          title: 'The little things',
+          background: localBiz.surface,
+          accent: localBiz.accent,
+          ...band,
+          items: [
+            { icon: 'Award', text: 'Local produce first; seafood on spotlight Fridays.' },
+            { icon: 'Star', text: 'Low-intervention wines chosen for clarity, not trends.' },
+            { icon: 'ShieldCheck', text: 'Step-free entrance and spacious tables on request.' },
+          ],
+        }),
+        block('location', {
+          title: 'Find us on Court Street',
+          address: '188 Court Street, Brooklyn',
+          hours: 'Tue–Sun · 17:30–23:00 · Brunch Sat–Sun 10:00–15:00',
+          background: localBiz.bg,
+          accent: localBiz.accent,
+          anchorId: 'visit',
+          ...major,
+        }),
+        block('socialProof', {
+          title: 'Notes from the neighborhood',
+          background: localBiz.surface,
+          accent: localBiz.accent,
+          ...major,
+          rating: 5,
+          items: [
+            {
+              quote: 'The room hums — you can hear your table again.',
+              name: 'The City Table',
+              role: 'Review',
+            },
+            {
+              quote: 'Worth the reservation. Save room for dessert.',
+              name: 'Field Notes Mag',
+              role: 'Feature',
+            },
+            {
+              quote: 'Our anniversary default.',
+              name: 'Mara & Jules',
+              role: 'Guests',
+            },
+          ],
+        }),
+        block('contact', {
+          title: 'Reserve or plan a celebration',
+          body: 'Tell us party size, occasion, and dietary notes — we will confirm by email.',
+          background: localBiz.bg,
+          accent: localBiz.accent,
+          anchorId: 'contact',
+          ...major,
+        }),
+        block('footer', {
+          brand: 'Kin & Copper',
+          tagline: 'Hospitality with appetite and patience.',
+          copyright: '© 2026 Kin & Copper',
+          background: '#0D0A08',
+          accent: localBiz.accent,
+          paddingTop: 'lg',
+          paddingBottom: 'lg',
+          paddingX: 'md',
+          maxWidth: 'wide',
+          items: [
+            {
+              heading: 'Visit',
+              links: [
+                { label: 'Directions', url: '#' },
+                { label: 'Private dining', url: '#' },
+              ],
+            },
+            {
+              heading: 'Connect',
+              links: [
+                { label: 'Instagram', url: '#' },
+                { label: 'Gift cards', url: '#' },
+              ],
+            },
+          ],
+        }),
+      ],
+    }),
+  },
+  {
+    id: 'event',
+    name: 'Event launch',
+    description: 'Summit landing with countdown, schedule, and mailing list.',
+    build: () => ({
+      version: 2,
+      blocks: [
+        block('badgeRow', {
+          background: summit.bg,
+          accent: summit.accent,
+          ...compactY,
+          maxWidth: 'wide',
+          badges: [
+            { label: 'May 30, 2026' },
+            { label: 'Hybrid' },
+            { label: 'Limited seats' },
+            { label: 'Dhaka · Foundry Hall' },
+          ],
+        }),
+        block('hero', {
+          eyebrow: 'Vibe Summit 2026',
+          headline: 'One day for people who obsess over interfaces',
+          body: 'Talks, live critiques, and hands-on labs for designers, founders, and frontend teams building the next decade of software.',
+          cta: 'Reserve a seat',
+          secondaryCta: 'Partners',
+          background: summit.bg,
+          accent: summit.accent,
+          heroLayout: 'center',
+          align: 'center',
+          heroHeight: 640,
+          headlineSize: 'lg',
+          ...heroPad,
+        }),
+        block('countdown', {
+          eyebrow: 'Doors open in',
+          title: 'May 30, 2026 · 10:00',
+          cta: 'Add to calendar',
+          target: '2026-05-30T10:00:00+06:00',
+          background: summit.surface,
+          accent: summit.accent2,
+          ...major,
+        }),
+        block('timeline', {
+          title: 'Main stage',
+          orientation: 'vertical',
+          background: summit.bg,
+          accent: summit.accent2,
+          ...major,
+          items: [
+            {
+              date: '10:00',
+              title: 'Opening keynote',
+              body: 'Calm tools, sharp teams — lessons from shipping at unreasonable speed.',
+            },
+            {
+              date: '13:15',
+              title: 'Interface labs',
+              body: 'Layout, motion, and content systems you can steal Monday morning.',
+            },
+            {
+              date: '16:30',
+              title: 'Live teardowns',
+              body: 'Senior designers review real products with the room.',
+            },
+          ],
+        }),
+        block('animatedHeadline', {
+          text: 'Bring your toughest WIP.',
+          sub: 'Leave with a clearer story — and friends who get it.',
+          style: 'fadeRise',
+          background: summit.surface,
+          accent: summit.accent,
+          ...major,
+        }),
+        block('team', {
+          eyebrow: 'Speakers',
+          title: 'People who ship in public',
+          layout: 'avatar',
+          background: summit.bg,
+          accent: summit.accent2,
+          ...major,
+          items: [
+            { name: 'Amira Khan', role: 'Product design, Mercury Labs', image: '' },
+            { name: 'Diego Voss', role: 'Frontend architect', image: '' },
+            { name: 'Ren Patel', role: 'Content systems', image: '' },
+          ],
+        }),
+        block('location', {
+          title: 'Foundry Hall · Gulshan',
+          address: 'Plot 12, North Avenue, Dhaka',
+          hours: 'Saturday 10:00–19:00 · Registration from 09:15',
+          background: summit.surface,
+          accent: summit.accent,
+          ...major,
+        }),
+        block('newsletter', {
+          eyebrow: 'Stay in the loop',
+          title: 'Speaker drops, scholarship rounds, and afterparty news',
+          body: 'One email per milestone — no daily spam.',
+          placeholder: 'you@team.com',
+          cta: 'Join the list',
+          background: summit.bg,
+          accent: summit.accent,
+          layout: 'card',
+          ...major,
+        }),
+      ],
+    }),
+  },
+];

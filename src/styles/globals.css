@@ -1,0 +1,531 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html.dark {
+  transition: background-color var(--transition-duration) ease;
+}
+
+.theme-toggle-icon {
+  transition: all var(--transition-duration) ease;
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  /* Hide scrollbars for webkit browsers */
+  .scrollbar-hide {
+    -ms-overflow-style: none; /* IE and Edge */
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, Opera */
+  }
+
+  /* Help the user select text in the button, need this for the uilm extension edge cases */
+  .button-text-select {
+    -webkit-user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+  }
+
+  .content-visibility-auto {
+    content-visibility: auto;
+    contain-intrinsic-size: 0 240px;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  html {
+    width: 100%;
+    min-height: 100%;
+    color-scheme: dark;
+    font-feature-settings:
+      'cv02',
+      'cv03',
+      'cv04',
+      'cv11',
+      'ss01';
+  }
+  body {
+    @apply bg-background text-foreground antialiased;
+    width: 100%;
+    min-height: 100%;
+    margin: 0;
+    font-family: theme('fontFamily.sans');
+  }
+
+  #root {
+    width: 100%;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-family: theme('fontFamily.display');
+    letter-spacing: -0.018em;
+    line-height: 1.15;
+  }
+
+  h4,
+  h5,
+  h6 {
+    font-family: theme('fontFamily.display');
+    letter-spacing: -0.012em;
+  }
+
+  code,
+  kbd,
+  pre,
+  samp {
+    font-family: theme('fontFamily.mono');
+  }
+
+  th,
+  td {
+    @apply relative;
+  }
+
+  th::before,
+  th::after,
+  td::before,
+  td::after {
+    content: '';
+    @apply absolute left-0 w-full;
+  }
+
+  th::before,
+  td::before {
+    @apply -top-px border-t border-border;
+  }
+
+  th::after,
+  td::after {
+    @apply -bottom-px border-b border-border;
+  }
+
+  input[type='time'] {
+    -webkit-appearance: none;
+    appearance: none;
+  }
+  input[type='time']::-webkit-calendar-picker-indicator {
+    display: none !important;
+  }
+  input[type='time']::-moz-calendar-picker-indicator {
+    display: none !important;
+  }
+
+  :root {
+    --white: 0, 0%, 100%;
+
+    /* === Iris (primary, deep indigo-violet) === */
+    --primary-50: 226, 100%, 97%;
+    --primary-100: 226, 100%, 94%;
+    --primary-200: 228, 96%, 89%;
+    --primary-300: 230, 94%, 82%;
+    --primary-400: 234, 89%, 74%;
+    --primary-500: 239, 84%, 67%;
+    --primary-600: 244, 75%, 58%; /* #4F46E5, brand */
+    --primary-700: 245, 58%, 51%;
+    --primary-800: 244, 55%, 41%;
+    --primary-900: 242, 47%, 34%;
+    --primary-950: 244, 47%, 20%;
+    --primary-foreground: 0, 0%, 100%;
+
+    /* === Spark (accent, warm coral) === */
+    --secondary-50: 356, 100%, 97%;
+    --secondary-100: 356, 100%, 95%;
+    --secondary-200: 353, 96%, 90%;
+    --secondary-300: 353, 96%, 82%;
+    --secondary-400: 351, 95%, 72%;
+    --secondary-500: 350, 89%, 60%;
+    --secondary-600: 347, 77%, 50%;
+    --secondary-700: 346, 84%, 41%;
+    --secondary-800: 343, 80%, 35%;
+    --secondary-900: 343, 75%, 30%;
+    --secondary-foreground: 0, 0%, 100%;
+
+    /* === Mist (warm-tinted slate, neutrals) === */
+    --neutral-25: 60, 9%, 99%;
+    --neutral-50: 60, 9%, 98%;
+    --neutral-100: 60, 5%, 96%;
+    --neutral-200: 20, 6%, 90%;
+    --neutral-300: 24, 6%, 83%;
+    --neutral-400: 25, 5%, 64%;
+    --neutral-500: 25, 5%, 45%;
+    --neutral-600: 33, 5%, 32%;
+    --neutral-700: 30, 6%, 24%;
+    --neutral-800: 21, 7%, 14%;
+    --neutral-900: 240, 16%, 6%;
+
+    /* === Burgundy (kept for legacy components) === */
+    --burgundy-50: 0, 0%, 91%;
+    --burgundy-100: 346, 46%, 84%;
+    --burgundy-200: 351, 40%, 67%;
+    --burgundy-300: 351, 38%, 54%;
+    --burgundy-400: 350, 53%, 48%;
+    --burgundy-500: 350, 72%, 43%;
+    --burgundy-600: 348, 76%, 39%;
+    --burgundy-700: 346, 83%, 34%;
+    --burgundy-800: 345, 89%, 30%;
+    --burgundy-900: 345, 100%, 25%;
+
+    --surface: 60, 9%, 98%;
+
+    --high-emphasis: 240, 16%, 6%;
+    --medium-emphasis: 30, 6%, 30%;
+    --low-emphasis: 25, 5%, 55%;
+
+    /* === Semantic === */
+    --success: 152, 73%, 36%;
+    --success-background: 152, 60%, 95%;
+    --success-high-emphasis: 152, 73%, 22%;
+
+    --warning: 38, 92%, 50%;
+    --warning-background: 47, 100%, 96%;
+    --warning-high-emphasis: 35, 92%, 33%;
+
+    --error: 350, 89%, 60%;
+    --error-background: 356, 100%, 97%;
+    --error-high-emphasis: 343, 80%, 35%;
+
+    /* === Decorative families (light mode) === */
+    --purple-50: 270, 100%, 97%;
+    --purple-100: 269, 100%, 92%;
+    --purple-200: 269, 100%, 86%;
+    --purple-300: 269, 95%, 76%;
+    --purple-400: 270, 91%, 65%;
+    --purple-500: 271, 91%, 56%;
+    --purple-600: 271, 81%, 48%;
+    --purple-700: 272, 72%, 41%;
+    --purple-800: 272, 67%, 35%;
+    --purple-900: 273, 66%, 29%;
+
+    --pink-50: 327, 73%, 97%;
+    --pink-100: 326, 78%, 95%;
+    --pink-200: 326, 85%, 90%;
+    --pink-300: 327, 87%, 81%;
+    --pink-400: 329, 86%, 70%;
+    --pink-500: 330, 81%, 60%;
+    --pink-600: 333, 71%, 51%;
+    --pink-700: 335, 78%, 42%;
+    --pink-800: 336, 74%, 35%;
+    --pink-900: 336, 69%, 30%;
+
+    --green-50: 152, 76%, 95%;
+    --green-100: 149, 80%, 90%;
+    --green-200: 152, 76%, 80%;
+    --green-300: 156, 72%, 67%;
+    --green-400: 158, 64%, 52%;
+    --green-500: 152, 73%, 41%;
+    --green-600: 152, 73%, 36%;
+    --green-700: 153, 75%, 28%;
+    --green-800: 155, 70%, 23%;
+    --green-900: 155, 68%, 19%;
+
+    /* === App chrome === */
+    --sidebar-background: 60, 9%, 98%;
+    --sidebar-foreground: 240, 14%, 14%;
+    --sidebar-primary: 244, 75%, 58%;
+    --sidebar-primary-foreground: 0, 0%, 100%;
+    --sidebar-accent: 60, 5%, 96%;
+    --sidebar-accent-foreground: 240, 16%, 6%;
+    --sidebar-border: 20, 6%, 90%;
+    --sidebar-ring: 244, 75%, 58%;
+
+    --background: 0, 0%, 100%;
+    --foreground: 240, 16%, 6%;
+    --card: 0, 0%, 100%;
+    --card-foreground: 240, 16%, 6%;
+    --popover: 0, 0%, 100%;
+    --popover-foreground: 240, 16%, 6%;
+    --muted: 60, 9%, 96%;
+    --muted-foreground: 30, 6%, 38%;
+    --accent: 60, 9%, 96%;
+    --accent-foreground: 240, 16%, 6%;
+    --destructive: 350, 89%, 60%;
+    --destructive-foreground: 0, 0%, 100%;
+    --border: 20, 6%, 90%;
+    --input: 20, 6%, 90%;
+    --ring: 244, 75%, 58%;
+    --radius: 0.625rem;
+    --emerald-green-500: 152, 73%, 36%;
+
+    --transition-duration: 200ms;
+
+    /* File type icon colors */
+    --folder-icon-color: 34, 94%, 50%;
+    --folder-icon-background: 37, 100%, 94%;
+
+    --file-icon-color: 244, 75%, 58%;
+    --file-icon-background: 226, 100%, 94%;
+
+    --image-icon-color: 350, 89%, 60%;
+    --image-icon-background: 356, 100%, 95%;
+
+    --audio-icon-color: 271, 91%, 56%;
+    --audio-icon-background: 269, 100%, 92%;
+
+    --video-icon-color: 244, 75%, 58%;
+    --video-icon-background: 228, 96%, 89%;
+  }
+
+  .dark {
+    --white: 240, 14%, 8%;
+
+    /* Iris darkens cleanly because the hue is consistent. */
+    --primary-50: 244, 47%, 18%;
+    --primary-100: 244, 49%, 24%;
+    --primary-200: 244, 52%, 30%;
+    --primary-300: 244, 55%, 38%;
+    --primary-400: 245, 58%, 48%;
+    --primary-500: 244, 75%, 58%;
+    --primary-600: 239, 84%, 67%;
+    --primary-700: 234, 89%, 74%;
+    --primary-800: 230, 94%, 82%;
+    --primary-900: 228, 96%, 89%;
+    --primary-950: 226, 100%, 94%;
+    --primary-foreground: 0, 0%, 100%;
+
+    --secondary-50: 343, 75%, 22%;
+    --secondary-100: 343, 78%, 28%;
+    --secondary-200: 346, 82%, 34%;
+    --secondary-300: 347, 78%, 42%;
+    --secondary-400: 350, 80%, 52%;
+    --secondary-500: 350, 89%, 60%;
+    --secondary-600: 351, 95%, 72%;
+    --secondary-700: 353, 96%, 82%;
+    --secondary-800: 353, 96%, 90%;
+    --secondary-900: 356, 100%, 95%;
+    --secondary-foreground: 0, 0%, 100%;
+
+    --neutral-25: 240, 14%, 14%;
+    --neutral-50: 240, 14%, 18%;
+    --neutral-100: 240, 12%, 22%;
+    --neutral-200: 240, 10%, 30%;
+    --neutral-300: 30, 6%, 50%;
+    --neutral-400: 30, 6%, 65%;
+    --neutral-500: 30, 6%, 78%;
+    --neutral-600: 30, 6%, 86%;
+    --neutral-700: 30, 6%, 92%;
+    --neutral-800: 60, 9%, 96%;
+    --neutral-900: 0, 0%, 100%;
+
+    --burgundy-50: 0, 0%, 91%;
+    --burgundy-100: 346, 46%, 84%;
+    --burgundy-200: 351, 40%, 67%;
+    --burgundy-300: 351, 38%, 54%;
+    --burgundy-400: 350, 53%, 48%;
+    --burgundy-500: 350, 72%, 43%;
+    --burgundy-600: 348, 76%, 39%;
+    --burgundy-700: 346, 83%, 34%;
+    --burgundy-800: 345, 89%, 30%;
+    --burgundy-900: 345, 100%, 25%;
+
+    --surface: 240, 14%, 12%;
+
+    --high-emphasis: 0, 0%, 100%;
+    --medium-emphasis: 30, 6%, 78%;
+    --low-emphasis: 30, 6%, 65%;
+
+    --success: 152, 65%, 48%;
+    --success-background: 156, 30%, 14%;
+    --success-high-emphasis: 152, 80%, 90%;
+
+    --warning: 38, 92%, 60%;
+    --warning-background: 33, 50%, 16%;
+    --warning-high-emphasis: 45, 100%, 92%;
+
+    --error: 351, 95%, 72%;
+    --error-background: 343, 35%, 16%;
+    --error-high-emphasis: 356, 100%, 95%;
+
+    --purple-50: 273, 66%, 22%;
+    --purple-100: 272, 67%, 28%;
+    --purple-200: 272, 72%, 35%;
+    --purple-300: 272, 75%, 42%;
+    --purple-400: 271, 81%, 48%;
+    --purple-500: 271, 91%, 56%;
+    --purple-600: 270, 91%, 65%;
+    --purple-700: 269, 95%, 76%;
+    --purple-800: 269, 100%, 86%;
+    --purple-900: 269, 100%, 92%;
+
+    --pink-50: 336, 69%, 22%;
+    --pink-100: 336, 74%, 30%;
+    --pink-200: 335, 78%, 38%;
+    --pink-300: 333, 71%, 47%;
+    --pink-400: 330, 81%, 55%;
+    --pink-500: 330, 81%, 65%;
+    --pink-600: 329, 86%, 75%;
+    --pink-700: 327, 87%, 84%;
+    --pink-800: 326, 85%, 90%;
+    --pink-900: 326, 78%, 95%;
+
+    --green-50: 155, 68%, 14%;
+    --green-100: 155, 70%, 20%;
+    --green-200: 153, 75%, 26%;
+    --green-300: 152, 73%, 32%;
+    --green-400: 152, 65%, 40%;
+    --green-500: 152, 65%, 48%;
+    --green-600: 158, 64%, 56%;
+    --green-700: 156, 70%, 70%;
+    --green-800: 152, 76%, 84%;
+    --green-900: 149, 80%, 92%;
+
+    --sidebar-background: 240, 16%, 6%;
+    --sidebar-foreground: 30, 6%, 92%;
+    --sidebar-primary: 239, 84%, 67%;
+    --sidebar-primary-foreground: 0, 0%, 100%;
+    --sidebar-accent: 240, 12%, 14%;
+    --sidebar-accent-foreground: 0, 0%, 100%;
+    --sidebar-border: 240, 12%, 16%;
+    --sidebar-ring: 239, 84%, 67%;
+
+    --background: 240, 16%, 6%;
+    --foreground: 30, 6%, 92%;
+    --card: 240, 14%, 9%;
+    --card-foreground: 30, 6%, 92%;
+    --popover: 240, 14%, 9%;
+    --popover-foreground: 30, 6%, 92%;
+    --muted: 240, 12%, 13%;
+    --muted-foreground: 30, 6%, 65%;
+    --accent: 240, 12%, 13%;
+    --accent-foreground: 30, 6%, 92%;
+    --destructive: 351, 95%, 72%;
+    --destructive-foreground: 0, 0%, 100%;
+    --border: 240, 10%, 16%;
+    --input: 240, 10%, 16%;
+    --ring: 239, 84%, 67%;
+
+    /* File type icon colors */
+    --folder-icon-color: 34, 94%, 60%;
+    --folder-icon-background: 37, 30%, 14%;
+
+    --file-icon-color: 239, 84%, 67%;
+    --file-icon-background: 244, 49%, 24%;
+
+    --image-icon-color: 351, 95%, 72%;
+    --image-icon-background: 343, 78%, 28%;
+
+    --audio-icon-color: 271, 91%, 65%;
+    --audio-icon-background: 272, 67%, 28%;
+
+    --video-icon-color: 239, 84%, 67%;
+    --video-icon-background: 244, 49%, 24%;
+  }
+}
+
+.ql-toolbar {
+  @apply rounded-t-md border border-border;
+}
+.ql-container {
+  @apply rounded-b-md border border-border;
+}
+
+/* === Vibe — block entrance animations === */
+@keyframes vibeFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes vibeRise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes vibeSlide {
+  from {
+    opacity: 0;
+    transform: translate3d(-24px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes vibeZoom {
+  from {
+    opacity: 0;
+    transform: scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+@keyframes vibeSheen {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+.vibe-button {
+  transition:
+    transform 200ms cubic-bezier(0.18, 0.7, 0.2, 1),
+    box-shadow 200ms ease-out,
+    background-color 200ms ease-out;
+}
+
+/* === Vibe brand gradient (used by hero, login showcase, etc.) === */
+.vibe-gradient {
+  background-image: linear-gradient(
+    115deg,
+    hsl(var(--primary-600)) 0%,
+    hsl(var(--primary-500)) 35%,
+    hsl(var(--secondary-500)) 100%
+  );
+  background-size: 200% 100%;
+}
+
+/**
+ * Dot grid must layer *on top of* the gradient. A second `background-image` rule
+ * would replace the gradient entirely — use a compound selector when both apply.
+ */
+.vibe-gradient.vibe-grid-bg {
+  background-image:
+    radial-gradient(circle at 1px 1px, hsla(0, 0%, 100%, 0.14) 1px, transparent 0),
+    linear-gradient(
+      115deg,
+      hsl(var(--primary-600)) 0%,
+      hsl(var(--primary-500)) 35%,
+      hsl(var(--secondary-500)) 100%
+    );
+  background-size:
+    24px 24px,
+    200% 100%;
+}
+
+.vibe-grid-bg:not(.vibe-gradient) {
+  background-image:
+    radial-gradient(circle at 1px 1px, hsla(0, 0%, 100%, 0.14) 1px, transparent 0);
+  background-size: 24px 24px;
+}
+
+/* Subtle focus ring on inputs / buttons */
+:focus-visible {
+  outline: none;
+}
