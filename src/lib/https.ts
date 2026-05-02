@@ -1,3 +1,4 @@
+import { getBlocksApiBaseUrl } from './blocks-api-base';
 import { useAuthStore } from '@/state/store/auth';
 import { getRefreshToken } from '@/modules/auth/services/auth.service';
 import { isLocalhost } from './utils/localhost-checker/locahost-checker';
@@ -82,7 +83,7 @@ export class HttpError extends Error {
   }
 }
 
-const BASE_URL = import.meta.env.VITE_API_BASE_URL?.replace(/\/$/, '');
+const BASE_URL = getBlocksApiBaseUrl();
 const projectKey = import.meta.env.VITE_X_BLOCKS_KEY ?? '';
 const localHostChecker = isLocalhost();
 

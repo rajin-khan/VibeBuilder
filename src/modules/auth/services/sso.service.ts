@@ -1,8 +1,9 @@
 import { LoginOption } from '@/constant/sso';
 import { MFASigninResponse } from './auth.service';
+import { getBlocksApiBaseUrl } from '@/lib/blocks-api-base';
 
 const projectKey = import.meta.env.VITE_X_BLOCKS_KEY || '';
-const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+const baseUrl = getBlocksApiBaseUrl();
 
 const safeJsonParse = async (response: Response) => {
   try {

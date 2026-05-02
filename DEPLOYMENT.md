@@ -1,5 +1,24 @@
 # Deployment
 
+## Before you deploy (checklist)
+
+Cross-check this list against the official flow: [Deploy and observe](https://docs.seliseblocks.com/cloud/deploy-and-observe/) and [Getting started → branches](https://docs.seliseblocks.com/cloud/getting-started).
+
+| Step | What Selise docs / this repo expects |
+|------|--------------------------------------|
+| 1. Git access | Blocks Cloud can clone your repo: [Adding a repository](https://docs.seliseblocks.com/cloud/getting-started#adding-a-repository). |
+| 2. Branch for **Production** | For “prod” / production builds, Selise maps **Production → `main`**. Push the commit you want live to **`main`**. (Other environments use `dev`, `stg`, etc.) |
+| 3. Build works locally | From repo root: `npm ci && npm run lint && npm run test` (optional but recommended), then **`npm run build:prod`**. Output folder **`build/`** must exist. |
+| 4. Production env in the **repo** | Selise’s Deploy docs do **not** describe a separate “build env vars” screen. This project uses **Vite’s [`.env.production`](.env.production)** (loaded on `vite build` / `npm run build:prod`). Keep **`VITE_*`** in sync with **Environment Overview** (API URL, X-Blocks-Key, project slug). See table below. |
+| 5. Dockerfile | Blocks builds the image from your **[`Dockerfile`](Dockerfile)** (`npm run build:${ci_build}`). No extra Selise-specific file is documented for a custom Vite app beyond a valid build. |
+| 6. Deploy in portal | **Deployment** → **Deployment Overview** → your repo → **Repository Details** → **Deploy Now** or **Git-based deployment** ([docs](https://docs.seliseblocks.com/cloud/deploy-and-observe/)). |
+| 7. After green deploy | Use **Deploys To** URL. Add that **origin** to **Identity / IAM** redirect/CORS if login or APIs reject the new host (see [After deploy](#after-deploy-iam-and-allowed-origins)). |
+| 8. SPA deep links | `/app/...`, `/site/...` need **`index.html` fallback** on the host. If refresh on a deep link 404s, nginx/host must match [nginx.conf](nginx.conf) / [staticwebapp.config.json](staticwebapp.config.json) behaviour. |
+
+**Official caveat:** Docs still state deployments are intended for repos built on **Blocks Construct**; a Vite SPA may still be accepted in practice (your pipeline already built). If a future deploy fails with a Construct-only message, contact Selise/course support.
+
+---
+
 ## Selise Blocks Cloud (primary hosting)
 
 This app is a **Vite** SPA: `npm run build` writes to **`build/`**. Use **SELISE Blocks Cloud → Deployment** as the main way to host it next to your Blocks APIs.
@@ -17,19 +36,23 @@ This app is a **Vite** SPA: `npm run build` writes to **`build/`**. Use **SELISE
 
 ### Build-time environment variables
 
-Configure the same keys as [.env.example](.env.example) in the Blocks **deployment / environment** UI (never commit real values to Git):
+**Blocks Cloud** often has no “build env” UI. This repo uses **committed [`.env.production`](.env.production)**: Vite loads it automatically when you run **`npm run build:prod`** (which is just `vite build`). The Docker image build copies the repo then runs that script, so **`VITE_*`** values are baked in without portal configuration.
 
 | Variable | Purpose |
 |----------|---------|
 | `VITE_API_BASE_URL` | Selise API base URL |
-| `VITE_X_BLOCKS_KEY` | Project gateway key (`x-blocks-key` header) |
-| `VITE_PROJECT_SLUG` | Project slug used in the GraphQL gateway path |
+| `VITE_X_BLOCKS_KEY` | Project X-Blocks-Key (also sent as `x-blocks-key`; visible in the client bundle) |
+| `VITE_PROJECT_SLUG` | Project slug for the GraphQL gateway path |
 | `VITE_CAPTCHA_SITE_KEY` | Optional; if IAM uses captcha |
 | `VITE_CAPTCHA_TYPE` | Optional; must match IAM |
 
-`VITE_*` values are baked into the client bundle at build time.
+Keep [.env.example](.env.example) as a template for **local** `.env` (gitignored). If you rotate the key or slug in **Environment Overview**, update **`.env.production`** and redeploy.
 
-**Selise Blocks Docker build:** `npm run build:prod` runs `set-env` then `vite build`. If `.env.prod` is not in the repo (recommended—do not commit secrets), `set-env` skips copying and Vite reads **`VITE_*` from the environment**. You **must** define those variables in the Blocks deployment / build configuration so they exist during the image build.
+**Note:** If the repository is **public**, anyone can read the committed key from Git—rotate the key in Blocks if needed. Private repos match how the Construct CLI scaffolds `--x-blocks-key` into app config.
+
+`getBlocksApiBaseUrl()` in code still defaults API origin to `https://api.seliseblocks.com` when unset—`.env.production` makes the full set explicit for your tenant.
+
+**Selise Blocks Docker build:** `Dockerfile` runs `npm run build:prod` → **`vite build`** (no `.env.prod` / `set-env` required for production). `build:dev` / `build:stg` still use [set-env.cjs](set-env.cjs) when you maintain `.env.dev` / `.env.stg` locally.
 
 ### Portal flow (summary)
 

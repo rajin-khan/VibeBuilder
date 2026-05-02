@@ -12,11 +12,12 @@ import { useAuthStore } from '@/state/store/auth';
 import type { Notification as NotificationType } from '../../types/notification.types';
 import { NotificationSkeletonList } from '../notification-skeleton/notification-skeleton';
 import { isLocalDemoToken } from '@/modules/auth/utils/demo-session';
+import { getBlocksApiBaseUrl } from '@/lib/blocks-api-base';
 
 const PAGE_SIZE = 10;
 
 const projectKey = import.meta.env.VITE_X_BLOCKS_KEY || '';
-const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+const baseUrl = getBlocksApiBaseUrl();
 
 export const Notification = () => {
   const { t } = useTranslation();

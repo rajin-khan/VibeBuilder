@@ -1,4 +1,5 @@
 import { clients } from './https';
+import { getBlocksApiBaseUrl } from './blocks-api-base';
 
 /**
  * GraphQL Client Module
@@ -48,7 +49,7 @@ interface GraphQLClient {
 }
 
 const projectKey = import.meta.env.VITE_X_BLOCKS_KEY || '';
-const baseUrl = import.meta.env.VITE_API_BASE_URL || '';
+const baseUrl = getBlocksApiBaseUrl();
 
 const cleanBaseUrl = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
 
