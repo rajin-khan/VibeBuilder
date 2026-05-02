@@ -1,4 +1,5 @@
 import graphqlClient from '@/lib/graphql-client';
+import { HttpError } from '@/lib/https';
 import { getPreSignedUrlForUpload } from '@/lib/api/services/storage.service';
 import {
   Asset,
@@ -158,7 +159,36 @@ const readFileAsDataUrl = (file: File) =>
     reader.readAsDataURL(file);
   });
 
-/** Demo token or DEV GraphQL failure: use local snapshot instead of throwing (prod throws on real errors). */
+let warnedVibeGatewayMissing = false;
+
+/** True when GraphQL schema has no Vibe* entities (not created/published in Data Gateway). */
+const isVibeDataGatewayUnavailable = (error: unknown): boolean => {
+  const parts: string[] = [];
+  if (error instanceof HttpError) {
+    parts.push(error.message);
+    try {
+      parts.push(JSON.stringify(error.error));
+    } catch {
+      /* ignore */
+    }
+  } else if (error instanceof Error) {
+    parts.push(error.message);
+  } else {
+    parts.push(String(error));
+  }
+  const text = parts.join('\n');
+  if (!text.includes('does not exist')) {
+    return false;
+  }
+  return (
+    /\bVibe(Website|Page|Asset)s?\b/i.test(text) ||
+    /\bgetVibe(Website|Page|Asset)s?\b/i.test(text) ||
+    /\binsertVibe/i.test(text) ||
+    /\b(update|delete)Vibe/i.test(text)
+  );
+};
+
+/** Demo token, dev build, or production without Data Gateway: use local snapshot. */
 const runWithDemoFallback = async <T,>(operation: () => Promise<T>, fallback: () => T): Promise<T> => {
   if (isLocalDemoToken(useAuthStore.getState().accessToken)) {
     return fallback();
@@ -167,7 +197,13 @@ const runWithDemoFallback = async <T,>(operation: () => Promise<T>, fallback: ()
   try {
     return await operation();
   } catch (err) {
-    if (import.meta.env.DEV) {
+    if (import.meta.env.DEV || isVibeDataGatewayUnavailable(err)) {
+      if (isVibeDataGatewayUnavailable(err) && !warnedVibeGatewayMissing) {
+        warnedVibeGatewayMissing = true;
+        console.warn(
+          '[VibeBuilder] Data Gateway has no published VibeWebsite / VibePage / VibeAsset schemas. Using browser localStorage. Define those entities in Blocks Cloud → Data → Schemas and click Publish (see DEPLOYMENT.md).'
+        );
+      }
       return fallback();
     }
 
@@ -207,10 +243,10 @@ export const vibeBuilderService = {
   async listWebsites(ownerId: string): Promise<Website[]> {
     return runWithDemoFallback(
       async () => {
-        const data = await graphqlClient.query<{ VibeWebsites: { items: BlocksWebsite[] } }>({
+        const data = await graphqlClient.query<{ getVibeWebsites: { items: BlocksWebsite[] } }>({
           query: `
             query GetWebsites($input: DynamicQueryInput) {
-              VibeWebsites(input: $input) {
+              getVibeWebsites(input: $input) {
                 items {
                   ItemId
                   OwnerId
@@ -232,7 +268,7 @@ export const vibeBuilderService = {
           },
         });
 
-        return (data.VibeWebsites?.items ?? []).map(mapWebsite);
+        return (data.getVibeWebsites?.items ?? []).map(mapWebsite);
       },
       () => loadSnapshot().websites.filter((website) => website.ownerId === ownerId)
     );
@@ -241,10 +277,10 @@ export const vibeBuilderService = {
   async listPages(websiteId: string): Promise<WebsitePage[]> {
     return runWithDemoFallback(
       async () => {
-        const data = await graphqlClient.query<{ VibePages: { items: BlocksPage[] } }>({
+        const data = await graphqlClient.query<{ getVibePages: { items: BlocksPage[] } }>({
           query: `
             query GetPages($input: DynamicQueryInput) {
-              VibePages(input: $input) {
+              getVibePages(input: $input) {
                 items {
                   ItemId
                   WebsiteId
@@ -267,7 +303,7 @@ export const vibeBuilderService = {
           },
         });
 
-        return (data.VibePages?.items ?? []).map(mapPage).sort((a, b) => a.sortOrder - b.sortOrder);
+        return (data.getVibePages?.items ?? []).map(mapPage).sort((a, b) => a.sortOrder - b.sortOrder);
       },
       () =>
         loadSnapshot()
@@ -567,10 +603,10 @@ export const vibeBuilderService = {
 
     return runWithDemoFallback(
       async () => {
-        const websites = await graphqlClient.query<{ VibeWebsites: { items: BlocksWebsite[] } }>({
+        const websites = await graphqlClient.query<{ getVibeWebsites: { items: BlocksWebsite[] } }>({
           query: `
             query GetPublicWebsite($input: DynamicQueryInput) {
-              VibeWebsites(input: $input) {
+              getVibeWebsites(input: $input) {
                 items {
                   ItemId
                   OwnerId
@@ -590,7 +626,9 @@ export const vibeBuilderService = {
             },
           },
         });
-        const website = websites.VibeWebsites?.items?.[0] ? mapWebsite(websites.VibeWebsites.items[0]) : undefined;
+        const website = websites.getVibeWebsites?.items?.[0]
+          ? mapWebsite(websites.getVibeWebsites.items[0])
+          : undefined;
 
         if (!website || website.status !== 'published') {
           return { website: undefined, pages: [], page: undefined };
@@ -694,11 +732,11 @@ export const vibeBuilderService = {
         };
 
         const data = await graphqlClient.query<{
-          VibeAssets: { items: BlocksAsset[] };
+          getVibeAssets: { items: BlocksAsset[] };
         }>({
           query: `
             query GetAssets($input: DynamicQueryInput) {
-              VibeAssets(input: $input) {
+              getVibeAssets(input: $input) {
                 items {
                   ItemId
                   OwnerId
@@ -720,7 +758,7 @@ export const vibeBuilderService = {
           },
         });
 
-        return (data.VibeAssets?.items ?? []).map((item) => {
+        return (data.getVibeAssets?.items ?? []).map((item) => {
           const fallback: Asset = {
             id: item.ItemId ?? createId('asset'),
             ownerId: item.OwnerId ?? '',

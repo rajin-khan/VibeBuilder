@@ -65,7 +65,33 @@ Keep [.env.example](.env.example) as a template for **local** `.env` (gitignored
 
 **SPA routing:** Deep links like `/app/...` and `/site/...` require the host to serve `index.html` for routes that are not static files. [staticwebapp.config.json](staticwebapp.config.json) shows the expected fallback (`navigationFallback` / rewrite to `/index.html`). Configure the equivalent in Blocks if the default static hosting does not.
 
-### After deploy: IAM and allowed origins
+### Data Gateway (real persistence for VibeBuilder)
+
+GraphQL errors like **`getVibeWebsites does not exist on the type Query`** (or **`VibeWebsites` does not exist**) mean the **Data Gateway** for this environment has no published schemas that expose the Vibe collections, or the client is using the wrong **query root field** name. After publish, Blocks generates **`get*`-prefixed** list queries (same pattern as `getInventoryItems`). This app calls:
+
+| Entity (schema) | List query (read) | Insert mutation example |
+|-----------------|-------------------|---------------------------|
+| **VibeWebsite** | `getVibeWebsites(input: DynamicQueryInput)` | `insertVibeWebsite` |
+| **VibePage** | `getVibePages` | `insertVibePage` |
+| **VibeAsset** | `getVibeAssets` | `insertVibeAsset` |
+
+**In Blocks Cloud:** open your **environment → Data** (Data Gateway). Ensure **Blocks Database** (or your DB) is configured and the gateway is **started**. Under **Schemas**, **Add** each **Entity** with the properties below (remove any default columns you do not want), then **Publish** ([Data Gateway docs](https://docs.seliseblocks.com/cloud/data-gateway)).
+
+**Navigation:** **Console** → open your project (e.g. **VibeBuilder**) → **Cloud** → pick the environment (e.g. **prod**) → sidebar **Data** (or **Data Gateway**). If you only see **Deployment / Workflow**, you are on **Environment Overview**—use the environment switcher or project card until the **Data** entry appears.
+
+| Entity name | Properties (type: String unless noted) | Notes |
+|-------------|----------------------------------------|--------|
+| **VibeWebsite** | `ItemId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, `IsDeleted` (Boolean) | List filter: `OwnerId` + `IsDeleted: false`. Soft deletes should set `IsDeleted: true`. |
+| **VibePage** | `ItemId`, `WebsiteId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, `IsDeleted` (Boolean) | List filter: `WebsiteId` + `IsDeleted: false`. |
+| **VibeAsset** | `ItemId`, `OwnerId`, `WebsiteId`, `FileName`, `Payload`, `CreatedDate`, `IsDeleted` (Boolean) | List filter: `WebsiteId` + `IsDeleted: false`. |
+
+Use **Data Playground → Schemas** to confirm **`getVibeWebsites` / `getVibePages` / `getVibeAssets`** and **`insertVibeWebsite`**, **`updateVibeWebsite`**, etc. **Publish** after schema edits or the API will not match.
+
+**`_id` vs `ItemId`:** mutations use `filter: JSON.stringify({ _id: "<id>" })` for updates/deletes using the website/page **id** stored in `ItemId` / payload. With Blocks Database, confirm new rows use `_id` equal to `ItemId` (or change [vibe-builder.service.ts](src/modules/vibe-builder/services/vibe-builder.service.ts) filters to the field your gateway uses).
+
+Until those schemas exist, the app **falls back to `localStorage`** for Vibe data (one browser only, not shared across devices).
+
+---
 
 1. Copy the **production origin** from **Deploys To** (e.g. `https://your-host.example`).
 2. In Blocks **Identity / IAM** (or project auth settings), allow that origin for **redirect / callback URLs** and any **CORS / allowed web origins** required by your API setup.

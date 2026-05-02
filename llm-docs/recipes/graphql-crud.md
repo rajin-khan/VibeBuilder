@@ -2,28 +2,22 @@
 
 ## 🚨 CRITICAL: This is the ONLY Source for Data Operations
 
-**NEVER look at inventory feature for data operations - it uses different patterns!**
-**This recipe is based on actual working Selise Cloud GraphQL patterns.**
+**For Data Gateway GraphQL:** use **Data Playground introspection** (or this recipe). List queries follow **`get` + plural** (e.g. `getInventoryItems`, `getVibeWebsites`). Inventory in this repo is a working reference for that pattern.
 
 ## GraphQL Naming Patterns You MUST Know
 
 ### 1. Correct Schema Name Pattern (Updated)
-```typescript
-// CRITICAL: Get schema name from MCP first, then apply these patterns:
-// Schema: "TodoTask" → Query field: "TodoTasks" (schema name + single 's')
-// Schema: "Product" → Query field: "Products" (schema name + single 's')
-// Schema: "User" → Query field: "Users" (schema name + single 's')
 
-// QUERIES use schema name + single 's':
-query { TodoTasks(input: ...) }     // Schema "TodoTask" + 's'
-query { Products(input: ...) }      // Schema "Product" + 's'
+**Blocks Data Gateway (UDS)** uses a **`get` + schema plural** pattern for **list queries**, matching the auto-generated Playground (e.g. schema `InventoryItem` → `getInventoryItems`; schema `VibeWebsite` → **`getVibeWebsites`**). Confirm names in **Data Playground → Schemas → Queries** before coding.
+
+Legacy shorthand “schema name + `s`” (e.g. `TodoTasks`) may appear in older examples; for this project’s gateway, use whatever introspection shows (`getVibePages`, not `VibePages`).
+
+```typescript
+// List query (Data Gateway style — verify in Playground):
+query { getVibeWebsites(input: ...) { items { ItemId } } }
 
 // MUTATIONS use operation + original schema name:
-mutation { insertTodoTask(...) }    // insert + "TodoTask"
-mutation { updateProduct(...) }     // update + "Product"
-
-// INPUT TYPES use schema name + operation + Input:
-// TodoTaskInsertInput, TodoTaskUpdateInput, TodoTaskDeleteInput
+mutation { insertVibeWebsite(...) }
 ```
 
 ### 2. Schema Discovery with MCP
@@ -32,11 +26,10 @@ mutation { updateProduct(...) }     // update + "Product"
 // 1. list_schemas() - Shows all available schemas
 // 2. get_schema_details(schema_name) - Shows schema structure
 
-// Example MCP workflow:
-// list_schemas() → returns ["TodoTask", "Product", "User"]
-// Then apply naming patterns:
-// - Query: TodoTasks, Products, Users (add 's')
-// - Mutations: insertTodoTask, updateProduct, deleteUser
+// Preferred: Data Playground → Queries (or MCP if available).
+// Example: list_schemas → VibeWebsite → root field getVibeWebsites (not VibeWebsites).
+// - Query: getVibeWebsites, getInventoryItems, …
+// - Mutations: insertVibeWebsite, updateProduct, deleteUser
 ```
 
 ### 3. MongoDB Filter Syntax
