@@ -1,4 +1,4 @@
-import { useEffect, useState, useRef } from 'react';
+import { useEffect, useState, useRef, type ComponentProps } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import {
@@ -13,6 +13,7 @@ import { useAuthStore } from '@/state/store/auth';
 import DummyProfile from '@/assets/images/dummy_profile.png';
 import { Skeleton } from '@/components/ui-kit/skeleton';
 import { useGetAccount } from '@/modules/profile/hooks/use-account';
+import { cn } from '@/lib/utils';
 
 /**
  * ProfileMenu Component
@@ -38,7 +39,19 @@ import { useGetAccount } from '@/modules/profile/hooks/use-account';
  * <ProfileMenu />
  */
 
-export const ProfileMenu = () => {
+type ProfileMenuProps = {
+  align?: ComponentProps<typeof DropdownMenuContent>['align'];
+  side?: ComponentProps<typeof DropdownMenuContent>['side'];
+  sideOffset?: number;
+  triggerClassName?: string;
+};
+
+export const ProfileMenu = ({
+  align = 'end',
+  side = 'top',
+  sideOffset = 10,
+  triggerClassName,
+}: ProfileMenuProps = {}) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isImageLoaded, setIsImageLoaded] = useState(false);
   const imgRef = useRef<HTMLImageElement>(null);
@@ -92,8 +105,13 @@ export const ProfileMenu = () => {
 
   return (
     <DropdownMenu open={isDropdownOpen} onOpenChange={setIsDropdownOpen}>
-      <DropdownMenuTrigger asChild className="cursor-pointer p-1 rounded-[2px]">
-        <div className="flex justify-between items-center gap-1 sm:gap-3 cursor-pointer">
+      <DropdownMenuTrigger asChild className="cursor-pointer rounded-[2px] p-1">
+        <div
+          className={cn(
+            'flex cursor-pointer items-center justify-between gap-1 sm:gap-3',
+            triggerClassName
+          )}
+        >
           <div className="relative overflow-hidden rounded-full border-[2px] border-border h-8 w-8">
             {showSkeleton && <Skeleton className="h-8 w-8 rounded-full absolute inset-0 z-10" />}
             <img
@@ -110,9 +128,9 @@ export const ProfileMenu = () => {
       </DropdownMenuTrigger>
       <DropdownMenuContent
         className="w-56 text-medium-emphasis"
-        align="end"
-        side="top"
-        sideOffset={10}
+        align={align}
+        side={side}
+        sideOffset={sideOffset}
       >
         <DropdownMenuItem onClick={() => navigate('profile')}>{t('MY_PROFILE')}</DropdownMenuItem>
         <DropdownMenuItem disabled>{t('ABOUT')}</DropdownMenuItem>

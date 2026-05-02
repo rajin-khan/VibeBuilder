@@ -22,18 +22,8 @@ import '../../lib/utils/test-utils/shared-test-utils';
 
 // Mock the core barrel so named imports in MainLayout resolve to test doubles
 vi.mock('@/components/core', () => ({
-  LanguageSelector: () => <div data-testid="language-selector">Language Selector</div>,
   ProfileMenu: () => <div data-testid="profile-menu">Profile Menu</div>,
   AppSidebar: () => <div data-testid="app-sidebar">App Sidebar</div>,
-  Notification: () => <div data-testid="notification">Notification</div>,
-  OrgSwitcher: () => <div data-testid="org-switcher">Org Switcher</div>,
-  useGetNotifications: vi.fn().mockReturnValue({
-    data: {
-      notifications: [],
-      unReadNotificationsCount: 0,
-      totalNotificationsCount: 0,
-    },
-  }),
 }));
 
 vi.mock('@/i18n/language-context', () => ({
@@ -55,6 +45,7 @@ vi.mock('@/components/ui-kit/sidebar', () => {
     open: true,
     isMobile: false,
     toggle: vi.fn(),
+    setOpen: vi.fn(),
     setOpenMobile: vi.fn(),
   }));
 
@@ -247,16 +238,16 @@ describe('MainLayout', () => {
   it('renders the component correctly', () => {
     renderWithProviders(<MainLayout />);
     expect(screen.getByTestId('app-sidebar')).toBeInTheDocument();
-    expect(screen.getByTestId('sidebar-trigger')).toBeInTheDocument();
     expect(screen.getByTestId('outlet')).toBeInTheDocument();
+    expect(screen.getByTestId('profile-menu')).toBeInTheDocument();
   });
 
-  it('renders all navigation and utility elements', () => {
+  it('removes the legacy top bar utilities from the shell', () => {
     renderWithProviders(<MainLayout />);
-    expect(screen.getByTestId('bell-icon')).toBeInTheDocument();
-    // expect(screen.getByTestId('library-icon')).toBeInTheDocument();
-    expect(screen.getByTestId('language-selector')).toBeInTheDocument();
+    expect(screen.queryByTestId('sidebar-trigger')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('bell-icon')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('language-selector')).not.toBeInTheDocument();
+    expect(screen.queryByTestId('notification')).not.toBeInTheDocument();
     expect(screen.getByTestId('profile-menu')).toBeInTheDocument();
-    expect(screen.getByTestId('notification')).toBeInTheDocument();
   });
 });

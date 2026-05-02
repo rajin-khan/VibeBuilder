@@ -278,19 +278,27 @@ export const signin = async <
 };
 
 export const signout = async (): Promise<{ isSuccess: true }> => {
+  const refreshToken = useAuthStore.getState().refreshToken;
+  const url = '/idp/v1/Authentication/Logout';
+
   try {
+    if (refreshToken) {
+      await clients.postWithoutSessionRefresh(
+        url,
+        JSON.stringify({
+          refreshToken,
+        })
+      );
+    }
+  } catch {
+    // Logout must be fail-safe. Blocks can reject localhost/stale sessions, but
+    // the user should still be signed out locally without a refresh attempt.
+  } finally {
+    useAuthStore.getState().logout();
     localStorage.removeItem('auth-storage');
-    const url = '/idp/v1/Authentication/Logout';
-    return await clients.post(
-      url,
-      JSON.stringify({
-        refreshToken: useAuthStore.getState().refreshToken,
-      })
-    );
-  } catch (error) {
-    console.error('Logout operation failed:', error);
-    throw error;
   }
+
+  return { isSuccess: true };
 };
 
 export const getRefreshToken = async () => {

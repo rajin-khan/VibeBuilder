@@ -52,6 +52,7 @@ import { AssetPicker } from '../components/asset-picker';
 import { LayersPanel } from '../components/layers-panel';
 import { componentRegistry } from '../components/component-registry';
 import { VibeMark } from '@/components/core/vibe-brand/vibe-brand';
+import { ProfileMenu } from '@/components/core';
 import {
   useCreatePage,
   useDeletePage,
@@ -606,7 +607,7 @@ export const EditorPage = () => {
   };
 
   return (
-    <div className="-m-4 flex min-h-[calc(100dvh-57px)] w-[calc(100%+2rem)] flex-col overflow-auto bg-muted/30 sm:-m-6 sm:min-h-[calc(100dvh-65px)] sm:w-[calc(100%+3rem)] md:-m-8 md:w-[calc(100%+4rem)] md:overflow-hidden lg:h-[calc(100dvh-65px)]">
+    <div className="flex min-h-screen w-full flex-col overflow-auto bg-muted/30 md:overflow-hidden lg:h-screen">
       <header className="flex min-h-16 flex-wrap items-center justify-between gap-3 border-b border-border bg-card px-4 py-2.5">
         <div className="flex min-w-0 items-center gap-3">
           <VibeMark className="size-7 flex-none" />
@@ -832,6 +833,13 @@ export const EditorPage = () => {
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
+
+          <ProfileMenu
+            side="bottom"
+            align="end"
+            sideOffset={8}
+            triggerClassName="ml-1 rounded-full border border-border bg-muted/40 p-0.5 transition hover:border-primary/40 hover:bg-muted"
+          />
         </div>
       </header>
 

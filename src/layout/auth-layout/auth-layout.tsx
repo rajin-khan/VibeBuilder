@@ -3,7 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { ExclamationTriangleIcon } from '@radix-ui/react-icons';
 import { useGetLoginOptions } from '@/modules/auth/hooks/use-auth';
 import { useAuthState } from '@/state/client-middleware';
-import { ExtensionBanner, LanguageSelector, VibeWordmark } from '@/components/core';
+import { ExtensionBanner, VibeWordmark } from '@/components/core';
 
 const AUTH_SHOWCASE_IMAGE = '/vibe-assets/auth-showcase-clean.webp';
 
@@ -151,9 +151,6 @@ export const AuthLayout = () => {
             tagline="Build your site, fast."
             className="text-[#f7f4ea] [&_*]:text-[#f7f4ea]"
           />
-          <div className="rounded-full border border-white/10 bg-[#0C0F17]/80 px-3 py-1.5">
-            <LanguageSelector />
-          </div>
         </header>
 
         <main className="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-[92rem] items-center gap-10 px-8 pb-10 sm:px-12 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,27rem)] lg:px-16 xl:px-20">
