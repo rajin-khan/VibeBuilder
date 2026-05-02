@@ -12,7 +12,7 @@ import {
 } from '@/components/ui-kit/dropdown-menu';
 import { Skeleton } from '@/components/ui-kit/skeleton';
 import { useLanguageContext } from '@/i18n/language-context';
-import { publicRoutes } from '@/constant/auth-public-routes';
+import { isPublicRoutePath } from '@/constant/auth-public-routes';
 
 /**
  * LanguageSelector Component
@@ -52,7 +52,7 @@ export const LanguageSelector = () => {
     }
   }, [availableLanguages, currentLanguage, isLoading, setLanguage]);
 
-  const isAuthLayout = publicRoutes.some((path) => location.pathname.startsWith(path));
+  const isAuthLayout = isPublicRoutePath(location.pathname);
 
   const changeLanguage = async (newLanguageCode: string) => {
     await setLanguage(newLanguageCode);

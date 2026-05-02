@@ -1,7 +1,7 @@
 import { ReactNode, useEffect, useLayoutEffect, useState } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { useAuthStore } from './store/auth';
-import { publicRoutes } from '@/constant/auth-public-routes';
+import { isPublicRoutePath } from '@/constant/auth-public-routes';
 
 /**
  * useAuthState Hook
@@ -77,7 +77,7 @@ export const ClientMiddleware: React.FC<ClientMiddlewareProps> = ({ children }) 
   const location = useLocation();
   const currentPath = location.pathname;
   const { isMounted, isAuthenticated } = useAuthState();
-  const isPublicRoute = publicRoutes.includes(currentPath);
+  const isPublicRoute = isPublicRoutePath(currentPath);
 
   // Check if we're processing an SSO callback (has code and state parameters)
   const urlParams = new URLSearchParams(location.search);
