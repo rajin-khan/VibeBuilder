@@ -40,11 +40,17 @@ interface GraphQLResponse<T = any> {
     message: string;
     locations?: Array<{ line: number; column: number }>;
     path?: string[];
+    extensions?: Record<string, unknown>;
   }>;
 }
 
 interface GraphQLClient {
   query<T>(request: GraphQLRequest): Promise<T>;
+  /**
+   * Read-only gateway query for published sites: uses an explicit bearer (or none), never the
+   * session refresh flow. Pass user access token and/or set VITE_VIBE_PUBLIC_READ_TOKEN in env.
+   */
+  queryWithVisitorBearer<T>(request: GraphQLRequest, bearerToken: string | undefined): Promise<T>;
   mutate<T>(request: GraphQLRequest): Promise<T>;
 }
 
@@ -57,6 +63,23 @@ const PROJECT_SLUG = import.meta.env.VITE_PROJECT_SLUG || '';
 
 const projectSlug = PROJECT_SLUG ? `/${PROJECT_SLUG}` : '';
 const GRAPHQL_BASE_URL = `${cleanBaseUrl}/uds/v1${projectSlug}/gateway`; //not finding
+
+function assertGraphQLData<T>(response: GraphQLResponse<T>): asserts response is GraphQLResponse<T> & {
+  data: T;
+} {
+  if (response.errors && response.errors.length > 0) {
+    const parts = response.errors.map((e) => {
+      const ext =
+        e.extensions && Object.keys(e.extensions).length > 0 ? ` ${JSON.stringify(e.extensions)}` : '';
+      return `${e.message}${ext}`;
+    });
+    throw new Error(parts.join('; '));
+  }
+
+  if (response.data == null) {
+    throw new Error('GraphQL returned no data payload');
+  }
+}
 
 export const graphqlClient: GraphQLClient = {
   async query<T>(request: GraphQLRequest): Promise<T> {
@@ -74,19 +97,34 @@ export const graphqlClient: GraphQLClient = {
       }
     );
 
-    if (response.errors && response.errors.length > 0) {
-      const parts = response.errors.map((e) => {
-        const ext =
-          e.extensions && Object.keys(e.extensions).length > 0 ? ` ${JSON.stringify(e.extensions)}` : '';
-        return `${e.message}${ext}`;
-      });
-      throw new Error(parts.join('; '));
+    assertGraphQLData(response);
+    return (response.data as T) ?? ({} as T);
+  },
+
+  async queryWithVisitorBearer<T>(
+    request: GraphQLRequest,
+    bearerToken: string | undefined
+  ): Promise<T> {
+    const payload = {
+      query: request.query,
+      variables: request.variables || {},
+    };
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'x-blocks-key': projectKey,
+    };
+    if (bearerToken) {
+      headers['Authorization'] = `bearer ${bearerToken}`;
     }
 
-    if (response.data == null) {
-      throw new Error('GraphQL returned no data payload');
-    }
+    const response = await clients.postWithoutSessionRefresh<GraphQLResponse<T>>(
+      GRAPHQL_BASE_URL,
+      JSON.stringify(payload),
+      headers
+    );
 
+    assertGraphQLData(response);
     return (response.data as T) ?? ({} as T);
   },
 
@@ -105,19 +143,7 @@ export const graphqlClient: GraphQLClient = {
       }
     );
 
-    if (response.errors && response.errors.length > 0) {
-      const parts = response.errors.map((e) => {
-        const ext =
-          e.extensions && Object.keys(e.extensions).length > 0 ? ` ${JSON.stringify(e.extensions)}` : '';
-        return `${e.message}${ext}`;
-      });
-      throw new Error(parts.join('; '));
-    }
-
-    if (response.data == null) {
-      throw new Error('GraphQL returned no data payload');
-    }
-
+    assertGraphQLData(response);
     return response.data as T;
   },
 };

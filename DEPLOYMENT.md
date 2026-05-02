@@ -43,10 +43,45 @@ This app is a **Vite** SPA: `npm run build` writes to **`build/`**. Use **SELISE
 | `VITE_API_BASE_URL` | Selise API base URL |
 | `VITE_X_BLOCKS_KEY` | Project X-Blocks-Key (also sent as `x-blocks-key`; visible in the client bundle) |
 | `VITE_PROJECT_SLUG` | Project slug for the GraphQL gateway path |
+| `VITE_VIBE_PUBLIC_READ_TOKEN` | Optional but recommended for **published** `/site/...` pages: a **read-scoped** access token (JWT) embedded in the bundle so anonymous visitors can call `getVibeWebsites` / `getVibePages`. See [Public site reads](#public-site-reads-vite_vibe_public_read_token) below. |
 | `VITE_CAPTCHA_SITE_KEY` | Optional; if IAM uses captcha |
 | `VITE_CAPTCHA_TYPE` | Optional; must match IAM |
 
 Keep [.env.example](.env.example) as a template for **local** `.env` (gitignored). If you rotate the key or slug in **Environment Overview**, update **`.env.production`** and redeploy.
+
+#### Public site reads (`VITE_VIBE_PUBLIC_READ_TOKEN`)
+
+The Data Gateway often requires a **Bearer** token; `x-blocks-key` alone is not enough. For **incognito** users opening `/site/your-slug`, the app sends this JWT (when set) instead of a user session token.
+
+Verified flow in **Blocks Cloud** (prod environment, sidebar **Users / IAM** icon):
+
+1. **Authentication → General** [`/services/authentication?tab=general`](https://cloud.seliseblocks.com/services/authentication?tab=general)  
+   - Under **Grant Types**, enable **Client Credential** and click **Save**. (Without this, machine clients cannot use the client-credentials grant.)
+
+2. **Authentication → Client Credential** [`/services/authentication?tab=client_credential`](https://cloud.seliseblocks.com/services/authentication?tab=client_credential)  
+   - Click **Create**.  
+   - **Client Name:** any label (e.g. `vibe-public-readonly-site`).  
+   - **Audience:** use your **API base** (same host as `VITE_API_BASE_URL`, typically `https://api.seliseblocks.com`). The portal may normalize or override this; if GraphQL still returns 401 after setting the token, recreate the client or ask Selise support for the correct audience for Data Gateway tokens.  
+   - **Assign Role(s):** assign the **`user`** role only (avoid **`cloudadmin`** for a public-read key). Tighter scoping is possible via **IAM → Roles / Permissions** [roles](https://cloud.seliseblocks.com/services/iam?tab=roles), [permissions](https://cloud.seliseblocks.com/services/iam?tab=permissions) if your tenant exposes Data Gateway permissions.  
+   - Click **Add** and copy **Client Id** and **Client Secret** (shown once / via copy buttons).
+
+3. **Mint an access token** (JWT) with the IdP — same contract as interactive login, see [Swagger `POST /idp/v1/Authentication/Token`](https://api.seliseblocks.com/idp/v1/swagger/index.html) (`grant_type`, `client_id`, `client_secret` in multipart form). Example:
+
+```bash
+curl -s -X POST 'https://api.seliseblocks.com/idp/v1/Authentication/Token' \
+  -H "x-blocks-key: YOUR_PROJECT_X_BLOCKS_KEY" \
+  -F 'grant_type=client_credentials' \
+  -F 'client_id=YOUR_CLIENT_ID' \
+  -F 'client_secret=YOUR_CLIENT_SECRET'
+```
+
+Parse **`access_token`** from the JSON response and set **`VITE_VIBE_PUBLIC_READ_TOKEN`** to that value in [`.env.production`](.env.production), then rebuild and redeploy.
+
+4. **Expiry:** Client-credentials access tokens expire per **Access token validity** on **Authentication → General**. For a static env var in the bundle, raise validity (within org policy) or plan to rotate `VITE_VIBE_PUBLIC_READ_TOKEN` when it expires.
+
+**Security:** The value is **public** in the JavaScript bundle—treat it like an **anonymous read key**. Prefer **`user`** (or a custom read-only role), never **`cloudadmin`**, for this client; rotate **Client Secret** / delete the client if it leaks.
+
+If Selise documents **anonymous Data Gateway** reads later, you can try clearing this variable and relying on key-only access instead.
 
 **Note:** If the repository is **public**, anyone can read the committed key from Git—rotate the key in Blocks if needed. Private repos match how the Construct CLI scaffolds `--x-blocks-key` into app config.
 

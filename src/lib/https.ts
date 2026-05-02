@@ -2,6 +2,7 @@ import { getBlocksApiBaseUrl } from './blocks-api-base';
 import { useAuthStore } from '@/state/store/auth';
 import { getRefreshToken } from '@/modules/auth/services/auth.service';
 import { isLocalhost } from './utils/localhost-checker/locahost-checker';
+import { isPublicRoutePath } from '@/constant/auth-public-routes';
 
 /**
  * HTTP Client Module
@@ -57,6 +58,8 @@ import { isLocalhost } from './utils/localhost-checker/locahost-checker';
 interface Https {
   get<T>(url: string, headers?: HeadersInit): Promise<T>;
   post<T>(url: string, body: BodyInit, headers?: HeadersInit): Promise<T>;
+  /** POST without injecting the session access token or attempting refresh on 401 (for public / visitor gateway calls). */
+  postWithoutSessionRefresh<T>(url: string, body: BodyInit, headers?: HeadersInit): Promise<T>;
   put<T>(url: string, body: BodyInit, headers?: HeadersInit): Promise<T>;
   delete<T>(url: string, headers?: HeadersInit): Promise<T>;
   request<T>(url: string, options: RequestOptions): Promise<T>;
@@ -87,6 +90,33 @@ const BASE_URL = getBlocksApiBaseUrl();
 const projectKey = import.meta.env.VITE_X_BLOCKS_KEY ?? '';
 const localHostChecker = isLocalhost();
 
+function loginPath(): string {
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+  return `${base}/login`.replace(/([^:]\/)\/+/g, '$1');
+}
+
+/** Clear persisted auth and send the user to sign-in when refresh is no longer valid. */
+export function clearSessionAndForceLogin(): void {
+  useAuthStore.getState().logout();
+  try {
+    localStorage.removeItem('auth-storage');
+  } catch {
+    /* ignore */
+  }
+  const path = window.location.pathname;
+  if (path.startsWith('/login') || isPublicRoutePath(path)) return;
+  window.location.assign(loginPath());
+}
+
+function isInvalidRefreshTokenError(e: unknown): boolean {
+  return (
+    e instanceof HttpError &&
+    typeof e.error === 'object' &&
+    e.error !== null &&
+    (e.error as { error?: string }).error === 'invalid_refresh_token'
+  );
+}
+
 export const clients: Https = {
   async get<T>(url: string, headers: HeadersInit = {}): Promise<T> {
     return this.request<T>(url, { method: 'GET', headers });
@@ -94,6 +124,55 @@ export const clients: Https = {
 
   async post<T>(url: string, body: BodyInit, headers: HeadersInit = {}): Promise<T> {
     return this.request<T>(url, { method: 'POST', headers, body });
+  },
+
+  async postWithoutSessionRefresh<T>(
+    url: string,
+    body: BodyInit,
+    headers: HeadersInit = {}
+  ): Promise<T> {
+    const fullUrl = url.startsWith('http') ? url : `${BASE_URL}/${url.replace(/^\//, '')}`;
+
+    const headerEntries =
+      headers instanceof Headers ? Object.fromEntries(headers.entries()) : { ...headers };
+
+    const requestHeaders = new Headers({
+      'Content-Type': 'application/json',
+      'x-blocks-key': projectKey,
+      ...headerEntries,
+    });
+
+    const config: RequestInit = {
+      method: 'POST',
+      headers: requestHeaders,
+      referrerPolicy: 'no-referrer',
+      body,
+    };
+
+    if (!localHostChecker) {
+      config.credentials = 'include';
+    }
+
+    try {
+      const response = await fetch(fullUrl, config);
+
+      if (response.ok) {
+        return response.json() as Promise<T>;
+      }
+
+      let err;
+      try {
+        err = await response.json();
+      } catch {
+        err = { error: response.statusText || 'Request failed' };
+      }
+      throw new HttpError(response.status, err);
+    } catch (error) {
+      if (error instanceof HttpError) {
+        throw error;
+      }
+      throw new HttpError(500, { error: 'Network error' });
+    }
   },
 
   async put<T>(url: string, body: BodyInit, headers: HeadersInit = {}): Promise<T> {
@@ -191,16 +270,25 @@ export const clients: Https = {
     const authStore = useAuthStore.getState();
 
     if (!authStore.refreshToken) {
+      clearSessionAndForceLogin();
       throw new HttpError(401, { error: 'invalid_request' });
     }
 
-    const refreshTokenRes = await getRefreshToken();
+    try {
+      const refreshTokenRes = await getRefreshToken();
 
-    if (refreshTokenRes.error === 'invalid_request') {
-      throw new HttpError(401, refreshTokenRes);
+      if (refreshTokenRes.error === 'invalid_request') {
+        clearSessionAndForceLogin();
+        throw new HttpError(401, refreshTokenRes);
+      }
+
+      authStore.setAccessToken(refreshTokenRes.access_token);
+      return this.request<T>(url, { method, headers, body });
+    } catch (e) {
+      if (isInvalidRefreshTokenError(e)) {
+        clearSessionAndForceLogin();
+      }
+      throw e;
     }
-
-    authStore.setAccessToken(refreshTokenRes.access_token);
-    return this.request<T>(url, { method, headers, body });
   },
 };

@@ -155,6 +155,51 @@ const mapPage = (item: BlocksPage): WebsitePage => {
   };
 };
 
+/** Anonymous published-site reads: env JWT when gateway requires Bearer; omit when using IAM anonymous access. */
+const visitorReadBearer = (): string | undefined => {
+  const pub = import.meta.env.VITE_VIBE_PUBLIC_READ_TOKEN;
+  if (typeof pub === 'string' && pub.trim()) return pub.trim();
+  return undefined;
+};
+
+const listPagesWithVisitorBearer = async (
+  websiteId: string,
+  bearer: string | undefined
+): Promise<WebsitePage[]> => {
+  const data = await graphqlClient.queryWithVisitorBearer<{
+    getVibePages: { items: BlocksPage[] };
+  }>(
+    {
+      query: `
+            query GetPagesPublic($input: DynamicQueryInput) {
+              getVibePages(input: $input) {
+                items {
+                  ItemId
+                  WebsiteId
+                  OwnerId
+                  Slug
+                  Payload
+                  CreatedDate
+                  LastUpdatedDate
+                }
+              }
+            }
+          `,
+      variables: {
+        input: {
+          filter: JSON.stringify({ WebsiteId: websiteId }),
+          sort: JSON.stringify({ LastUpdatedDate: 1 }),
+          pageNo: 1,
+          pageSize: 100,
+        },
+      },
+    },
+    bearer
+  );
+
+  return (data.getVibePages?.items ?? []).map(mapPage).sort((a, b) => a.sortOrder - b.sortOrder);
+};
+
 const loadSnapshot = (): BuilderSnapshot => {
   if (typeof window === 'undefined') {
     return { websites: [], pages: [], assets: [] };
@@ -673,7 +718,8 @@ export const vibeBuilderService = {
 
     return runWithDemoFallback(
       async () => {
-        const websites = await graphqlClient.query<{ getVibeWebsites: { items: BlocksWebsite[] } }>({
+        const sessionToken = useAuthStore.getState().accessToken?.trim();
+        const websiteQuery = {
           query: `
             query GetPublicWebsite($input: DynamicQueryInput) {
               getVibeWebsites(input: $input) {
@@ -695,7 +741,14 @@ export const vibeBuilderService = {
               pageSize: 1,
             },
           },
-        });
+        };
+
+        const websites = sessionToken
+          ? await graphqlClient.query<{ getVibeWebsites: { items: BlocksWebsite[] } }>(websiteQuery)
+          : await graphqlClient.queryWithVisitorBearer<{
+              getVibeWebsites: { items: BlocksWebsite[] };
+            }>(websiteQuery, visitorReadBearer());
+
         const website = websites.getVibeWebsites?.items?.[0]
           ? mapWebsite(websites.getVibeWebsites.items[0])
           : undefined;
@@ -704,7 +757,10 @@ export const vibeBuilderService = {
           return { website: undefined, pages: [], page: undefined };
         }
 
-        const pages = await this.listPages(website.id);
+        const pages = sessionToken
+          ? await this.listPages(website.id)
+          : await listPagesWithVisitorBearer(website.id, visitorReadBearer());
+
         return {
           website,
           pages,
