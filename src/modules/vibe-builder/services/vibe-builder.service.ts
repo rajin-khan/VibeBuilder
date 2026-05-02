@@ -166,12 +166,12 @@ const runWithDemoFallback = async <T,>(operation: () => Promise<T>, fallback: ()
 
   try {
     return await operation();
-  } catch {
+  } catch (err) {
     if (import.meta.env.DEV) {
       return fallback();
     }
 
-    throw error;
+    throw err;
   }
 };
 
