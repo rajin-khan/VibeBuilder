@@ -81,13 +81,13 @@ GraphQL errors like **`getVibeWebsites does not exist on the type Query`** (or *
 
 | Entity name | Properties (type: String unless noted) | Notes |
 |-------------|----------------------------------------|--------|
-| **VibeWebsite** | `ItemId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, `IsDeleted` (Boolean) | List filter: `OwnerId` + `IsDeleted: false`. Soft deletes should set `IsDeleted: true`. |
-| **VibePage** | `ItemId`, `WebsiteId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, `IsDeleted` (Boolean) | List filter: `WebsiteId` + `IsDeleted: false`. |
-| **VibeAsset** | `ItemId`, `OwnerId`, `WebsiteId`, `FileName`, `Payload`, `CreatedDate`, `IsDeleted` (Boolean) | List filter: `WebsiteId` + `IsDeleted: false`. |
+| **VibeWebsite** | `ItemId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, optional `IsDeleted` (Boolean) | **App list filter:** `OwnerId` only in `DynamicQueryInput.filter` (JSON string). Omit `IsDeleted: false` unless every row has that field—Mongo-style equality excludes documents where the field is missing. |
+| **VibePage** | `ItemId`, `WebsiteId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, optional `IsDeleted` (Boolean) | **App list filter:** `WebsiteId` only (same note on `IsDeleted`). |
+| **VibeAsset** | `ItemId`, `OwnerId`, `WebsiteId`, `FileName`, `Payload`, `CreatedDate`, optional `IsDeleted` (Boolean) | **App list filter:** `WebsiteId` only (same note on `IsDeleted`). |
 
-The GraphQL **`InsertInput`** types for these entities **omit `CreatedDate` / `LastUpdatedDate`** (the gateway sets them). **`UpdateInput`** types include **`OwnerId` / `Slug` / `Payload`** (and **`WebsiteId`** on pages) plus optional **`Language` / `OrganizationIds` / `Tags`** — not `ItemId` or timestamps. **`DeleteInput`** is only **`isHardDelete`** (boolean), same as other Blocks entities (e.g. inventory). Confirm fields in **Data Playground → Schemas → Input Types** after each publish.
+The GraphQL **`InsertInput`** types for these entities **omit `CreatedDate` / `LastUpdatedDate`** (the gateway sets them). **Do not send `ItemId` on insert** — let the gateway assign `_id` and use the mutation’s **`itemId`** return value (same as inventory). Client-generated ids like `site_<uuid>` can cause insert failures. **`UpdateInput`** types include **`OwnerId` / `Slug` / `Payload`** (and **`WebsiteId`** on pages) plus optional **`Language` / `OrganizationIds` / `Tags`** — not `ItemId` or timestamps. **`DeleteInput`** is only **`isHardDelete`** (boolean), same as other Blocks entities (e.g. inventory). Confirm fields in **Data Playground → Schemas → Input Types** after each publish.
 
-The app keeps canonical dates inside **`Payload`** on create/update. List `DynamicQueryInput` filters may still use **`IsDeleted`** if that column exists in your collection; it is not always exposed on the GraphQL object type.
+The app keeps canonical dates inside **`Payload`** on create/update. **`insertVibeWebsite` / `insertVibePage` / `insertVibeAsset`** return **`ActionResponse`**: `acknowledged`, `itemId`, `message`, and (in Playground) **`totalImpactedData`**—use **`itemId`** as the persisted id.
 
 Use **Data Playground → Schemas** to confirm **`getVibeWebsites` / `getVibePages` / `getVibeAssets`** and mutation input shapes. **Publish** after schema edits or the API will not match.
 

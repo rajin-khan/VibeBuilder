@@ -211,16 +211,30 @@ const runWithDemoFallback = async <T,>(operation: () => Promise<T>, fallback: ()
   }
 };
 
-/** Insert types omit server-managed timestamps; dates still live inside `Payload` JSON. */
+/** Server-generated `ItemId` / `_id` (do not send `ItemId` on insert — same pattern as inventory). */
+type GatewayInsertResult = {
+  itemId?: string | null;
+  acknowledged?: boolean | null;
+  message?: string | null;
+};
+
+const requireInsertItemId = (row: GatewayInsertResult | null | undefined, operation: string): string => {
+  const id = row?.itemId?.trim();
+  if (id) {
+    return id;
+  }
+  const hint = row?.message?.trim() ? ` (${row.message})` : '';
+  throw new Error(`${operation} did not return itemId${hint}`);
+};
+
+/** Omit `ItemId` so the gateway assigns `_id` (client-generated `site_…` / `page_…` ids break inserts). */
 const websiteInsertInput = (website: Website) => ({
-  ItemId: website.id,
   OwnerId: website.ownerId,
   Slug: website.slug,
   Payload: JSON.stringify(website),
 });
 
 const pageInsertInput = (page: WebsitePage) => ({
-  ItemId: page.id,
   WebsiteId: page.websiteId,
   OwnerId: page.ownerId,
   Slug: page.slug,
@@ -228,7 +242,6 @@ const pageInsertInput = (page: WebsitePage) => ({
 });
 
 const assetInsertInput = (asset: Asset) => ({
-  ItemId: asset.id,
   OwnerId: asset.ownerId,
   WebsiteId: asset.websiteId,
   FileName: asset.fileName,
@@ -270,7 +283,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             input: {
-              filter: JSON.stringify({ OwnerId: ownerId, IsDeleted: false }),
+              filter: JSON.stringify({ OwnerId: ownerId }),
               sort: JSON.stringify({ LastUpdatedDate: -1 }),
               pageNo: 1,
               pageSize: 100,
@@ -305,7 +318,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             input: {
-              filter: JSON.stringify({ WebsiteId: websiteId, IsDeleted: false }),
+              filter: JSON.stringify({ WebsiteId: websiteId }),
               sort: JSON.stringify({ LastUpdatedDate: 1 }),
               pageNo: 1,
               pageSize: 100,
@@ -340,28 +353,38 @@ export const vibeBuilderService = {
         };
         const page = this.createPageShape(website, 'Home', 0);
 
-        await graphqlClient.mutate({
+        const websiteRes = await graphqlClient.mutate<{ insertVibeWebsite?: GatewayInsertResult }>({
           query: `
             mutation InsertWebsite($input: VibeWebsiteInsertInput!) {
               insertVibeWebsite(input: $input) {
                 itemId
+                acknowledged
+                message
               }
             }
           `,
           variables: { input: websiteInsertInput(website) },
         });
-        await graphqlClient.mutate({
+        const persistedWebsiteId = requireInsertItemId(websiteRes.insertVibeWebsite, 'insertVibeWebsite');
+        const websiteOut: Website = { ...website, id: persistedWebsiteId };
+
+        const pageForInsert: WebsitePage = { ...page, websiteId: persistedWebsiteId };
+        const pageRes = await graphqlClient.mutate<{ insertVibePage?: GatewayInsertResult }>({
           query: `
             mutation InsertPage($input: VibePageInsertInput!) {
               insertVibePage(input: $input) {
                 itemId
+                acknowledged
+                message
               }
             }
           `,
-          variables: { input: pageInsertInput(page) },
+          variables: { input: pageInsertInput(pageForInsert) },
         });
+        const persistedPageId = requireInsertItemId(pageRes.insertVibePage, 'insertVibePage');
+        const pageOut: WebsitePage = { ...pageForInsert, id: persistedPageId };
 
-        return { website, page };
+        return { website: websiteOut, page: pageOut };
       },
       () => {
         const snapshot = loadSnapshot();
@@ -413,18 +436,20 @@ export const vibeBuilderService = {
 
     return runWithDemoFallback(
       async () => {
-        await graphqlClient.mutate({
+        const pageRes = await graphqlClient.mutate<{ insertVibePage?: GatewayInsertResult }>({
           query: `
             mutation InsertPage($input: VibePageInsertInput!) {
               insertVibePage(input: $input) {
                 itemId
+                acknowledged
+                message
               }
             }
           `,
           variables: { input: pageInsertInput(page) },
         });
-
-        return page;
+        const persistedPageId = requireInsertItemId(pageRes.insertVibePage, 'insertVibePage');
+        return { ...page, id: persistedPageId };
       },
       () => {
         const snapshot = loadSnapshot();
@@ -630,7 +655,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             input: {
-              filter: JSON.stringify({ Slug: siteSlug, IsDeleted: false }),
+              filter: JSON.stringify({ Slug: siteSlug }),
               pageNo: 1,
               pageSize: 1,
             },
@@ -760,7 +785,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             input: {
-              filter: JSON.stringify({ WebsiteId: websiteId, IsDeleted: false }),
+              filter: JSON.stringify({ WebsiteId: websiteId }),
               sort: JSON.stringify({ CreatedDate: -1 }),
               pageNo: 1,
               pageSize: 200,
@@ -846,18 +871,20 @@ export const vibeBuilderService = {
 
     return runWithDemoFallback(
       async () => {
-        await graphqlClient.mutate({
+        const assetRes = await graphqlClient.mutate<{ insertVibeAsset?: GatewayInsertResult }>({
           query: `
             mutation InsertAsset($input: VibeAssetInsertInput!) {
               insertVibeAsset(input: $input) {
                 itemId
+                acknowledged
+                message
               }
             }
           `,
           variables: { input: assetInsertInput(asset) },
         });
-
-        return asset;
+        const persistedAssetId = requireInsertItemId(assetRes.insertVibeAsset, 'insertVibeAsset');
+        return { ...asset, id: persistedAssetId };
       },
       () => {
         const snapshot = loadSnapshot();

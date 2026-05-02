@@ -75,7 +75,16 @@ export const graphqlClient: GraphQLClient = {
     );
 
     if (response.errors && response.errors.length > 0) {
-      throw new Error(response.errors[0].message);
+      const parts = response.errors.map((e) => {
+        const ext =
+          e.extensions && Object.keys(e.extensions).length > 0 ? ` ${JSON.stringify(e.extensions)}` : '';
+        return `${e.message}${ext}`;
+      });
+      throw new Error(parts.join('; '));
+    }
+
+    if (response.data == null) {
+      throw new Error('GraphQL returned no data payload');
     }
 
     return (response.data as T) ?? ({} as T);
@@ -97,7 +106,16 @@ export const graphqlClient: GraphQLClient = {
     );
 
     if (response.errors && response.errors.length > 0) {
-      throw new Error(response.errors[0].message);
+      const parts = response.errors.map((e) => {
+        const ext =
+          e.extensions && Object.keys(e.extensions).length > 0 ? ` ${JSON.stringify(e.extensions)}` : '';
+        return `${e.message}${ext}`;
+      });
+      throw new Error(parts.join('; '));
+    }
+
+    if (response.data == null) {
+      throw new Error('GraphQL returned no data payload');
     }
 
     return response.data as T;
