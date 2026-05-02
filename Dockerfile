@@ -1,6 +1,10 @@
-FROM node:21.7.0-alpine AS builder
+# Match Vite engine (^20.19 || >=22.12); avoid non-LTS Node 21 in CI
+FROM node:22-alpine AS builder
 
 WORKDIR /app
+
+# Husky expects .git; Docker builds have no .git — skip git hooks during install
+ENV HUSKY=0
 
 COPY package*.json ./
 

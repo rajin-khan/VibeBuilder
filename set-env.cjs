@@ -10,12 +10,13 @@ const env = process.env.BUILD_ENV || 'dev'; // Options: development, stg, produc
 const envFile = `.env.${env}`;
 const targetFile = path.join(__dirname, '.env');
 
-// Check if the environment file exists
+// In CI (e.g. Selise Blocks Docker build), secrets come from injected env vars, not a committed file.
 if (!fs.existsSync(envFile)) {
-  console.error(`❌ Error: ${envFile} does not exist.`);
-  process.exit(1);
+  console.warn(
+    `⚠️  ${envFile} not found — skipping copy. Vite will use VITE_* from the environment (CI/Blocks Cloud).`
+  );
+  process.exit(0);
 }
 
-// Copy the correct environment file to `.env`
 fs.copyFileSync(envFile, targetFile);
 console.log(`✅ Successfully set environment: ${envFile} → .env`);

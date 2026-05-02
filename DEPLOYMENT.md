@@ -29,6 +29,8 @@ Configure the same keys as [.env.example](.env.example) in the Blocks **deployme
 
 `VITE_*` values are baked into the client bundle at build time.
 
+**Selise Blocks Docker build:** `npm run build:prod` runs `set-env` then `vite build`. If `.env.prod` is not in the repo (recommended—do not commit secrets), `set-env` skips copying and Vite reads **`VITE_*` from the environment**. You **must** define those variables in the Blocks deployment / build configuration so they exist during the image build.
+
 ### Portal flow (summary)
 
 1. Open [Blocks Cloud](https://cloud.seliseblocks.com) (or your tenant URL).
