@@ -43,15 +43,23 @@ This app is a **Vite** SPA: `npm run build` writes to **`build/`**. Use **SELISE
 | `VITE_API_BASE_URL` | Selise API base URL |
 | `VITE_X_BLOCKS_KEY` | Project X-Blocks-Key (also sent as `x-blocks-key`; visible in the client bundle) |
 | `VITE_PROJECT_SLUG` | Project slug for the GraphQL gateway path |
-| `VITE_VIBE_PUBLIC_READ_TOKEN` | Optional but recommended for **published** `/site/...` pages: a **read-scoped** access token (JWT) embedded in the bundle so anonymous visitors can call `getVibeWebsites` / `getVibePages`. See [Public site reads](#public-site-reads-vite_vibe_public_read_token) below. |
+| `VITE_VIBE_PUBLIC_READ_TOKEN` | **Optional fallback** for anonymous `/site/...` GraphQL reads if you keep Data Gateway **View** on **logged-in users only**. Prefer [public schema View access](#public-data-gateway-view-for-anonymous-reads) so this can stay unset. |
 | `VITE_CAPTCHA_SITE_KEY` | Optional; if IAM uses captcha |
 | `VITE_CAPTCHA_TYPE` | Optional; must match IAM |
 
 Keep [.env.example](.env.example) as a template for **local** `.env` (gitignored). If you rotate the key or slug in **Environment Overview**, update **`.env.production`** and redeploy.
 
-#### Public site reads (`VITE_VIBE_PUBLIC_READ_TOKEN`)
+#### Public Data Gateway View (for anonymous reads)
 
-The Data Gateway often requires a **Bearer** token; `x-blocks-key` alone is not enough. For **incognito** users opening `/site/your-slug`, the app sends this JWT (when set) instead of a user session token.
+For **anonymous** visitors on `/site/...`, the app calls `getVibeWebsites` / `getVibePages` with **`x-blocks-key` only** (no session Bearer) when those collections allow public reads.
+
+In **Blocks Cloud → Data Gateway** ([overview](https://cloud.seliseblocks.com/services/data-gateway)), open each Vibe collection → **Schema Access** → **View** tab → set access to **Public** → confirm. At minimum set **View** to Public for **VibeWebsite**, **VibePage**, and **VibeAsset** (and any other schema your published site queries anonymously). Leave **Create** / **Edit** / **Delete** restricted to logged-in users unless you intend otherwise.
+
+**Security:** Public **View** exposes read access to those records to anyone with the project key (already in the client bundle). Ensure published payloads do not contain secrets.
+
+#### Public site reads — optional JWT (`VITE_VIBE_PUBLIC_READ_TOKEN`)
+
+If you **cannot** use public **View** on those schemas, anonymous users need a **Bearer** token: the app sends this JWT (when set) via `queryWithVisitorBearer` instead of a user session token.
 
 Verified flow in **Blocks Cloud** (prod environment, sidebar **Users / IAM** icon):
 
@@ -81,7 +89,7 @@ Parse **`access_token`** from the JSON response and set **`VITE_VIBE_PUBLIC_READ
 
 **Security:** The value is **public** in the JavaScript bundle—treat it like an **anonymous read key**. Prefer **`user`** (or a custom read-only role), never **`cloudadmin`**, for this client; rotate **Client Secret** / delete the client if it leaks.
 
-If Selise documents **anonymous Data Gateway** reads later, you can try clearing this variable and relying on key-only access instead.
+If **View** is **Public** on the schemas above, leave **`VITE_VIBE_PUBLIC_READ_TOKEN` unset** (or empty) and rely on `x-blocks-key` only for those reads.
 
 **Note:** If the repository is **public**, anyone can read the committed key from Git—rotate the key in Blocks if needed. Private repos match how the Construct CLI scaffolds `--x-blocks-key` into app config.
 

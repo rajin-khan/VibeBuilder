@@ -6,8 +6,8 @@ interface ImportMetaEnv {
   readonly VITE_CAPTCHA_SITE_KEY: string;
   readonly VITE_CAPTCHA_TYPE: string;
   readonly VITE_PROJECT_SLUG: string;
-  /** Optional. Read-scoped JWT for published-site GraphQL (`/site/...`) when the gateway requires Bearer for anonymous users. */
-  readonly VITE_VIBE_PUBLIC_READ_TOKEN: string;
+  /** Optional. JWT for anonymous /site reads when Data Gateway View is not Public. */
+  readonly VITE_VIBE_PUBLIC_READ_TOKEN?: string;
   readonly VITE_BLOCKS_OIDC_CLIENT_ID: string;
   readonly VITE_BLOCKS_OIDC_REDIRECT_URI: string;
 }

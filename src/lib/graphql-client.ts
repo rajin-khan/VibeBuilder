@@ -47,8 +47,8 @@ interface GraphQLResponse<T = any> {
 interface GraphQLClient {
   query<T>(request: GraphQLRequest): Promise<T>;
   /**
-   * Read-only gateway query for published sites: uses an explicit bearer (or none), never the
-   * session refresh flow. Pass user access token and/or set VITE_VIBE_PUBLIC_READ_TOKEN in env.
+   * Read-only gateway query for published sites: uses postWithoutSessionRefresh and optional Bearer.
+   * Omit bearer when Data Gateway **View** is Public for the queried schemas (x-blocks-key only).
    */
   queryWithVisitorBearer<T>(request: GraphQLRequest, bearerToken: string | undefined): Promise<T>;
   mutate<T>(request: GraphQLRequest): Promise<T>;
