@@ -211,32 +211,42 @@ const runWithDemoFallback = async <T,>(operation: () => Promise<T>, fallback: ()
   }
 };
 
-const websiteInput = (website: Website) => ({
+/** Insert types omit server-managed timestamps; dates still live inside `Payload` JSON. */
+const websiteInsertInput = (website: Website) => ({
   ItemId: website.id,
   OwnerId: website.ownerId,
   Slug: website.slug,
   Payload: JSON.stringify(website),
-  CreatedDate: website.createdAt,
-  LastUpdatedDate: website.updatedAt,
 });
 
-const pageInput = (page: WebsitePage) => ({
+const pageInsertInput = (page: WebsitePage) => ({
   ItemId: page.id,
   WebsiteId: page.websiteId,
   OwnerId: page.ownerId,
   Slug: page.slug,
   Payload: JSON.stringify(page),
-  CreatedDate: page.createdAt,
-  LastUpdatedDate: page.updatedAt,
 });
 
-const assetInput = (asset: Asset) => ({
+const assetInsertInput = (asset: Asset) => ({
   ItemId: asset.id,
   OwnerId: asset.ownerId,
   WebsiteId: asset.websiteId,
   FileName: asset.fileName,
   Payload: JSON.stringify(asset),
-  CreatedDate: asset.createdAt,
+});
+
+/** Update inputs: match `VibeWebsiteUpdateInput` / `VibePageUpdateInput` (Data Gateway has no ItemId/timestamps here). */
+const websiteUpdateInput = (website: Website) => ({
+  OwnerId: website.ownerId,
+  Slug: website.slug,
+  Payload: JSON.stringify(website),
+});
+
+const pageUpdateInput = (page: WebsitePage) => ({
+  WebsiteId: page.websiteId,
+  OwnerId: page.ownerId,
+  Slug: page.slug,
+  Payload: JSON.stringify(page),
 });
 
 export const vibeBuilderService = {
@@ -338,7 +348,7 @@ export const vibeBuilderService = {
               }
             }
           `,
-          variables: { input: websiteInput(website) },
+          variables: { input: websiteInsertInput(website) },
         });
         await graphqlClient.mutate({
           query: `
@@ -348,7 +358,7 @@ export const vibeBuilderService = {
               }
             }
           `,
-          variables: { input: pageInput(page) },
+          variables: { input: pageInsertInput(page) },
         });
 
         return { website, page };
@@ -411,7 +421,7 @@ export const vibeBuilderService = {
               }
             }
           `,
-          variables: { input: pageInput(page) },
+          variables: { input: pageInsertInput(page) },
         });
 
         return page;
@@ -437,7 +447,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: pageId }),
-            input: { IsDeleted: true, LastUpdatedDate: now() },
+            input: { isHardDelete: true },
           },
         });
       },
@@ -470,7 +480,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: page.id }),
-            input: pageInput(updatedPage),
+            input: pageUpdateInput(updatedPage),
           },
         });
 
@@ -503,7 +513,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: page.id }),
-            input: pageInput(updatedPage),
+            input: pageUpdateInput(updatedPage),
           },
         });
 
@@ -547,7 +557,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: website.id }),
-            input: websiteInput(updatedWebsite),
+            input: websiteUpdateInput(updatedWebsite),
           },
         });
         await graphqlClient.mutate({
@@ -560,7 +570,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: page.id }),
-            input: pageInput(updatedPage),
+            input: pageUpdateInput(updatedPage),
           },
         });
 
@@ -672,7 +682,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: website.id }),
-            input: websiteInput(updated),
+            input: websiteUpdateInput(updated),
           },
         });
         return updated;
@@ -703,7 +713,7 @@ export const vibeBuilderService = {
           `,
           variables: {
             filter: JSON.stringify({ _id: websiteId }),
-            input: { IsDeleted: true, LastUpdatedDate: now() },
+            input: { isHardDelete: true },
           },
         });
       },
@@ -844,7 +854,7 @@ export const vibeBuilderService = {
               }
             }
           `,
-          variables: { input: assetInput(asset) },
+          variables: { input: assetInsertInput(asset) },
         });
 
         return asset;

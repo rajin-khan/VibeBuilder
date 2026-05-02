@@ -85,7 +85,11 @@ GraphQL errors like **`getVibeWebsites does not exist on the type Query`** (or *
 | **VibePage** | `ItemId`, `WebsiteId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, `IsDeleted` (Boolean) | List filter: `WebsiteId` + `IsDeleted: false`. |
 | **VibeAsset** | `ItemId`, `OwnerId`, `WebsiteId`, `FileName`, `Payload`, `CreatedDate`, `IsDeleted` (Boolean) | List filter: `WebsiteId` + `IsDeleted: false`. |
 
-Use **Data Playground → Schemas** to confirm **`getVibeWebsites` / `getVibePages` / `getVibeAssets`** and **`insertVibeWebsite`**, **`updateVibeWebsite`**, etc. **Publish** after schema edits or the API will not match.
+The GraphQL **`InsertInput`** types for these entities **omit `CreatedDate` / `LastUpdatedDate`** (the gateway sets them). **`UpdateInput`** types include **`OwnerId` / `Slug` / `Payload`** (and **`WebsiteId`** on pages) plus optional **`Language` / `OrganizationIds` / `Tags`** — not `ItemId` or timestamps. **`DeleteInput`** is only **`isHardDelete`** (boolean), same as other Blocks entities (e.g. inventory). Confirm fields in **Data Playground → Schemas → Input Types** after each publish.
+
+The app keeps canonical dates inside **`Payload`** on create/update. List `DynamicQueryInput` filters may still use **`IsDeleted`** if that column exists in your collection; it is not always exposed on the GraphQL object type.
+
+Use **Data Playground → Schemas** to confirm **`getVibeWebsites` / `getVibePages` / `getVibeAssets`** and mutation input shapes. **Publish** after schema edits or the API will not match.
 
 **`_id` vs `ItemId`:** mutations use `filter: JSON.stringify({ _id: "<id>" })` for updates/deletes using the website/page **id** stored in `ItemId` / payload. With Blocks Database, confirm new rows use `_id` equal to `ItemId` (or change [vibe-builder.service.ts](src/modules/vibe-builder/services/vibe-builder.service.ts) filters to the field your gateway uses).
 
