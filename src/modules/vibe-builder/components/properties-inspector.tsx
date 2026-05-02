@@ -322,6 +322,8 @@ const renderField = (
                 if (file) {
                   onUploadImage(file, field.key);
                 }
+                event.target.value = '';
+                event.target.blur();
               }}
             />
           </label>

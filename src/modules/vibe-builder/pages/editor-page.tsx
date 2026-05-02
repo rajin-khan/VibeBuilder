@@ -558,8 +558,16 @@ export const EditorPage = () => {
     try {
       const asset = await uploadAsset.mutateAsync({ file, websiteId: website.id, ownerId });
       applyDeepProp(selectedBlock.id, propKey, asset.url);
-    } catch {
-      applyDeepProp(selectedBlock.id, propKey, URL.createObjectURL(file));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : 'Image upload failed.';
+      toast({ variant: 'destructive', title: 'Upload failed', description: message });
+      if (import.meta.env.DEV) {
+        try {
+          applyDeepProp(selectedBlock.id, propKey, URL.createObjectURL(file));
+        } catch {
+          /* ignore */
+        }
+      }
     }
   };
 

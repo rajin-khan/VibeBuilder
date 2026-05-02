@@ -74,7 +74,7 @@ export const PublicSitePage = () => {
 
   return (
     <div
-      className="min-h-screen"
+      className="min-h-screen w-full min-w-0 overflow-x-hidden"
       style={themeStyle}
       data-vibe-public-site={website.slug}
     >
@@ -121,7 +121,7 @@ export const PublicSitePage = () => {
         </nav>
       </header>
 
-      <main>
+      <main className="w-full min-w-0">
         {page.publishedLayout.blocks.map((block) => (
           <VibeBlockRenderer key={block.id} block={block} />
         ))}

@@ -13,6 +13,7 @@ import { createId, toSlug, uniqueSlug } from '../utils/slug';
 import { migrateLayoutToV2 } from '../utils/block-tree';
 import { useAuthStore } from '@/state/store/auth';
 import { isLocalDemoToken } from '@/modules/auth/utils/demo-session';
+import { ModuleName } from '@/constant/modules.constants';
 
 const STORAGE_KEY = 'vibebuilder-demo-snapshot-v1';
 
@@ -38,6 +39,40 @@ type BlocksPage = {
 const emptyLayout = (): VibePageLayout => ({ version: 2, blocks: [] });
 
 const now = () => new Date().toISOString();
+
+/** Storage/CDN URLs must be absolute so <img src> is never a bare path (avoids ERR_FILE_NOT_FOUND on /site/...). */
+const assertHttpsPublicUrl = (raw: string): string => {
+  const trimmed = raw.trim();
+  if (!trimmed) {
+    throw new Error('Upload did not return a public file URL.');
+  }
+  try {
+    const url = new URL(trimmed);
+    if (url.protocol !== 'https:' && url.protocol !== 'http:') {
+      throw new Error('File URL must be http(s).');
+    }
+    return trimmed;
+  } catch (e) {
+    if (e instanceof TypeError) {
+      throw new Error('File URL must be an absolute http(s) address.');
+    }
+    throw e;
+  }
+};
+
+const preSignedPut = async (uploadUrl: string, file: File) => {
+  const res = await fetch(uploadUrl, {
+    method: 'PUT',
+    body: file,
+    headers: {
+      'Content-Type': file.type || 'application/octet-stream',
+      'x-ms-blob-type': 'BlockBlob',
+    },
+  });
+  if (!res.ok) {
+    throw new Error(`Storage upload failed (${res.status}).`);
+  }
+};
 
 const parseLayout = (value: VibePageLayout | string | undefined): VibePageLayout => {
   if (!value) {
@@ -842,28 +877,33 @@ export const vibeBuilderService = {
     const response = await getPreSignedUrlForUpload({
       name: file.name,
       projectKey: import.meta.env.VITE_X_BLOCKS_KEY,
-      moduleName: 0,
+      itemId: '',
       metaData: JSON.stringify({ websiteId, ownerId, source: 'vibebuilder' }),
+      accessModifier: 'Public',
+      configurationName: 'Default',
+      parentDirectoryId: '',
+      tags: '',
+      moduleName: ModuleName.DefaultConstruct,
     });
 
-    if (!response.uploadUrl) {
-      throw new Error('Blocks Storage did not return an upload URL.');
+    if (!response.isSuccess || !response.uploadUrl) {
+      const detail =
+        response.errors && Object.keys(response.errors).length > 0
+          ? ` ${JSON.stringify(response.errors)}`
+          : '';
+      throw new Error(`Blocks Storage presign failed.${detail}`);
     }
 
-    await fetch(response.uploadUrl, {
-      method: 'PUT',
-      body: file,
-      headers: {
-        'Content-Type': file.type || 'application/octet-stream',
-      },
-    });
+    await preSignedPut(response.uploadUrl, file);
+
+    const publicUrl = assertHttpsPublicUrl(response.uploadUrl.split('?')[0]);
 
     const asset: Asset = {
       id: response.fileId ?? createId('asset'),
       ownerId,
       websiteId,
       fileName: file.name,
-      url: response.uploadUrl.split('?')[0],
+      url: publicUrl,
       mimeType: file.type,
       size: file.size,
       createdAt: now(),

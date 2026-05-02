@@ -135,13 +135,18 @@ export const AssetPicker = ({
         websiteId,
         ownerId,
       });
-      const url = asset.url || URL.createObjectURL(file);
-      onSelect(url);
+      if (!asset.url) {
+        throw new Error('Upload did not return a file URL.');
+      }
+      onSelect(asset.url);
       onOpenChange(false);
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Upload failed');
-      onSelect(URL.createObjectURL(file));
-      onOpenChange(false);
+      const message = err instanceof Error ? err.message : 'Upload failed';
+      setError(message);
+      if (import.meta.env.DEV) {
+        onSelect(URL.createObjectURL(file));
+        onOpenChange(false);
+      }
     }
   };
 
@@ -158,10 +163,18 @@ export const AssetPicker = ({
             websiteId,
             ownerId,
           });
-          urls.push(asset.url || URL.createObjectURL(file));
+          if (asset.url) {
+            urls.push(asset.url);
+          }
         } catch {
-          urls.push(URL.createObjectURL(file));
+          if (import.meta.env.DEV) {
+            urls.push(URL.createObjectURL(file));
+          }
         }
+      }
+      if (urls.length === 0) {
+        setError('Upload failed. Check your connection and try again.');
+        return;
       }
       if (multiple && onSelectMany) {
         onSelectMany(urls);
@@ -191,7 +204,10 @@ export const AssetPicker = ({
         onOpenChange(value);
       }}
     >
-      <DialogContent className="max-w-3xl">
+      <DialogContent
+        className="max-w-3xl"
+        onCloseAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle className="font-display text-lg font-semibold">
             {multiple ? 'Choose images' : 'Choose an image'}

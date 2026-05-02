@@ -83,6 +83,25 @@ const prop = (block: VibeBlock, key: string, fallback = ''): string => {
   return String(value);
 };
 
+/** Rejects bare UUIDs and relative paths so <img src> never hits /site/.../uuid (404). */
+const BARE_UUID =
+  /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
+const safeImageUrl = (raw: unknown): string => {
+  if (raw === undefined || raw === null) return '';
+  const s = String(raw).trim();
+  if (!s || BARE_UUID.test(s)) return '';
+  if (s.startsWith('blob:') || s.startsWith('data:')) return s;
+  if (/^https?:\/\//i.test(s)) return s;
+  try {
+    const u = new URL(s);
+    if (u.protocol === 'https:' || u.protocol === 'http:') return s;
+  } catch {
+    /* not usable as absolute URL */
+  }
+  return '';
+};
+
 const numberProp = (block: VibeBlock, key: string, fallback: number) => {
   const value = Number(block.props[key]);
   return Number.isFinite(value) ? value : fallback;
@@ -123,7 +142,7 @@ const Section = ({
       className={`relative w-full ${blockVisibilityClass(block)} ${customClass ? customClass : ''} ${className}`}
       style={wrapper}
     >
-      <div style={inner} className="relative z-10 w-full">
+      <div style={inner} className="relative z-10 w-full min-w-0 max-w-full">
         {children}
       </div>
     </section>
@@ -3004,7 +3023,7 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
     const layout = prop(block, 'heroLayout', 'split');
     const align = prop(block, 'align', 'left');
     const minHeight = `${numberProp(block, 'heroHeight', 620)}px`;
-    const media = prop(block, 'media');
+    const media = safeImageUrl(block.props.media);
     const headline = prop(block, 'headline');
     const showBody = !boolProp(block, 'hideBody', false);
     const headlineSize = prop(block, 'headlineSize', 'lg');
@@ -3096,7 +3115,7 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
       <Section block={block} fallbackBackground="#0f172a">
         {layout === 'overlay' && media && overlayGradient ? (
           <div
-            className="relative overflow-hidden rounded-3xl"
+            className="relative max-w-full overflow-hidden rounded-3xl"
             style={{
               minHeight,
               backgroundImage: overlayGradient,
@@ -3107,17 +3126,20 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
             <div className="px-6 py-16 text-[#f7f4ea] sm:px-10 sm:py-24">{inner}</div>
           </div>
         ) : layout === 'split' ? (
-          <div className="grid items-center gap-10 lg:grid-cols-[1.05fr_0.95fr]" style={{ minHeight }}>
-            <div>{inner}</div>
+          <div
+            className="grid min-w-0 max-w-full items-center gap-10 lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]"
+            style={{ minHeight }}
+          >
+            <div className="min-w-0">{inner}</div>
             <div
-              className="relative overflow-hidden rounded-3xl border"
+              className="relative min-w-0 max-w-full overflow-hidden rounded-3xl border"
               style={{ borderColor: tokens.surfaceBorder, background: tokens.surface }}
             >
               {media ? (
                 <img
                   src={media}
                   alt=""
-                  className="aspect-[5/4] w-full object-cover"
+                  className="aspect-[5/4] max-h-[min(80dvh,900px)] w-full max-w-full object-cover"
                   style={{ objectFit: mediaFit, objectPosition: bgPos }}
                 />
               ) : (
@@ -3225,6 +3247,7 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
         </div>
         <div className={`mt-8 grid gap-5 ${gridCols}`}>
           {items.map((item, index) => {
+            const cardImageUrl = safeImageUrl(item.image);
             const IconComponent =
               isCardGrid
                 ? null
@@ -3242,8 +3265,12 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
                 {isCardGrid ? (
                   <>
                     <div className="overflow-hidden rounded-xl">
-                      {item.image ? (
-                        <img src={item.image} alt={item.title} className="aspect-[4/3] w-full object-cover" />
+                      {cardImageUrl ? (
+                        <img
+                          src={cardImageUrl}
+                          alt={item.title}
+                          className="aspect-[4/3] w-full max-w-full object-cover"
+                        />
                       ) : (
                         <PlaceholderImage accent={accent} ratio="aspect-[4/3]" rounded="rounded-xl" isDark={tokens.isDark} />
                       )}
@@ -3394,18 +3421,20 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
           </div>
           <div className="h-1 w-20 rounded-full" style={{ backgroundColor: accent }} />
         </div>
-        <div className={`grid gap-4 ${grid}`}>
-          {items.map((item, index) => (
+        <div className={`grid min-w-0 gap-4 ${grid}`}>
+          {items.map((item, index) => {
+            const gallerySrc = safeImageUrl(item.image);
+            return (
             <figure
               key={index}
-              className={`overflow-hidden rounded-2xl border bg-[#f7f4ea] shadow-sm ${layout === 'masonry' && index === 0 ? 'sm:row-span-2' : ''}`}
+              className={`min-w-0 overflow-hidden rounded-2xl border bg-[#f7f4ea] shadow-sm ${layout === 'masonry' && index === 0 ? 'sm:row-span-2' : ''}`}
               style={{ borderColor: tokens.surfaceBorder, background: tokens.surface }}
             >
-              {item.image ? (
+              {gallerySrc ? (
                 <img
-                  src={item.image}
+                  src={gallerySrc}
                   alt={item.caption}
-                  className={`w-full object-cover ${layout === 'masonry' && index === 0 ? 'aspect-[4/5] h-full' : 'aspect-[4/3]'}`}
+                  className={`max-h-[min(85dvh,1200px)] w-full max-w-full object-cover ${layout === 'masonry' && index === 0 ? 'aspect-[4/5] h-full' : 'aspect-[4/3]'}`}
                 />
               ) : (
                 <PlaceholderImage
@@ -3421,7 +3450,8 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
                 </figcaption>
               )}
             </figure>
-          ))}
+            );
+          })}
         </div>
       </Section>
     );
@@ -3438,12 +3468,17 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
       '3/4': 'aspect-[3/4]',
       auto: '',
     };
+    const imageBlockUrl = safeImageUrl(block.props.image);
 
     return (
       <Section block={block}>
-        <div className={`max-w-4xl ${wrapAlign}`}>
-          {prop(block, 'image') ? (
-            <img src={prop(block, 'image')} alt={prop(block, 'caption')} className={`w-full overflow-hidden rounded-3xl object-cover ${aspectClass[aspect] ?? ''}`} />
+        <div className={`min-w-0 max-w-4xl ${wrapAlign}`}>
+          {imageBlockUrl ? (
+            <img
+              src={imageBlockUrl}
+              alt={prop(block, 'caption')}
+              className={`w-full max-w-full overflow-hidden rounded-3xl object-cover ${aspectClass[aspect] ?? ''}`}
+            />
           ) : (
             <PlaceholderImage
               accent={accent}
@@ -3467,6 +3502,8 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
     const isMinimal = tone === 'minimal';
     const isGradient = tone === 'gradient';
 
+    const testimonialAvatar = safeImageUrl(block.props.avatar);
+
     return (
       <Section block={block} fallbackBackground="#fff7ed">
         <figure
@@ -3489,8 +3526,8 @@ export const VibeBlockRenderer = ({ block }: { block: VibeBlock }) => {
             &ldquo;{prop(block, 'quote')}&rdquo;
           </blockquote>
           <figcaption className="mt-7 flex items-center gap-3 text-sm">
-            {prop(block, 'avatar') ? (
-              <img src={prop(block, 'avatar')} alt={prop(block, 'name')} className="size-10 rounded-full object-cover" />
+            {testimonialAvatar ? (
+              <img src={testimonialAvatar} alt={prop(block, 'name')} className="size-10 max-w-full rounded-full object-cover" />
             ) : (
               <div className="flex size-10 items-center justify-center rounded-full" style={{ background: withAlpha(accent, 0.2), color: accent }}>
                 {prop(block, 'name', '?').slice(0, 1)}
