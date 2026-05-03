@@ -20,7 +20,7 @@
 
 ## Executive summary
 
-**Blockloom** is a multi-tenant-style visual site builder: authenticated users get an isolated workspace, a drag-and-drop editor with a large block library, persisted JSON layouts and media, and a **separate public renderer** for published pages. This document maps delivery to the course brief and lists submission artifacts. **Demo video** and **full tool transcripts** are supplied outside the repository per instructor instructions.
+**Blockloom** is a multi-tenant-style visual site builder: authenticated users get an isolated workspace, a drag-and-drop editor with a large block library, persisted JSON layouts and media, and a **separate public renderer** for published pages. This document maps delivery to the course brief and lists submission artifacts. **Demo video** and **full tool transcripts** are supplied per instructor instructions. The author is **not** submitting any **PDF** artifacts — this report, [`submission.md`](../submission.md), and related docs are **Markdown** (plus images in `docs/assets/`).
 
 ---
 

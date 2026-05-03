@@ -10,7 +10,9 @@
 
 1. Read this file (`submission.md`) top to bottom — it explains what is in the bundle and how to evaluate the project.  
 2. Open **`installation.md`** for step-by-step local setup, quality checks, and how that differs from the **deployed** app.  
-3. **Optional PDF:** For Canvas, you may export this page to **`submission.pdf`** (print / Markdown-to-PDF) so graders have one printable file — content should match this markdown.
+3. Open **`docs/PROGRESS_REPORT.md`** for the formal progress write-up (screenshots, requirements coverage).
+
+**Format:** This submission uses **Markdown** and the project zip only — **no PDF** files are included.
 
 ---
 
@@ -54,8 +56,8 @@ The **project zip** you receive should match a tagged commit or the stated SHA; 
 | --- | --- |
 | **Project zip** | Full repository source (this folder tree): app, `README.md`, `DEPLOYMENT.md`, `docs/` (progress report + screenshots), tests, etc. |
 | **submission.md** | This file — index, links, and grading guidance. |
-| **submission.pdf** *(optional)* | Same content as `submission.md`, exported by the author for the course zip if required. |
 | **installation.md** | Install, run, test; points back here first. |
+| **docs/PROGRESS_REPORT.md** | Formal progress report (Markdown + embedded images). |
 | **chat-logs/codex-side.md** | Primary, chronological export of **Codex** sessions (large file). |
 | **chat-logs/cursor-side.md** | Export of **Cursor** agent/chat sessions used when switching tools. |
 
