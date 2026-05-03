@@ -1,41 +1,57 @@
 # Contributing to Blockloom
 
-Thanks for your interest in **Blockloom**. This repository is primarily a course capstone project; small fixes and documentation improvements are welcome.
+<p align="center">
+  <img src="public/favicon.png" alt="Blockloom app icon" width="56" height="56" />
+</p>
 
-## How to contribute
+Thanks for your interest in **Blockloom**. This repository is primarily an academic project submission, but the codebase is organized like a real product and welcomes focused improvements.
 
-### Reporting issues
+## Good Contributions
 
-Open an issue on [github.com/rajin-khan/VibeBuilder](https://github.com/rajin-khan/VibeBuilder) with:
+- Bug fixes with clear reproduction steps.
+- Accessibility, contrast, or responsiveness improvements.
+- Documentation improvements.
+- Tests for existing builder behavior.
+- Small refactors that preserve current functionality.
 
-- A short description and steps to reproduce (for bugs)
-- Environment (OS, Node version, browser)
-- Screenshots if relevant
-
-### Pull requests
-
-1. Fork the repository and create a branch from `main`.
-2. Make focused changes; run `npm run lint` and `npm test -- --run`.
-3. Open a PR with a clear summary following **Conventional Commits** (this repo uses commitlint).
-
-## Development setup
+## Development Setup
 
 ```bash
 npm install
 npm run dev
 ```
 
-Use `.env.example` as a template for local environment variables.
+Open [http://127.0.0.1:3000/login](http://127.0.0.1:3000/login), then use **Continue in demo workspace** for local testing.
 
-## Code style
+## Before Opening a Pull Request
 
-- **Prettier:** `npm run format`
-- **ESLint:** `npm run lint`
+Run:
 
-## Code of conduct
+```bash
+npm run lint
+npm run build
+npm test -- --run
+```
 
-See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
+Use a focused commit message. Conventional Commits are preferred, for example:
+
+```text
+fix: preserve selected block after reorder
+docs: clarify deployment steps
+```
+
+## Project Context
+
+Academic submission material lives in [`academic/`](academic/):
+
+- [`academic/submission.md`](academic/submission.md)
+- [`academic/installation.md`](academic/installation.md)
+- [`academic/progress-report.md`](academic/progress-report.md)
+
+## Conduct
+
+Please follow the [Code of Conduct](CODE_OF_CONDUCT.md).
 
 ## License
 
-By contributing, you agree your contributions are licensed under the [MIT License](./LICENSE).
+By contributing, you agree that your contribution is licensed under the [MIT License](LICENSE).

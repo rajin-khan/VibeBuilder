@@ -1,52 +1,79 @@
 <p align="center">
-  <img src="public/favicon.svg" alt="Blockloom" width="72" height="72" />
+  <img src="public/favicon.png" alt="Blockloom app icon" width="92" height="92" />
 </p>
 
 <h1 align="center">Blockloom</h1>
 
-<p align="center"><strong>Design it. Shape it. Publish it.</strong></p>
+<p align="center">
+  <strong>Design it. Shape it. Publish it.</strong><br />
+  A polished visual website builder built for the CSE226 Selise Blocks Project.
+</p>
 
 <p align="center">
-  <a href="https://github.com/rajin-khan">@rajin-khan</a>
+  <a href="https://pemfes-dzdfz.seliseblocks.com">Live app</a>
   ·
-  <a href="https://github.com/rajin-khan/VibeBuilder">GitHub</a>
+  <a href="academic/submission.md">Academic submission</a>
+  ·
+  <a href="https://github.com/rajin-khan">Rajin Khan</a>
 </p>
-
----
 
 <p align="center">
-  <img src="public/og-card.svg" alt="Blockloom — studio-grade site builder" width="920" />
+  <img src="public/og-card.svg" alt="Blockloom social preview" width="940" />
 </p>
 
-**Blockloom** is a studio-grade **visual website builder**: drag blocks onto the canvas, tune copy and styles in real time, manage media, and ship a **published** site your visitors can browse—no template soup, no hand-written page markup.
+## Overview
 
-| | |
+**Blockloom** is a studio-grade drag-and-drop website builder. Users can create sites, manage pages, add reusable blocks, edit content and styling visually, autosave drafts, publish live pages, and view public sites without editor chrome.
+
+It is a frontend React/Vite application backed by SELISE Blocks services for identity, structured data, and media storage. For local exploration, it also includes a demo workspace that stores data in the browser.
+
+<p align="center">
+  <img src="academic/assets/blockloom-editor-hero-browser.png" alt="Blockloom editor showing a selected hero block" width="860" />
+</p>
+
+## Highlights
+
+| Area | What Blockloom provides |
 | --- | --- |
-| **Workspace** | Create sites from starters, manage pages, drafts, and publish flow in one place. |
-| **Editor** | 57+ block types, layers, responsive preview, zoom, undo/redo, autosave, publish. |
-| **Live sites** | Public routes at `/site/:siteSlug/:pageSlug`—same blocks as the editor, zero builder chrome. |
-| **Site settings** | Global theme, typography, SEO, social preview, favicon, homepage, and attribution. |
+| Workspace | Create sites, open drafts, choose starter templates, and jump to live URLs. |
+| Editor | 57+ block types, compact sidebar, floating layers, inspector tabs, drag/drop, zoom, undo/redo, save, and publish. |
+| Customization | Content, style, spacing, color, layout, media, responsive visibility, SEO, favicon, and global site settings. |
+| Publishing | Draft-vs-published separation with clean public routes at `/site/:siteSlug/:pageSlug`. |
+| Persistence | SELISE IAM, Data Gateway schemas, Storage/Media integration, plus local demo fallback. |
 
-<p align="center">
-  <img src="docs/assets/blockloom-editor-hero-browser.png" alt="Blockloom editor" width="780" />
-</p>
+## Screenshots
 
-## Stack
+| Login | Workspace |
+| --- | --- |
+| ![Blockloom login](academic/assets/blockloom-login-clean.png) | ![Blockloom workspace](academic/assets/blockloom-workspace-browser.png) |
 
-React 19 · Vite · TypeScript · Tailwind CSS · Radix UI · `@dnd-kit` · TanStack Query · Vitest
+| Editor | Published site |
+| --- | --- |
+| ![Blockloom editor](academic/assets/blockloom-editor-browser.png) | ![Blockloom published site](academic/assets/blockloom-public-viewport.png) |
 
-## Run it locally
+## Tech Stack
+
+- React 19 + Vite
+- TypeScript
+- Tailwind CSS
+- Radix UI primitives and icons
+- `@dnd-kit` for drag-and-drop
+- TanStack Query
+- SELISE Blocks IAM, Data Gateway, and Storage/Media APIs
+- Vitest + Testing Library
+
+## Quick Start
 
 ```bash
 npm install
 npm run dev
 ```
 
-Open [http://127.0.0.1:3000/login](http://127.0.0.1:3000/login). Use **Continue in demo workspace** for a quick, offline-friendly tryout (data stays in your browser). Sign in when you want synced projects.
+Open [http://127.0.0.1:3000/login](http://127.0.0.1:3000/login).
 
-**Hosting and production configuration:** [`DEPLOYMENT.md`](DEPLOYMENT.md)
+Use **Continue in demo workspace** for a fast local walkthrough. Use the deployed app for the full IAM-backed experience.
 
-## Quality
+## Quality Checks
 
 ```bash
 npm run lint
@@ -56,17 +83,20 @@ npm test -- --run
 
 ## Documentation
 
-| Doc | Purpose |
+| Document | Purpose |
 | --- | --- |
-| **Demo video** | [BlockLoom Demo.mp4 — Google Drive](https://drive.google.com/file/d/1i8G2NsF6rU3TOiz0Xzh21VPIilmp1Q1R/view?usp=sharing) |
-| [`DEPLOYMENT.md`](DEPLOYMENT.md) | Build output, hosting, env, and gateway notes |
-| [`submission.md`](submission.md) | Course submission index (read first for graders) |
-| [`installation.md`](installation.md) | Detailed install & local vs deployed testing |
-| [`docs/PROGRESS_REPORT.md`](docs/PROGRESS_REPORT.md) | Deliverable summary, requirements mapping, visuals |
-| [`llm-docs/README.md`](llm-docs/README.md) | Contributor-oriented agent / recipe docs |
+| [academic/submission.md](academic/submission.md) | Course submission index and grading guide. |
+| [academic/installation.md](academic/installation.md) | Detailed installation, local testing, and deployment notes. |
+| [academic/progress-report.md](academic/progress-report.md) | Formal academic progress report with screenshots and requirement mapping. |
+| [DEPLOYMENT.md](DEPLOYMENT.md) | Hosting, environment variables, schema notes, and deployment workflow. |
+| [academic/VIDEO_LINK.txt](academic/VIDEO_LINK.txt) | Plain-text demo video link. |
+| [chat-logs/codex-side.md](chat-logs/codex-side.md) | Codex interaction history for submission. |
+| [chat-logs/cursor-side.md](chat-logs/cursor-side.md) | Cursor interaction history for submission. |
 
----
+## Author
 
-<p align="center">
-  <sub>Built by <a href="https://github.com/rajin-khan"><strong>Rajin Khan</strong></a> · MIT License</sub>
-</p>
+Built by [Rajin Khan](https://github.com/rajin-khan) (`@rajin-khan`) for CSE226 Section 1, Spring 2026.
+
+## License
+
+Blockloom is released under the [MIT License](LICENSE).

@@ -1,14 +1,18 @@
-# Blockloom — deployment & operations
+# Blockloom Deployment Guide
 
-Blockloom builds a **static Vite SPA** into `build/`. Identity, structured content, and media are served by your **Blocks project** APIs (see `.env.example` for the variables the client expects).
+<p align="center">
+  <img src="public/favicon.png" alt="Blockloom app icon" width="64" height="64" />
+</p>
 
-## Recommended hosting
+Blockloom builds a static Vite single-page app into `build/`. Identity, structured content, and media are handled by the connected SELISE Blocks project.
 
-Deploy from the **Blocks Cloud** project linked to this repository when you need IAM, Data Gateway, and storage to match production keys. The flow in this guide assumes that environment.
+## Recommended Host
 
-You can also host the `build/` folder on any static host (e.g. Vercel); set the same `VITE_*` values and add the new origin to your identity/CORS allow list if sign-in or API calls fail.
+Use **SELISE Blocks Cloud** for the academic submission because the project brief is centered on SELISE Blocks and the repository is already connected there.
 
-## Local Verification Before Deploy
+Vercel can also host the static frontend, but you must add the Vercel origin to IAM/CORS allow lists if sign-in or API calls reject the host.
+
+## Pre-Deployment Checks
 
 ```bash
 npm install
@@ -17,36 +21,37 @@ npm run build
 npm test -- --run
 ```
 
-The production build output is `build/`.
+Production output: `build/`.
 
-## Required Environment Values
+## Environment Variables
 
-Vite reads `VITE_*` values at build time. Keep `.env.production` aligned with your Blocks project environment.
+Vite reads `VITE_*` values at build time.
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_API_BASE_URL` | API base URL for your tenant |
-| `VITE_X_BLOCKS_KEY` | Public frontend project key |
-| `VITE_PROJECT_SLUG` | Data Gateway project slug |
-| `VITE_CAPTCHA_SITE_KEY` | Optional captcha site key |
-| `VITE_CAPTCHA_TYPE` | Optional captcha provider |
-| `VITE_VIBE_PUBLIC_READ_TOKEN` | Optional anonymous read fallback; prefer public View access instead |
+| `VITE_API_BASE_URL` | SELISE Blocks API base URL. |
+| `VITE_BLOCKS_API_URL` | Blocks API URL used by generated services. |
+| `VITE_X_BLOCKS_KEY` | Public frontend project key. |
+| `VITE_PROJECT_SLUG` | Data Gateway project slug. |
+| `VITE_CAPTCHA_SITE_KEY` | Optional captcha site key. |
+| `VITE_CAPTCHA_TYPE` | Optional captcha provider. |
+| `VITE_VIBE_PUBLIC_READ_TOKEN` | Optional anonymous read fallback; prefer public view access. |
 
-Do not add private secrets to `VITE_*` variables. They are bundled into browser JavaScript.
+Do not put private secrets in `VITE_*` variables. They are bundled into browser JavaScript.
 
-## Deploy on Blocks Cloud
+## Deploy On SELISE Blocks Cloud
 
 1. Push the final code to `main`.
-2. Open [Blocks Cloud](https://cloud.seliseblocks.com) (operator console).
+2. Open [Blocks Cloud](https://cloud.seliseblocks.com).
 3. Open the project connected to `rajin-khan/VibeBuilder`.
 4. Go to **Deployment**.
 5. Open the repository card.
-6. Choose **Deploy Now** for the `main` branch, or enable Git-based deployment if it is available.
-7. Wait for the deployment job to finish.
-8. Open the **Deploys To** URL from the deployment overview.
-9. Test `/login`, `/app`, and at least one `/site/...` public route.
+6. Deploy the `main` branch.
+7. Wait for the deployment job to complete.
+8. Open the deployment URL.
+9. Test `/login`, `/app`, and a published `/site/...` route.
 
-If the deployment panel asks for build settings:
+If build settings are requested:
 
 | Setting | Value |
 | --- | --- |
@@ -55,54 +60,30 @@ If the deployment panel asks for build settings:
 | Output directory | `build` |
 | Node version | Node 20+ or Node 24 |
 
-## Data Gateway Schemas
+## Data Gateway Entities
 
-Blockloom uses these Data Gateway entities:
+Blockloom expects these entities:
 
-| Entity | Read query | Insert mutation |
+| Entity | List query | Insert mutation |
 | --- | --- | --- |
 | `VibeWebsite` | `getVibeWebsites(input: DynamicQueryInput)` | `insertVibeWebsite` |
 | `VibePage` | `getVibePages(input: DynamicQueryInput)` | `insertVibePage` |
 | `VibeAsset` | `getVibeAssets(input: DynamicQueryInput)` | `insertVibeAsset` |
 
-Entity fields:
+For anonymous public pages, set **View** access to **Public** for `VibeWebsite` and `VibePage`, or provide a carefully scoped public read token.
 
-| Entity | Fields |
-| --- | --- |
-| `VibeWebsite` | `ItemId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, optional `IsDeleted` |
-| `VibePage` | `ItemId`, `WebsiteId`, `OwnerId`, `Slug`, `Payload`, `CreatedDate`, `LastUpdatedDate`, optional `IsDeleted` |
-| `VibeAsset` | `ItemId`, `OwnerId`, `WebsiteId`, `FileName`, `Payload`, `CreatedDate`, optional `IsDeleted` |
+## Public Routes
 
-After editing schemas, click **Publish** in Data Gateway.
-
-## Public Site Access
-
-Published pages are rendered at:
+Published pages render at:
 
 ```text
 /site/:siteSlug/:pageSlug
 ```
 
-For anonymous visitors, set **View** access to **Public** for:
+The host must fall back unknown routes to `index.html` so direct links and refreshes work for `/app/...` and `/site/...`.
 
-- `VibeWebsite`
-- `VibePage`
+## Academic References
 
-`VibeAsset` metadata can stay restricted because published layouts store direct image URLs.
-
-## SPA Routing
-
-Deep links such as `/app/...` and `/site/...` must fall back to `index.html`. The included `nginx.conf` and `staticwebapp.config.json` show the required behavior.
-
-## Optional Vercel Deployment
-
-Vercel can deploy this as a static Vite app:
-
-1. Import the GitHub repository into Vercel.
-2. Set build command to `npm run build`.
-3. Set output directory to `build`.
-4. Add the same `VITE_*` environment values.
-5. Deploy.
-6. Add the Vercel origin to your IAM/CORS allow list if login or API calls reject the host.
-
-The same GitHub repo can be wired to Blocks Cloud and Vercel; keep commit SHAs in sync across hosts if you use both.
+- [`academic/submission.md`](academic/submission.md)
+- [`academic/installation.md`](academic/installation.md)
+- [`academic/progress-report.md`](academic/progress-report.md)

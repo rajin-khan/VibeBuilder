@@ -1,24 +1,40 @@
-# Code of Conduct
+# Blockloom Code of Conduct
 
-## Our pledge
+<p align="center">
+  <img src="public/favicon.png" alt="Blockloom app icon" width="56" height="56" />
+</p>
 
-We pledge to make participation in this project a harassment-free experience for everyone, regardless of age, body size, disability, ethnicity, gender identity and expression, level of experience, nationality, personal appearance, race, religion, or sexual identity and orientation.
+Blockloom should be a respectful, practical, and constructive project space.
 
-## Our standards
+## Our Pledge
 
-**Positive examples:** welcoming language, respectful disagreement, constructive criticism, empathy.
+We aim to make participation welcoming for everyone, regardless of experience level, background, identity, or perspective.
 
-**Unacceptable examples:** sexualized language or attention, trolling, insults, harassment, publishing private information without consent, other unprofessional conduct.
+## Expected Behavior
+
+- Be kind and direct.
+- Assume good intent, but accept correction when impact differs from intent.
+- Give actionable feedback.
+- Keep discussion focused on the work.
+- Respect privacy and do not publish private information.
+
+## Unacceptable Behavior
+
+- Harassment, threats, insults, or personal attacks.
+- Sexualized or discriminatory language.
+- Deliberate disruption of project spaces.
+- Sharing private information without consent.
+- Abusive or illegal behavior.
 
 ## Enforcement
 
-Report concerns by opening an issue or contacting the maintainer via [GitHub](https://github.com/rajin-khan).
+Concerns can be raised through the maintainer’s GitHub profile: [Rajin Khan](https://github.com/rajin-khan).
 
-Maintainers may remove or reject contributions that violate this code and will explain moderation decisions when appropriate.
+Maintainers may remove content, reject contributions, or block participation when behavior violates this code.
 
 ## Scope
 
-This applies to project spaces and when someone represents the project in public.
+This applies to repository interactions and public spaces where someone represents Blockloom.
 
 ## Attribution
 
