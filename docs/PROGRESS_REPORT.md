@@ -7,6 +7,7 @@
 
 <p align="center">
   <strong>CSE226 · Spring 2026</strong><br />
+  <strong>NSU ID:</strong> 2212708042<br />
   <a href="https://github.com/rajin-khan">Rajin Khan</a> (<code>@rajin-khan</code>) ·
   <a href="https://github.com/rajin-khan/VibeBuilder">github.com/rajin-khan/VibeBuilder</a>
 </p>
@@ -121,4 +122,4 @@ See the root [`README.md`](../README.md) for the latest reported test counts.
 
 Blockloom is meant to feel like a **real product**: calm onboarding, a focused studio, and a clean public site. Thank you for reviewing.
 
-— **Rajin Khan**, [@rajin-khan](https://github.com/rajin-khan)
+— **Rajin Khan** (NSU ID **2212708042**) · [@rajin-khan](https://github.com/rajin-khan)
