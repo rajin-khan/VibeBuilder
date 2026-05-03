@@ -1,7 +1,7 @@
 # Blockloom — installation & local run
 
 > **Read [`submission.md`](submission.md) first.**  
-> It lists the demo video placeholder, GitHub repo, **deployed URL**, what is in the zip, and how **Codex vs Cursor** logs fit together.  
+> It lists the **demo video** (Google Drive), GitHub repo, **deployed URL**, what is in the zip, and how **Codex vs Cursor** logs fit together.  
 > This file focuses on **commands and environment** only.
 
 ---

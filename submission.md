@@ -18,11 +18,9 @@
 
 ## Demo video
 
-**Video walkthrough (placeholder — replace before final Canvas upload):**
+**Walkthrough:** [BlockLoom Demo.mp4 on Google Drive](https://drive.google.com/file/d/1i8G2NsF6rU3TOiz0Xzh21VPIilmp1Q1R/view?usp=sharing)
 
-[https://www.example.com/REPLACE_WITH_YOUR_VIDEO_LINK](https://www.example.com/REPLACE_WITH_YOUR_VIDEO_LINK)
-
-Upload your real link (YouTube, Drive, Loom, etc.) in the zip `VIDEO_LINK.txt` or edit this file in your final zip so graders can open the demo in one click.
+The same URL is in root **`VIDEO_LINK.txt`** for quick copy-paste when zipping the submission.
 
 ---
 
@@ -60,6 +58,7 @@ The **project zip** you receive should match a tagged commit or the stated SHA; 
 | **docs/PROGRESS_REPORT.md** | Formal progress report (Markdown + embedded images). |
 | **chat-logs/codex-side.md** | Primary, chronological export of **Codex** sessions (large file). |
 | **chat-logs/cursor-side.md** | Export of **Cursor** agent/chat sessions used when switching tools. |
+| **VIDEO_LINK.txt** | Plain-text copy of the demo video URL (Google Drive). |
 
 ### AI tooling / interaction history
 

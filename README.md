@@ -58,6 +58,7 @@ npm test -- --run
 
 | Doc | Purpose |
 | --- | --- |
+| **Demo video** | [BlockLoom Demo.mp4 — Google Drive](https://drive.google.com/file/d/1i8G2NsF6rU3TOiz0Xzh21VPIilmp1Q1R/view?usp=sharing) |
 | [`DEPLOYMENT.md`](DEPLOYMENT.md) | Build output, hosting, env, and gateway notes |
 | [`submission.md`](submission.md) | Course submission index (read first for graders) |
 | [`installation.md`](installation.md) | Detailed install & local vs deployed testing |

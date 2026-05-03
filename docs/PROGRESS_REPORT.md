@@ -20,7 +20,7 @@
 
 ## Executive summary
 
-**Blockloom** is a multi-tenant-style visual site builder: authenticated users get an isolated workspace, a drag-and-drop editor with a large block library, persisted JSON layouts and media, and a **separate public renderer** for published pages. This document maps delivery to the course brief and lists submission artifacts. **Demo video** and **full tool transcripts** are supplied per instructor instructions. The author is **not** submitting any **PDF** artifacts — this report, [`submission.md`](../submission.md), and related docs are **Markdown** (plus images in `docs/assets/`).
+**Blockloom** is a multi-tenant-style visual site builder: authenticated users get an isolated workspace, a drag-and-drop editor with a large block library, persisted JSON layouts and media, and a **separate public renderer** for published pages. This document maps delivery to the course brief and lists submission artifacts. **Demo video:** [BlockLoom Demo.mp4 (Google Drive)](https://drive.google.com/file/d/1i8G2NsF6rU3TOiz0Xzh21VPIilmp1Q1R/view?usp=sharing). **Full tool transcripts:** `chat-logs/codex-side.md`, `chat-logs/cursor-side.md`. The author is **not** submitting any **PDF** artifacts — this report, [`submission.md`](../submission.md), and related docs are **Markdown** (plus images in `docs/assets/`).
 
 ---
 
@@ -116,7 +116,7 @@ See the root [`README.md`](../README.md) for the latest reported test counts.
 | This report | `docs/PROGRESS_REPORT.md` |
 | Screenshots | `docs/assets/*.png` |
 | AI interaction logs | `chat-logs/codex-side.md`, `chat-logs/cursor-side.md` |
-| Video URL | *Author adds in course submission zip* |
+| Demo video | [Google Drive — BlockLoom Demo.mp4](https://drive.google.com/file/d/1i8G2NsF6rU3TOiz0Xzh21VPIilmp1Q1R/view?usp=sharing) · also [`VIDEO_LINK.txt`](../VIDEO_LINK.txt) |
 
 ---
 
