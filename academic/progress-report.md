@@ -1,7 +1,7 @@
 # Blockloom Progress Report
 
 <p align="center">
-  <img src="../public/favicon.png" alt="Blockloom app icon" width="76" height="76" />
+  <img src="../public/favicon.svg" alt="Blockloom app icon" width="76" height="76" />
 </p>
 
 <p align="center">

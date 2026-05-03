@@ -1,7 +1,7 @@
 # Blockloom Deployment Guide
 
 <p align="center">
-  <img src="public/favicon.png" alt="Blockloom app icon" width="64" height="64" />
+  <img src="public/favicon.svg" alt="Blockloom app icon" width="64" height="64" />
 </p>
 
 Blockloom builds a static Vite single-page app into `build/`. Identity, structured content, and media are handled by the connected SELISE Blocks project.

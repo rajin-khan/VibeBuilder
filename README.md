@@ -1,5 +1,5 @@
 <p align="center">
-  <img src="public/favicon.png" alt="Blockloom app icon" width="92" height="92" />
+  <img src="public/favicon.svg" alt="Blockloom app icon" width="92" height="92" />
 </p>
 
 <h1 align="center">Blockloom</h1>
@@ -18,7 +18,7 @@
 </p>
 
 <p align="center">
-  <img src="public/og-card.svg" alt="Blockloom social preview" width="940" />
+  <img src="academic/assets/blockloom-readme-banner.png" alt="Blockloom visual builder banner" width="940" />
 </p>
 
 ## Overview

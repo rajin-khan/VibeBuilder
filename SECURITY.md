@@ -1,7 +1,7 @@
 # Blockloom Security Policy
 
 <p align="center">
-  <img src="public/favicon.png" alt="Blockloom app icon" width="56" height="56" />
+  <img src="public/favicon.svg" alt="Blockloom app icon" width="56" height="56" />
 </p>
 
 ## Reporting A Vulnerability

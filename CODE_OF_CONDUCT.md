@@ -1,7 +1,7 @@
 # Blockloom Code of Conduct
 
 <p align="center">
-  <img src="public/favicon.png" alt="Blockloom app icon" width="56" height="56" />
+  <img src="public/favicon.svg" alt="Blockloom app icon" width="56" height="56" />
 </p>
 
 Blockloom should be a respectful, practical, and constructive project space.

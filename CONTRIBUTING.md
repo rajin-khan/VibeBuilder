@@ -1,7 +1,7 @@
 # Contributing to Blockloom
 
 <p align="center">
-  <img src="public/favicon.png" alt="Blockloom app icon" width="56" height="56" />
+  <img src="public/favicon.svg" alt="Blockloom app icon" width="56" height="56" />
 </p>
 
 Thanks for your interest in **Blockloom**. This repository is primarily an academic project submission, but the codebase is organized like a real product and welcomes focused improvements.

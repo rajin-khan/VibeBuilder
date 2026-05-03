@@ -4,9 +4,9 @@
   "description": "A modern drag-and-drop website builder.",
   "icons": [
     {
-      "src": "favicon.png",
-      "type": "image/png",
-      "sizes": "64x64"
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
     },
     {
       "src": "favicon.ico",

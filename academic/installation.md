@@ -1,7 +1,7 @@
 # Blockloom Installation Guide
 
 <p align="center">
-  <img src="../public/favicon.png" alt="Blockloom app icon" width="64" height="64" />
+  <img src="../public/favicon.svg" alt="Blockloom app icon" width="64" height="64" />
 </p>
 
 This guide explains how to run **Blockloom** locally, how to verify it, and where to test the full deployed experience.
