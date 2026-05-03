@@ -1,106 +1,97 @@
-# Blockloom — Progress Report
+<p align="center">
+  <img src="../public/favicon.svg" alt="Blockloom" width="64" height="64" />
+</p>
 
-**CSE226 Section 1 · Spring 2026**
+<h1 align="center">Blockloom</h1>
+<h3 align="center">Progress report</h3>
 
-| | |
-| --- | --- |
-| **Author** | [Rajin Khan](https://github.com/rajin-khan) (`@rajin-khan`) |
-| **Repository** | [github.com/rajin-khan/VibeBuilder](https://github.com/rajin-khan/VibeBuilder) |
-| **Product** | **Blockloom** — drag-and-drop website builder (Vite + React) |
+<p align="center">
+  <strong>CSE226 · Spring 2026</strong><br />
+  <a href="https://github.com/rajin-khan">Rajin Khan</a> (<code>@rajin-khan</code>) ·
+  <a href="https://github.com/rajin-khan/VibeBuilder">github.com/rajin-khan/VibeBuilder</a>
+</p>
+
+<p align="center">
+  <img src="../public/og-card.svg" alt="Blockloom brand" width="900" />
+</p>
 
 ---
 
-## 1. Executive summary
+## Executive summary
 
-Blockloom is a **multi-page site builder** that meets the Selise Blocks project brief: users sign in (IAM), work in a **private workspace**, compose pages from a **large block library**, persist **JSON layouts** and media through **Data Gateway and storage APIs**, and **publish** a **public** site at `/site/:siteSlug/:pageSlug` separate from the editor.
-
-This report summarizes **what is complete**, how it maps to the brief, and what artifacts ship with the repository. **Demo video** and **full LLM/chat transcripts** are prepared outside the repo per course instructions.
+**Blockloom** is a multi-tenant-style visual site builder: authenticated users get an isolated workspace, a drag-and-drop editor with a large block library, persisted JSON layouts and media, and a **separate public renderer** for published pages. This document maps delivery to the course brief and lists submission artifacts. **Demo video** and **full tool transcripts** are supplied outside the repository per instructor instructions.
 
 ---
 
-## 2. Alignment with the project brief
+## Requirements coverage
 
-### 2.1 Tenant & user management
+### Identity & workspace
 
 | Requirement | Status |
 | --- | ---: |
-| User registration / sign-in via Blocks IAM | Done |
-| Workspace isolation (user sees only their sites) | Done |
-| Multi-page sites: create, name, delete pages | Done |
+| Hosted sign-up / sign-in | Done |
+| Per-user isolation for sites and pages | Done |
+| Multiple pages per site (create, name, remove) | Done |
 
-### 2.2 Drag-and-drop editor
-
-| Requirement | Status |
-| --- | ---: |
-| Block library (heroes, text, media, galleries, forms, etc.) | Done — **57+** configurable block types |
-| Drag, reorder, edit properties in real time | Done (`@dnd-kit`, inspector, undo/redo) |
-| Layout serialized to JSON and saved | Done (draft + published payloads on `VibePage`) |
-
-### 2.3 Content & asset persistence
+### Editor
 
 | Requirement | Status |
 | --- | ---: |
-| Site structures stored via Blocks services (no local SQL/Firebase) | Done (`VibeWebsite`, `VibePage`, `VibeAsset`) |
-| Flexible JSON for page layout | Done |
-| Images uploaded via storage / presign flow | Done |
-| Autosave / persist so work is not lost | Done |
+| Rich component library | Done — **57+** block types |
+| Drag, reorder, live property editing | Done |
+| Layout stored as structured JSON | Done (draft + published payloads) |
 
-### 2.4 Live site renderer
+### Data & media
 
 | Requirement | Status |
 | --- | ---: |
-| Publish vs editor separation | Done |
-| Public routes | Done — `/site/...` |
-| Navigation between user-created pages | Done |
+| No local SQL / Firebase as primary store | Done — hosted APIs + schemas |
+| Flexible page payload | Done |
+| Image upload and durable URLs in layouts | Done |
+| Autosave / persistence | Done |
+
+### Published experience
+
+| Requirement | Status |
+| --- | ---: |
+| Distinct “live” view vs editor | Done |
+| Public URL pattern `/site/:siteSlug/:pageSlug` | Done |
+| Multi-page navigation on live site | Done |
 
 ---
 
-## 3. Visual walkthrough
+## Product visuals
 
-### 3.1 Identity & workspace
+Brand lockup (favicon + social card) appears at the top of this document. Key **in-app** captures:
 
 <p align="center">
-  <img src="assets/blockloom-login-clean.png" alt="Blockloom login" width="780" />
+  <img src="assets/blockloom-workspace-browser.png" alt="Workspace" width="720" /><br />
+  <em>Workspace — sites and templates</em>
 </p>
 
 <p align="center">
-  <img src="assets/blockloom-signup.png" alt="Blockloom signup" width="780" />
+  <img src="assets/blockloom-editor-browser.png" alt="Editor" width="720" /><br />
+  <em>Editor — canvas, palette, inspector</em>
 </p>
 
 <p align="center">
-  <img src="assets/blockloom-workspace-browser.png" alt="Workspace dashboard" width="780" />
+  <img src="assets/blockloom-public-viewport.png" alt="Published site" width="720" /><br />
+  <em>Published site — visitor view</em>
 </p>
 
-### 3.2 Editor
-
-<p align="center">
-  <img src="assets/blockloom-editor-browser.png" alt="Editor overview" width="780" />
-</p>
-
-<p align="center">
-  <img src="assets/blockloom-editor-hero-browser.png" alt="Hero block editing" width="780" />
-</p>
-
-### 3.3 Published site
-
-<p align="center">
-  <img src="assets/blockloom-public-viewport.png" alt="Published public site" width="780" />
-</p>
+Additional PNGs under `docs/assets/` are available for appendices or slides.
 
 ---
 
-## 4. Architecture (concise)
+## Architecture
 
-- **Frontend:** React 19, Vite, TypeScript, Tailwind, Radix UI, TanStack Query.
-- **State:** Builder and server state coordinated through hooks and services; demo mode uses `localStorage` when gateway schemas are unavailable locally.
-- **APIs:** GraphQL Data Gateway for websites, pages, assets; IAM for auth; HTTP client patterns for storage upload.
-- **Deployment:** Static `build/` output; Docker and **Blocks Cloud** deployment documented in [`DEPLOYMENT.md`](../DEPLOYMENT.md).
+- **Client:** React 19, Vite, TypeScript, Tailwind, Radix UI, TanStack Query, `@dnd-kit`.
+- **Models:** Websites, pages, and assets persisted via the platform GraphQL gateway; optional **demo** fallback to `localStorage` for local development.
+- **Output:** Static SPA in `build/`; container and cloud deploy documented in [`DEPLOYMENT.md`](../DEPLOYMENT.md).
 
 ---
 
-## 5. Quality & testing
-
-Repo includes ESLint, production build, and Vitest + Testing Library. Before submission, maintainers ran:
+## Verification
 
 ```bash
 npm run lint
@@ -108,33 +99,26 @@ npm run build
 npm test -- --run
 ```
 
-(Test counts may change as the suite evolves; see root [`README.md`](../README.md) for the latest figures.)
+See the root [`README.md`](../README.md) for the latest reported test counts.
 
 ---
 
-## 6. Deployment & configuration
+## Submission bundle (this repo)
 
-- Environment variables: see [`.env.example`](../.env.example) and [`DEPLOYMENT.md`](../DEPLOYMENT.md).
-- **Public reads:** Anonymous `/site/...` uses `getVibeWebsites` / `getVibePages` with project key when **View** is **Public** on those schemas (see deployment guide).
-
----
-
-## 7. Submission checklist (this repo)
-
-| Artifact | Location |
+| Item | Location |
 | --- | --- |
-| Source code | Repository root |
-| Install / run instructions | [`README.md`](../README.md) |
-| Deploy notes | [`DEPLOYMENT.md`](../DEPLOYMENT.md) |
-| **This progress report** | `docs/PROGRESS_REPORT.md` |
+| Source | Repository root |
+| Install / run | [`README.md`](../README.md) |
+| Deploy / ops | [`DEPLOYMENT.md`](../DEPLOYMENT.md) |
+| This report | `docs/PROGRESS_REPORT.md` |
 | Screenshots | `docs/assets/*.png` |
-| Video link | *To be added by author in Canvas zip* |
-| Interaction history | *To be added by author in Canvas zip* |
+| Video URL | *Author adds in course submission zip* |
+| Interaction history | *Author adds in course submission zip* |
 
 ---
 
-## 8. Closing note
+## Closing
 
-Blockloom is intended to read as a **cohesive product**: calm auth shell, fast workspace, deep editor, and a clean public renderer. Thank you for reviewing the work.
+Blockloom is meant to feel like a **real product**: calm onboarding, a focused studio, and a clean public site. Thank you for reviewing.
 
 — **Rajin Khan**, [@rajin-khan](https://github.com/rajin-khan)

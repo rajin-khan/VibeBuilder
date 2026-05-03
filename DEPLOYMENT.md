@@ -1,12 +1,12 @@
-# Blockloom Deployment Guide
+# Blockloom — deployment & operations
 
-Blockloom is a Vite React single-page app. The repository builds static frontend files into `build/`; SELISE Blocks provides IAM, Data Gateway, and Storage/Media.
+Blockloom builds a **static Vite SPA** into `build/`. Identity, structured content, and media are served by your **Blocks project** APIs (see `.env.example` for the variables the client expects).
 
-## Best Deployment Choice
+## Recommended hosting
 
-For this assignment, deploy on **SELISE Blocks Cloud** if possible. The project brief is specifically about using SELISE Blocks, the remote repository is already connected to Blocks Cloud, and the app depends on SELISE services for identity, data, and media.
+Deploy from the **Blocks Cloud** project linked to this repository when you need IAM, Data Gateway, and storage to match production keys. The flow in this guide assumes that environment.
 
-Vercel is a valid fallback for the static frontend, but it is less ideal for submission because the grader may expect the SELISE-hosted URL and Blocks deployment flow.
+You can also host the `build/` folder on any static host (e.g. Vercel); set the same `VITE_*` values and add the new origin to your identity/CORS allow list if sign-in or API calls fail.
 
 ## Local Verification Before Deploy
 
@@ -21,11 +21,11 @@ The production build output is `build/`.
 
 ## Required Environment Values
 
-Vite reads `VITE_*` values at build time. Keep `.env.production` aligned with the SELISE project environment.
+Vite reads `VITE_*` values at build time. Keep `.env.production` aligned with your Blocks project environment.
 
 | Variable | Purpose |
 | --- | --- |
-| `VITE_API_BASE_URL` | SELISE Blocks API base URL |
+| `VITE_API_BASE_URL` | API base URL for your tenant |
 | `VITE_X_BLOCKS_KEY` | Public frontend project key |
 | `VITE_PROJECT_SLUG` | Data Gateway project slug |
 | `VITE_CAPTCHA_SITE_KEY` | Optional captcha site key |
@@ -34,10 +34,10 @@ Vite reads `VITE_*` values at build time. Keep `.env.production` aligned with th
 
 Do not add private secrets to `VITE_*` variables. They are bundled into browser JavaScript.
 
-## Deploy On SELISE Blocks Cloud
+## Deploy on Blocks Cloud
 
 1. Push the final code to `main`.
-2. Open [SELISE Blocks Cloud](https://cloud.seliseblocks.com).
+2. Open [Blocks Cloud](https://cloud.seliseblocks.com) (operator console).
 3. Open the project connected to `rajin-khan/VibeBuilder`.
 4. Go to **Deployment**.
 5. Open the repository card.
@@ -103,6 +103,6 @@ Vercel can deploy this as a static Vite app:
 3. Set output directory to `build`.
 4. Add the same `VITE_*` environment values.
 5. Deploy.
-6. Add the Vercel origin to SELISE IAM/CORS settings if login or API calls reject the host.
+6. Add the Vercel origin to your IAM/CORS allow list if login or API calls reject the host.
 
-This should not conflict with the SELISE-connected GitHub repo. A repository can be connected to both SELISE Blocks Cloud and Vercel. The main risk is deploying a commit to one platform and forgetting to deploy the same commit to the other.
+The same GitHub repo can be wired to Blocks Cloud and Vercel; keep commit SHAs in sync across hosts if you use both.

@@ -11,7 +11,7 @@ interface BaseProps {
  */
 export const VibeMark = ({ className, style, title = 'Blockloom' }: BaseProps) => (
   <img
-    src="/vibe-assets/blockloom-icon.png"
+    src="/favicon.svg"
     alt={title}
     draggable={false}
     className={'inline-block select-none rounded-[9px] object-contain ' + (className ?? '')}
