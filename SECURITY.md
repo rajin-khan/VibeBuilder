@@ -1,34 +1,21 @@
 # Security Policy
 
-## Reporting a Vulnerability
+## Reporting a vulnerability
 
-If you believe you have found a security vulnerability, please report it to us as soon as possible. We take all reports seriously and will do our best to address the issue promptly.
+**Please do not file a public issue** for undisclosed security problems.
 
-**Do not create a public GitHub issue for the security vulnerability.**
-
-Instead, please follow these steps:
-
-1. Email us at [blocks@selisegroup.com](mailto:blocks@selisegroup.com) with details of the vulnerability.
-2. Include a thorough description of the issue, including any relevant information on the environment in which the vulnerability was discovered.
-3. Allow some time for us to review and respond to your report.
-4. We will acknowledge receipt of your report and work with you to understand and validate the issue.
-
-## Responsible Disclosure
-
-We appreciate the efforts of security researchers and the community in helping to keep our project and users safe. If you responsibly disclose a security issue, we commit to:
-
-- Acknowledge and respond to your report promptly.
-- Work with you to understand and validate the issue.
-- Provide details on when and how the issue will be addressed.
-- Give credit to the reporter, if agreed upon, upon resolution of the issue.
+1. Open a **private security advisory** on [GitHub — rajin-khan/VibeBuilder](https://github.com/rajin-khan/VibeBuilder/security/advisories/new), if available, or contact the maintainer via GitHub profile.
+2. Include a clear description, affected versions, and reproduction steps if possible.
+3. Allow reasonable time for review before public disclosure.
 
 ## Scope
 
-This security policy applies to the **SELISE `<Blocks/>`** project. Please note that this policy does not give you permission to hack, harm, or exploit our services. Any such attempts will be considered malicious and may be reported to the appropriate authorities.
+This policy applies to the **Blockloom** application code in this repository. It does not authorize probing production systems without permission.
 
-## Updates
+## Disclosure
 
-We may update this security policy from time to time. Check the file's Git history for the most recent changes.
+For valid reports, we aim to acknowledge promptly and coordinate a fix and release note.
 
-Thank you for helping to keep **SELISE `<Blocks/>`** secure!
+Thank you for helping keep users safe.
 
+— [Rajin Khan](https://github.com/rajin-khan)

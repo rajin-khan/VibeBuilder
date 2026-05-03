@@ -1,129 +1,41 @@
-# Contributing to l3-react-blocks-construct
+# Contributing to Blockloom
 
-Thank you for your interest in contributing to **l3-react-blocks-construct**! Your contributions help improve this project for everyone. Whether you're reporting a bug, suggesting an enhancement, or submitting code changes, we welcome your input.
+Thanks for your interest in **Blockloom**. This repository is primarily a course capstone project; small fixes and documentation improvements are welcome.
 
-## Table of Contents
+## How to contribute
 
-- [Code of Conduct](#code-of-conduct)
-- [How to Contribute](#how-to-contribute)
-  - [Reporting Issues](#reporting-issues)
-  - [Submitting Pull Requests](#submitting-pull-requests)
-- [Branching Strategy](#branching-strategy)
-- [Git Guidelines](#git-guidelines)
-- [Coding Guidelines](#coding-guidelines)
-- [Code Review Process](#code-review-process)
-- [Development Setup](#development-setup)
-- [License](#license)
+### Reporting issues
 
-## Code of Conduct
+Open an issue on [github.com/rajin-khan/VibeBuilder](https://github.com/rajin-khan/VibeBuilder) with:
 
-Please read and follow our [Code of Conduct](./CODE_OF_CONDUCT.md). By participating in this project, you agree to abide by its terms.
+- A short description and steps to reproduce (for bugs)
+- Environment (OS, Node version, browser)
+- Screenshots if relevant
 
-## How to Contribute
+### Pull requests
 
-### Reporting Issues
+1. Fork the repository and create a branch from `main`.
+2. Make focused changes; run `npm run lint` and `npm test -- --run`.
+3. Open a PR with a clear summary following **Conventional Commits** (this repo uses commitlint).
 
-If you encounter a bug or any issue, please report it by [opening an issue](https://github.com/SELISEdigitalplatforms/l3-react-blocks-construct/issues/new) and include the following details:
+## Development setup
 
-- **Description**: A clear and concise description of the bug.
-- **Steps to Reproduce**: Steps to replicate the issue.
-- **Expected Behavior**: What should happen.
-- **Actual Behavior**: What actually happens.
-- **Screenshots**: If applicable, attach screenshots.
-- **Environment**: Specify OS, browser, and versions.
-- **Type**: Select type `Bug`
-- **Project**: Select Project `Blocks Construct`
-
-
-### Submitting Pull Requests
-
-1. **Fork the Repository**: Click the "Fork" button at the top right of the repository page.
-2. **Clone Your Fork**: Clone your forked repository to your local machine.
-   ```bash
-   git clone https://github.com/your-username/l3-react-blocks-construct.git
-   cd l3-react-blocks-construct
-   ```
-3. **Create a Branch**: Create a new branch for your feature or bugfix.
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-4. **Make Changes**: Implement your changes in the codebase.
-5. **Commit Changes**: Follow the [Git Guidelines](#git-guidelines) for commit messages.
-6. **Push to GitHub**: Push your changes to your forked repository.
-   ```bash
-   git push origin feature/your-feature-name
-   ```
-7. **Open a Pull Request**: Navigate to the original repository and click "New Pull Request".
-
-## Branching Strategy
-
-We follow **Git Flow** for branching:
-
-- `main`: Production-ready code.
-- `dev`: Active development branch.
-- `feature/*`: New features branching from `dev`.
-- `bugfix/*`: Bug fixes branching from `dev`.
-- `hotfix/*`: Emergency fixes branching from `main`.
-
-## Git Guidelines
-
-- **Use the Imperative Mood**: Start commit messages with a verb in the imperative mood (e.g., "add", "fix", "update", "remove").
-- **Keep Messages Short and Descriptive**: The subject line should be concise (50 characters or less) and clearly describe the change.
-- **Separate Subject from Body**: If more detail is needed, separate the subject from the body with a blank line. The body should explain the "what" and "why" of the changes.
-- **Lowercase Commit Message**: Keep the commit message in lowercase.
-- **Avoid Ending with a Period**: Do not end the subject line with a period.
-- **Reference Issues and Pull Requests**: Reference related issues or pull requests in the body of the commit message (e.g., "fixes #123" or "see pr #456").
-- **Use Conventional Commits**: Follow the Conventional Commits specification for a standardized commit message format. Types include `feat`, `fix`, `docs`, `style`, `refactor` and `test`.
-
-Example of a well-structured commit message:
-```
-feat(auth): add user authentication - issue(#423)
-
-- implement JWT-based authentication
-- add login and registration endpoints
-- update user model to include password hashing
+```bash
+npm install
+npm run dev
 ```
 
-## Coding Guidelines
+Use `.env.example` as a template for local environment variables.
 
-- **Formatting**: Use [Prettier](https://prettier.io/). Format your code with:
-  ```bash
-  npm run format
-  ```
-- **Linting**: Run the linter before submitting changes:
-  ```bash
-  npm run lint
-  ```
-- **Testing**: Ensure all tests pass before submitting a PR:
-  ```bash
-  npm test
-  ```
+## Code style
 
-## Code Review Process
+- **Prettier:** `npm run format`
+- **ESLint:** `npm run lint`
 
-All PRs undergo review to maintain quality. Review steps:
+## Code of conduct
 
-1. **PR Submission**: Ensure PRs are small and well-documented.
-2. **Automated Checks**: CI/CD will run tests and linting.
-3. **Peer Review**: At least one maintainer must approve the PR.
-4. **Merge Process**: Once approved, the PR is merged into `dev`.
-
-## Development Setup
-
-1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-2. **Start the Development Server**:
-   ```bash
-   npm start
-   ```
-3. **Run Tests**:
-   ```bash
-   npm test
-   ```
+See [CODE_OF_CONDUCT.md](./CODE_OF_CONDUCT.md).
 
 ## License
 
-By contributing, you agree that your contributions will be licensed under the [MIT License](./LICENSE.md).
-
+By contributing, you agree your contributions are licensed under the [MIT License](./LICENSE).

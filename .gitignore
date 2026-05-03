@@ -6,6 +6,8 @@
 
 # Testing
 /coverage
+/tmp
+/output
 
 # Production
 /build
