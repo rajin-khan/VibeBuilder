@@ -10,7 +10,7 @@ import { useGetAccount } from '@/modules/profile/hooks/use-account';
 
 const DashboardLoader = () => {
   return (
-    <div className="flex items-center justify-center h-full w-full">
+    <div className="flex h-full w-full items-center justify-center">
       <Loader2 className="h-6 w-6 animate-spin text-primary" />
     </div>
   );
@@ -24,17 +24,27 @@ export const DashboardPage = () => {
       {isLoading ? (
         <DashboardLoader />
       ) : (
-        <main className="flex w-full flex-col" role="main" aria-label="Dashboard Content">
-          <DashboardHeader />
-          <div className="flex flex-col gap-4">
-            <DashboardOverview />
-            <div className="flex flex-col md:flex-row gap-4">
-              <DashboardUserPlatform />
-              <DashboardUserActivityGraph />
+        <div className="relative isolate min-h-full overflow-hidden rounded-3xl border border-border/40 bg-transparent">
+          <div className="relative z-10 flex flex-col gap-4">
+            <div>
+              <DashboardHeader />
             </div>
-            <DashboardSystemOverview />
+            <div>
+              <DashboardOverview />
+            </div>
+            <div className="flex flex-col gap-4 md:flex-row md:items-stretch">
+              <div className="min-w-0 flex-1">
+                <DashboardUserPlatform />
+              </div>
+              <div className="min-w-0 flex-1">
+                <DashboardUserActivityGraph />
+              </div>
+            </div>
+            <div>
+              <DashboardSystemOverview />
+            </div>
           </div>
-        </main>
+        </div>
       )}
     </>
   );

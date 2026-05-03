@@ -42,7 +42,7 @@ const LocalDemoSignup = () => {
   };
 
   return (
-    <div className="rounded-xl border border-white/10 bg-white/[0.035] p-4">
+    <div className="rounded-xl border border-white/12 bg-[#12151f] p-4">
       <p className="text-sm leading-6 text-muted-foreground">
         Hosted signup is disabled for this project right now. Create a local demo workspace to test
         the builder without sending account data to the identity service.
@@ -118,28 +118,33 @@ export const SignupPage = () => {
           </Link>
         </p>
       </div>
-      {loadingSignupSettings && (
-        <div className="rounded-xl border border-white/10 bg-white/[0.035] p-4 text-sm text-muted-foreground">
+      {loadingSignupSettings ? (
+        <div className="rounded-xl border border-white/10 bg-[#141820] p-4 text-sm text-muted-foreground">
           Checking Blocks IAM signup settings...
         </div>
-      )}
-      {showEmailSignup && <SignupForm />}
-      {showLocalDemoSignup && <LocalDemoSignup />}
-      {!import.meta.env.DEV && hasSignupSettings && !isEmailPasswordSignUpEnabled && !isSSoSignUpEnabled && (
-        <div className="rounded-xl border border-white/10 bg-white/[0.035] p-4 text-sm text-muted-foreground">
+      ) : null}
+      {showEmailSignup ? (
+        <div>
+          <SignupForm />
+        </div>
+      ) : null}
+      {showLocalDemoSignup ? <LocalDemoSignup /> : null}
+      {!import.meta.env.DEV &&
+      hasSignupSettings &&
+      !isEmailPasswordSignUpEnabled &&
+      !isSSoSignUpEnabled ? (
+        <div className="rounded-xl border border-white/10 bg-[#141820] p-4 text-sm text-muted-foreground">
           Signup is currently disabled in Blocks IAM settings. Ask the project admin to enable email
           signup or create an IAM account for you.
         </div>
-      )}
+      ) : null}
       <p className="text-xs leading-5 text-muted-foreground">
         Accounts include a private workspace, media library, draft pages, and a live publishing
         route once IAM activation is complete.
       </p>
       <div>
-        {showEmailSignup && showSsoSignup && (
-          <Divider text={t('OR_CONTINUE_WITH')} />
-        )}
-        {showSsoSignup && loginOption && <SsoSignin loginOption={loginOption} />}
+        {showEmailSignup && showSsoSignup ? <Divider text={t('OR_CONTINUE_WITH')} /> : null}
+        {showSsoSignup && loginOption ? <SsoSignin loginOption={loginOption} /> : null}
       </div>
     </div>
   );

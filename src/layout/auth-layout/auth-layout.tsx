@@ -5,8 +5,6 @@ import { useGetLoginOptions } from '@/modules/auth/hooks/use-auth';
 import { useAuthState } from '@/state/client-middleware';
 import { ExtensionBanner, VibeWordmark } from '@/components/core';
 
-const AUTH_SHOWCASE_IMAGE = '/vibe-assets/auth-showcase-clean.webp';
-
 export const AuthLayout = () => {
   const { isLoading, error: loginOptionsError } = useGetLoginOptions();
   const navigate = useNavigate();
@@ -132,61 +130,78 @@ export const AuthLayout = () => {
 
   if (isLoading) return null;
 
-  return (
-    <div className="min-h-screen w-full min-w-full overflow-x-hidden bg-[#070A12] text-[#f7f4ea]">
-      <ExtensionBanner />
-      <div className="relative min-h-screen w-full overflow-hidden">
-        <img
-          src={AUTH_SHOWCASE_IMAGE}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 size-full object-cover opacity-72"
-          fetchPriority="high"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,10,18,0.45)_0%,rgba(7,10,18,0.62)_48%,rgba(7,10,18,0.96)_100%)]" />
-        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(7,10,18,0.46)_0%,rgba(7,10,18,0.1)_44%,rgba(7,10,18,0.9)_100%)]" />
+  const wordmark = (
+    <VibeWordmark
+      tagline="Build your site, fast."
+      className="text-[#f7f4ea] [&_*]:text-[#f7f4ea]"
+    />
+  );
 
-        <header className="relative z-10 mx-auto flex w-full max-w-[92rem] items-center justify-between px-8 py-6 sm:px-12 lg:px-16 xl:px-20">
-          <VibeWordmark
-            tagline="Build your site, fast."
-            className="text-[#f7f4ea] [&_*]:text-[#f7f4ea]"
-          />
+  const heroCopy = (
+    <section className="relative z-[1] max-w-xl">
+      <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#2bd6c4]">
+        Website builder
+      </p>
+      <h1 className="mt-2 text-4xl font-semibold leading-[1.05] tracking-tight text-[#f7f4ea] sm:text-5xl">
+        Design it. Shape it. Publish it.
+      </h1>
+      <p className="mt-3 max-w-md text-sm leading-6 text-[#d8d3c4]/78 sm:text-base sm:leading-7">
+        A calm studio for turning polished site ideas into live pages, backed by SELISE Blocks.
+      </p>
+      <div className="mt-5 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d8d3c4]/76">
+        <span className="rounded-full border border-white/12 bg-[rgba(255,255,255,0.08)] px-3 py-1.5">
+          Drafts
+        </span>
+        <span className="rounded-full border border-white/12 bg-[rgba(255,255,255,0.08)] px-3 py-1.5">
+          Media
+        </span>
+        <span className="rounded-full border border-white/12 bg-[rgba(255,255,255,0.08)] px-3 py-1.5">
+          Publish
+        </span>
+      </div>
+    </section>
+  );
+
+  const authCardCaption = (
+    <p className="mt-4 text-center text-[11px] leading-5 text-[#d8d3c4]/55 lg:mt-0">
+      Secure identity, structured content, media storage, and publishing in one workspace.
+    </p>
+  );
+
+  return (
+    <div className="flex min-h-screen min-w-full w-full flex-col overflow-x-hidden bg-transparent text-[#f7f4ea]">
+      <ExtensionBanner />
+      <div className="flex w-full flex-1 flex-col justify-center py-10 sm:py-12 lg:py-16">
+        {/* Mobile / tablet: logo above content */}
+        <header className="mx-auto w-full max-w-[92rem] px-10 pb-6 pt-8 sm:px-14 sm:pb-8 sm:pt-10 lg:hidden">
+          {wordmark}
         </header>
 
-        <main className="relative z-10 mx-auto grid min-h-[calc(100vh-6rem)] w-full max-w-[92rem] items-center gap-10 px-8 pb-10 sm:px-12 lg:grid-cols-[minmax(0,1fr)_minmax(22rem,27rem)] lg:px-16 xl:px-20">
-          <section className="hidden max-w-xl self-end pb-10 lg:block">
-            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[#2bd6c4]">
-              Website builder
-            </p>
-            <h1 className="mt-4 text-5xl font-semibold leading-[1.02] tracking-tight text-[#f7f4ea] xl:text-6xl">
-              Design it. Shape it. Publish it.
-            </h1>
-            <p className="mt-5 max-w-md text-base leading-7 text-[#d8d3c4]/78">
-              A calm studio for turning polished site ideas into live pages, backed by SELISE Blocks.
-            </p>
-            <div className="mt-8 flex flex-wrap gap-2 text-[11px] font-semibold uppercase tracking-[0.14em] text-[#d8d3c4]/76">
-              <span className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1.5">
-                Drafts
-              </span>
-              <span className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1.5">
-                Media
-              </span>
-              <span className="rounded-full border border-white/10 bg-white/[0.055] px-3 py-1.5">
-                Publish
-              </span>
+        <div className="mx-auto w-full max-w-[92rem] px-10 pb-10 pt-2 sm:px-14 sm:pt-4 lg:px-28 lg:pb-12 lg:pt-8 xl:px-32">
+          {/* lg: left column (logo top, copy bottom) matches card height; card-only in this row */}
+          <div className="flex flex-col gap-8 lg:flex-row lg:items-stretch lg:gap-6">
+            <div className="hidden min-h-0 min-w-0 flex-1 flex-col justify-between lg:flex">
+              {wordmark}
+              {heroCopy}
             </div>
-          </section>
 
-          <div className="mx-auto w-full max-w-[27rem] lg:mx-0 lg:justify-self-end">
-            <div className="relative overflow-hidden rounded-[1.35rem] border border-white/10 bg-[#10131B] p-5 shadow-[0_24px_80px_-42px_rgba(0,0,0,0.95)] sm:p-6">
-              <div className="pointer-events-none absolute inset-x-0 top-0 h-px bg-white/16" />
-              {renderAuthContent()}
+            <div className="relative z-[1] mx-auto w-full max-w-[27rem] shrink-0 lg:mx-0">
+              <div className="relative isolate overflow-hidden rounded-[1.35rem] border border-white/20 bg-[#0c0f17] p-5 shadow-[0_18px_48px_-28px_rgba(0,0,0,0.75)] sm:p-6">
+                <div className="pointer-events-none absolute inset-x-0 top-0 z-0 h-px bg-gradient-to-r from-transparent via-white/35 to-transparent" />
+                <div className="pointer-events-none absolute -right-16 -top-16 z-0 size-48 rounded-full bg-violet-500/15 opacity-40" />
+                <div className="relative z-[1]">{renderAuthContent()}</div>
+              </div>
+              {/* Caption under card on small screens only */}
+              <div className="lg:hidden">{authCardCaption}</div>
             </div>
-            <p className="mt-4 text-center text-[11px] leading-5 text-[#d8d3c4]/55">
-              Secure identity, structured content, media storage, and publishing in one workspace.
-            </p>
           </div>
-        </main>
+
+          {/* Caption aligned under card column on lg (left flex spacer matches grid) */}
+          <div className="mt-0 hidden w-full gap-6 lg:mt-4 lg:flex">
+            <div className="min-w-0 flex-1" aria-hidden />
+            <div className="w-full max-w-[27rem] shrink-0">{authCardCaption}</div>
+          </div>
+        </div>
       </div>
     </div>
   );

@@ -63,10 +63,10 @@ const SiteThumbnail = ({ website }: { website: Website }) => {
         src={WORKSPACE_HERO}
         alt=""
         aria-hidden
-        className="absolute inset-0 size-full object-cover opacity-35 mix-blend-screen"
+        className="absolute inset-0 size-full object-cover opacity-[0.35] mix-blend-screen"
         loading="lazy"
       />
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.18),transparent_28%),linear-gradient(rgba(255,255,255,0.04)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.04)_1px,transparent_1px)] [background-size:100%_100%,22px_22px,22px_22px]" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(255,255,255,0.14),transparent_30%),linear-gradient(rgba(255,255,255,0.05)_1px,transparent_1px),linear-gradient(90deg,rgba(255,255,255,0.05)_1px,transparent_1px)] [background-size:100%_100%,22px_22px,22px_22px]" />
       <div className="absolute inset-0 flex flex-col gap-2 p-3 opacity-95">
         <div className="h-2.5 w-1/2 rounded-full bg-[rgba(247,244,234,0.85)]" />
         <div className="h-2 w-3/4 rounded-full bg-[rgba(247,244,234,0.6)]" />
@@ -94,7 +94,7 @@ const TemplateTile = ({
 }) => (
   <button
     type="button"
-    className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background text-left transition hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-pop"
+    className="group flex h-full flex-col overflow-hidden rounded-xl border border-border bg-background text-left transition duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-pop"
     onClick={onClick}
   >
     <div className="relative aspect-[16/9] w-full overflow-hidden border-b border-border bg-muted">
@@ -102,7 +102,7 @@ const TemplateTile = ({
         src={TEMPLATE_PREVIEWS[template.id] ?? TEMPLATE_PREVIEWS.blank}
         alt=""
         aria-hidden
-        className="size-full object-cover transition duration-500 group-hover:scale-[1.035]"
+        className="size-full object-cover transition duration-500 ease-out group-hover:scale-[1.035]"
         loading="lazy"
       />
       <span className="absolute left-3 top-3 inline-flex size-7 items-center justify-center rounded-md border border-[rgba(247,244,234,0.12)] bg-[#070A12]/90 text-primary">
@@ -151,7 +151,7 @@ const WebsiteCard = ({
   });
 
   return (
-    <Card className="group flex flex-col gap-4 overflow-hidden rounded-xl border-border bg-card p-4 transition hover:border-primary/40">
+    <Card className="group flex flex-col gap-4 overflow-hidden rounded-xl border-border bg-card p-4 shadow-pop transition duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/40 hover:shadow-pop">
       <SiteThumbnail website={website} />
       <CardContent className="flex flex-col gap-4 p-0">
         <div className="flex items-start justify-between gap-2">
@@ -310,160 +310,170 @@ export const WorkspaceDashboard = () => {
 
   return (
     <div className="mx-auto w-full max-w-6xl">
-      <section className="relative overflow-hidden rounded-2xl border border-[rgba(247,244,234,0.1)] bg-[#070A12] p-6 shadow-pop sm:p-10">
-        <img
-          src={WORKSPACE_HERO}
-          alt=""
-          aria-hidden
-          className="absolute inset-0 size-full object-cover opacity-82"
-          fetchPriority="high"
-        />
-        <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,10,18,0.96)_0%,rgba(7,10,18,0.82)_42%,rgba(7,10,18,0.28)_100%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(25,211,181,0.18),transparent_32%),radial-gradient(circle_at_82%_72%,rgba(249,115,98,0.16),transparent_28%)]" />
-        <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
-          <div className="text-[#f7f4ea]">
-            <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(247,244,234,0.78)]">
-              Blockloom Workspace
-            </p>
-            <h1 className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-tight text-[#f7f4ea] sm:text-5xl">
-              Build your site, fast.
-            </h1>
-            <p className="mt-4 max-w-2xl text-base leading-7 text-[rgba(247,244,234,0.82)]">
-              Spin up a new site, drop in beautifully styled blocks, and publish a clean live
-              route at <code className="font-mono text-[#f7f4ea]">/site/your-name</code>.
-            </p>
-          </div>
-          <form
-            className="rounded-xl border border-[rgba(247,244,234,0.12)] bg-[#0D1018] p-4 text-card-foreground shadow-[0_18px_50px_-30px_rgba(0,0,0,0.9)]"
-            onSubmit={(e) => handleCreate(e)}
-          >
-            <label className="text-sm font-medium text-foreground" htmlFor="site-name">
-              New site name
-            </label>
-            <div className="mt-2 flex gap-2">
-              <Input
-                id="site-name"
-                value={siteName}
-                onChange={(event) => setSiteName(event.target.value)}
-              />
-              <Button loading={createWebsite.isPending} type="submit">
-                <FilePlusIcon className="size-4" />
-                Create
-              </Button>
+      <div className="flex flex-col gap-6 md:gap-8">
+        <div>
+          <section className="relative overflow-hidden rounded-2xl border border-[rgba(247,244,234,0.1)] bg-[#070A12] p-6 shadow-pop sm:p-10">
+            <img
+              src={WORKSPACE_HERO}
+              alt=""
+              aria-hidden
+              className="absolute inset-0 size-full object-cover opacity-[0.82]"
+              fetchPriority="high"
+            />
+            <div className="absolute inset-0 bg-[linear-gradient(90deg,rgba(7,10,18,0.96)_0%,rgba(7,10,18,0.82)_42%,rgba(7,10,18,0.28)_100%)]" />
+            <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_0%,rgba(25,211,181,0.18),transparent_32%),radial-gradient(circle_at_82%_72%,rgba(249,115,98,0.16),transparent_28%)]" />
+            <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
+              <div className="text-[#f7f4ea]">
+                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(247,244,234,0.78)]">
+                  Blockloom Workspace
+                </p>
+                <h1 className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-tight text-[#f7f4ea] sm:text-5xl">
+                  Build your site, fast.
+                </h1>
+                <p className="mt-4 max-w-2xl text-base leading-7 text-[rgba(247,244,234,0.82)]">
+                  Spin up a new site, drop in beautifully styled blocks, and publish a clean live
+                  route at <code className="font-mono text-[#f7f4ea]">/site/your-name</code>.
+                </p>
+              </div>
+              <form
+                className="relative z-10 rounded-xl border border-border/90 bg-background/95 p-4 text-card-foreground"
+                onSubmit={(e) => handleCreate(e)}
+              >
+                <label className="text-sm font-medium text-foreground" htmlFor="site-name">
+                  New site name
+                </label>
+                <div className="mt-2 flex gap-2">
+                  <Input
+                    id="site-name"
+                    value={siteName}
+                    onChange={(event) => setSiteName(event.target.value)}
+                  />
+                  <Button loading={createWebsite.isPending} type="submit">
+                    <FilePlusIcon className="size-4" />
+                    Create
+                  </Button>
+                </div>
+                <p className="mt-3 text-xs text-muted-foreground">
+                  Or start from a template below.
+                </p>
+              </form>
             </div>
-            <p className="mt-3 text-xs text-muted-foreground">
-              Or start from a template below.
-            </p>
-          </form>
-        </div>
-        <button
-          type="button"
-          className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-full border border-[rgba(247,244,234,0.12)] bg-[#070A12]/75 px-3 py-1.5 text-xs font-semibold text-[rgba(247,244,234,0.84)] transition hover:border-primary/40 hover:text-[#f7f4ea]"
-          onClick={() => setGuideOpen(true)}
-        >
-          <QuestionMarkCircledIcon className="size-3.5 text-primary" />
-          Guide me through Blockloom
-        </button>
-      </section>
-
-      <div className="mt-6 grid gap-3 sm:grid-cols-2">
-        {stats.map((metric) => (
-          <div
-            key={metric.label}
-            className="flex items-center gap-4 rounded-xl border border-border bg-card p-5 shadow-pop"
-          >
-            <div className="flex size-11 items-center justify-center rounded-lg bg-primary-50 text-primary">
-              <metric.icon className="size-5" />
-            </div>
-            <div>
-              <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
-                {metric.label}
-              </p>
-              <p className="mt-1 font-display text-3xl font-semibold text-foreground">
-                {metric.value}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      <section className="mt-8">
-        <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-          <div>
-            <h2 className="font-display text-xl font-semibold text-foreground">Your sites</h2>
-            <p className="text-sm text-muted-foreground">
-              Continue editing or open the live URL.
-            </p>
-          </div>
-        </div>
-
-        {isLoading ? (
-          <div className="flex h-48 items-center justify-center rounded-xl border border-border bg-card">
-            <UpdateIcon className="size-6 animate-spin text-primary" />
-          </div>
-        ) : websites.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-border bg-card p-8 text-center sm:p-12">
-            <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary">
-              <Component1Icon className="size-6" />
-            </div>
-            <h3 className="mt-4 font-display text-lg font-semibold text-foreground">
-              Pick a starting point
-            </h3>
-            <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
-              Either create a blank site or seed one from a template — you can edit anything.
-            </p>
-            <div
-              id="vibe-template-gallery"
-              className="mx-auto mt-6 grid max-w-5xl scroll-mt-24 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+            <button
+              type="button"
+              className="relative z-10 mt-5 inline-flex items-center gap-2 rounded-full border border-[rgba(247,244,234,0.14)] bg-[#070A12]/90 px-3 py-1.5 text-xs font-semibold text-[rgba(247,244,234,0.9)] transition duration-200 ease-out hover:-translate-y-px hover:border-primary/50 hover:text-[#f7f4ea]"
+              onClick={() => setGuideOpen(true)}
             >
-              {starterTemplates.map((template) => (
-                <TemplateTile
-                  key={template.id}
-                  template={template}
-                  onClick={() => handleStarter(template.id)}
-                />
-              ))}
-            </div>
-          </div>
-        ) : (
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {websites.map((website) => (
-              <WebsiteCard key={website.id} website={website} ownerId={ownerId} />
+              <QuestionMarkCircledIcon className="size-3.5 text-primary" />
+              Guide me through Blockloom
+            </button>
+          </section>
+        </div>
+
+        <div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {stats.map((metric) => (
+              <div
+                key={metric.label}
+                className="flex items-center gap-4 rounded-xl border border-border/80 bg-card/95 p-5 shadow-pop transition duration-300 ease-out hover:-translate-y-0.5 hover:border-primary/35"
+              >
+                <div className="flex size-11 items-center justify-center rounded-lg bg-primary-50 text-primary">
+                  <metric.icon className="size-5" />
+                </div>
+                <div>
+                  <p className="text-xs uppercase tracking-[0.16em] text-muted-foreground">
+                    {metric.label}
+                  </p>
+                  <p className="mt-1 font-display text-3xl font-semibold text-foreground">
+                    {metric.value}
+                  </p>
+                </div>
+              </div>
             ))}
+          </div>
+        </div>
+
+        <div>
+          <section>
+            <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
+              <div>
+                <h2 className="font-display text-xl font-semibold text-foreground">Your sites</h2>
+                <p className="text-sm text-muted-foreground">
+                  Continue editing or open the live URL.
+                </p>
+              </div>
+            </div>
+
+            {isLoading ? (
+              <div className="flex h-48 items-center justify-center rounded-xl border border-border bg-card/95">
+                <UpdateIcon className="size-6 animate-spin text-primary" />
+              </div>
+            ) : websites.length === 0 ? (
+              <div className="rounded-2xl border border-dashed border-border bg-card/95 p-8 text-center sm:p-12">
+                <div className="mx-auto flex size-12 items-center justify-center rounded-full bg-primary-50 text-primary">
+                  <Component1Icon className="size-6" />
+                </div>
+                <h3 className="mt-4 font-display text-lg font-semibold text-foreground">
+                  Pick a starting point
+                </h3>
+                <p className="mx-auto mt-1 max-w-md text-sm text-muted-foreground">
+                  Either create a blank site or seed one from a template — you can edit anything.
+                </p>
+                <div
+                  id="vibe-template-gallery"
+                  className="mx-auto mt-6 grid max-w-5xl scroll-mt-24 gap-3 sm:grid-cols-2 lg:grid-cols-3"
+                >
+                  {starterTemplates.map((template) => (
+                    <TemplateTile
+                      key={template.id}
+                      template={template}
+                      onClick={() => handleStarter(template.id)}
+                    />
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+                {websites.map((website) => (
+                  <WebsiteCard key={website.id} website={website} ownerId={ownerId} />
+                ))}
+              </div>
+            )}
+          </section>
+        </div>
+
+        {websites.length > 0 && (
+          <div>
+            <section
+              id="vibe-template-gallery"
+              className="scroll-mt-24 rounded-2xl border border-dashed border-border bg-card/95 p-6 sm:p-8"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-foreground">
+                    Start another from a template
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    Each template is just JSON — you can rearrange every block.
+                  </p>
+                </div>
+                <Button type="button" variant="outline" size="sm" onClick={() => setGuideOpen(true)}>
+                  <QuestionMarkCircledIcon className="size-4" />
+                  Launch guide
+                </Button>
+              </div>
+              <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
+                {starterTemplates.map((template) => (
+                  <TemplateTile
+                    key={template.id}
+                    template={template}
+                    onClick={() => handleStarter(template.id)}
+                  />
+                ))}
+              </div>
+            </section>
           </div>
         )}
-      </section>
-
-      {websites.length > 0 && (
-        <section
-          id="vibe-template-gallery"
-          className="mt-10 scroll-mt-24 rounded-2xl border border-dashed border-border bg-card p-6 sm:p-8"
-        >
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <div>
-              <h3 className="font-display text-lg font-semibold text-foreground">
-                Start another from a template
-              </h3>
-              <p className="text-sm text-muted-foreground">
-                Each template is just JSON — you can rearrange every block.
-              </p>
-            </div>
-            <Button type="button" variant="outline" size="sm" onClick={() => setGuideOpen(true)}>
-              <QuestionMarkCircledIcon className="size-4" />
-              Launch guide
-            </Button>
-          </div>
-          <div className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
-            {starterTemplates.map((template) => (
-              <TemplateTile
-                key={template.id}
-                template={template}
-                onClick={() => handleStarter(template.id)}
-              />
-            ))}
-          </div>
-        </section>
-      )}
+      </div>
 
       <OnboardingGuideDialog
         open={guideOpen}

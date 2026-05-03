@@ -249,9 +249,31 @@ export default {
           '0%': { backgroundPosition: '0% 50%' },
           '100%': { backgroundPosition: '200% 50%' },
         },
+        fadeSlideIn: {
+          '0%': { opacity: '0', filter: 'blur(6px)', transform: 'translateY(12px)' },
+          '100%': { opacity: '1', filter: 'blur(0)', transform: 'translateY(0)' },
+        },
+        slideRightIn: {
+          '0%': { opacity: '0', filter: 'blur(6px)', transform: 'translateX(16px)' },
+          '100%': { opacity: '1', filter: 'blur(0)', transform: 'translateX(0)' },
+        },
+        testimonialIn: {
+          '0%': { opacity: '0', filter: 'blur(6px)', transform: 'translateY(12px) scale(0.98)' },
+          '100%': { opacity: '1', filter: 'blur(0)', transform: 'translateY(0) scale(1)' },
+        },
+        unlockFly: {
+          '0%': { opacity: '0', transform: 'translateY(36px) scale(0.96)' },
+          '100%': { opacity: '1', transform: 'translateY(0) scale(1)' },
+        },
       },
       animation: {
         'vibe-sheen': 'vibeSheen 12s ease-in-out infinite alternate',
+        'fade-slide-in': 'fadeSlideIn 0.65s ease-out forwards',
+        'slide-right-in': 'slideRightIn 0.75s ease-out both',
+        'testimonial-in': 'testimonialIn 0.8s ease-out forwards',
+        'unlock-fly': 'unlockFly 0.85s cubic-bezier(0.22, 1, 0.36, 1) forwards',
+        'unlock-both':
+          'unlockFly 0.82s cubic-bezier(0.22, 1, 0.36, 1) both',
       },
     },
   },

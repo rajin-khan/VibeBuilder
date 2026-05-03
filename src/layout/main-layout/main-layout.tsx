@@ -12,6 +12,13 @@ export const MainLayout = () => {
   const isChatRoute = firstSegment === 'chat';
   const isBuilderRoute = firstSegment === 'app';
   const isEditorRoute = pathname.startsWith('/app/sites/') && pathname.includes('/pages/');
+  const isStudioShell = pathname === '/dashboard' || pathname === '/app';
+
+  const contentSurfaceClass = (() => {
+    if (isEditorRoute) return 'bg-surface';
+    if (isStudioShell) return 'bg-background/94';
+    return 'bg-surface';
+  })();
 
   useEffect(() => {
     if (isBuilderRoute && !isMobile) {
@@ -41,10 +48,10 @@ export const MainLayout = () => {
       <div
         className={`flex min-h-screen w-full flex-col ${
           marginClass
-        } transition-[margin-left] duration-300 ease-in-out`}
+        } transition-[margin-left] duration-150 ease-out`}
       >
         <div
-          className={`flex min-h-screen bg-surface ${contentPaddingClass} ${open && !isMobile && !isBuilderRoute ? 'w-[calc(100dvw-var(--sidebar-width))]' : 'w-full'}`}
+          className={`flex min-h-screen ${contentSurfaceClass} ${contentPaddingClass} ${open && !isMobile && !isBuilderRoute ? 'w-[calc(100dvw-var(--sidebar-width))]' : 'w-full'}`}
         >
           <Outlet />
         </div>

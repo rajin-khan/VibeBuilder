@@ -28,6 +28,7 @@ import { SidebarProvider } from '@/components/ui-kit/sidebar';
 import { Toaster } from '@/components/ui-kit/toaster';
 import { useLanguageContext } from '@/i18n/language-context';
 import { LoadingOverlay } from '@/components/core';
+import { GlobalStudioAtmosphere } from '@/components/ui/global-studio-atmosphere';
 
 const WorkspaceDashboard = lazy(() =>
   import('@/modules/vibe-builder/pages/workspace-dashboard').then((module) => ({
@@ -57,10 +58,12 @@ export const AppRoutes = () => {
   }
   return (
     <div className="min-h-screen bg-background font-sans antialiased relative">
-      <ClientMiddleware>
-        <ThemeProvider>
-          <SidebarProvider>
-            <Routes>
+      <GlobalStudioAtmosphere />
+      <div className="relative isolate z-10 min-h-screen">
+        <ClientMiddleware>
+          <ThemeProvider>
+            <SidebarProvider>
+              <Routes>
               {AuthRoutes}
               <Route
                 path="/site/:siteSlug/:pageSlug"
@@ -166,7 +169,8 @@ export const AppRoutes = () => {
             </Routes>
           </SidebarProvider>
         </ThemeProvider>
-      </ClientMiddleware>
+        </ClientMiddleware>
+      </div>
       <Toaster />
     </div>
   );

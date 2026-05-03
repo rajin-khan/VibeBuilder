@@ -92,39 +92,39 @@ export const Signin = () => {
         )}
       </div>
 
-      {ssoError && (
+      {ssoError ? (
         <div className="rounded-lg border border-error/30 bg-error-background p-4">
           <p className="text-xs font-medium text-error-high-emphasis">{ssoError}</p>
         </div>
-      )}
+      ) : null}
 
-      {isBannerAllowedToVisible && (
-        <p className="rounded-lg border border-white/10 bg-white/[0.035] px-3 py-2 text-xs leading-5 text-muted-foreground">
+      {isBannerAllowedToVisible ? (
+        <p className="rounded-lg border border-white/12 bg-[#12151f] px-3 py-2 text-xs leading-5 text-muted-foreground">
           Use a Blocks IAM account for this project, or open the local demo workspace.
         </p>
-      )}
+      ) : null}
 
-      <div className="w-full flex flex-col gap-4">
+      <div className="flex w-full flex-col gap-4">
         {passwordGrantAllowed && <SigninEmail />}
         {isDivider && <Divider text={t('AUTH_OR')} />}
         {socialGrantAllowed && loginOption && <SsoSignin loginOption={loginOption} />}
       </div>
 
-      {canUseLocalDemo && (
-        <div className="rounded-xl border border-white/10 bg-white/[0.035] p-3">
+      {canUseLocalDemo ? (
+        <div className="rounded-xl border border-white/12 bg-[#12151f] p-3">
           <p className="text-xs leading-5 text-muted-foreground">
             Just exploring? Demo mode keeps everything on this device.
           </p>
           <Button
             type="button"
             variant="outline"
-            className="mt-3 w-full border-white/10 bg-background/70 hover:bg-background"
+            className="mt-3 w-full border-white/15 bg-[#0c0f17] hover:bg-[#141820]"
             onClick={continueAsLocalDemo}
           >
             Continue in demo workspace
           </Button>
         </div>
-      )}
+      ) : null}
     </div>
   );
 };
