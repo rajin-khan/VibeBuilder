@@ -1,12 +1,12 @@
 {
-  "short_name": "Vibe",
-  "name": "Vibe — Build your site, fast.",
+  "short_name": "Blockloom",
+  "name": "Blockloom — Build your site, fast.",
   "description": "A modern drag-and-drop website builder.",
   "icons": [
     {
-      "src": "favicon.svg",
-      "type": "image/svg+xml",
-      "sizes": "any"
+      "src": "favicon.png",
+      "type": "image/png",
+      "sizes": "64x64"
     },
     {
       "src": "favicon.ico",

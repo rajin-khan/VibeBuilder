@@ -1483,7 +1483,7 @@ export const componentRegistry: Record<VibeBlockType, VibeComponentDefinition> =
     category: 'utility',
     defaultProps: baseDefaults({
       eyebrow: 'Before vs after',
-      title: 'Before VibeBuilder / after VibeBuilder',
+      title: 'Before Blockloom / after Blockloom',
       style: 'split',
       background: '#ffffff',
       accent: '#16a34a',
@@ -2129,7 +2129,7 @@ export const componentRegistry: Record<VibeBlockType, VibeComponentDefinition> =
     category: 'content',
     defaultProps: baseDefaults({
       quote: 'Editing should feel like writing, not configuring fields.',
-      attribution: 'VibeBuilder principle 01',
+      attribution: 'Blockloom principle 01',
       align: 'center',
       style: 'serif',
       background: '#ffffff',
@@ -2922,7 +2922,7 @@ export const componentRegistry: Record<VibeBlockType, VibeComponentDefinition> =
     preview: 'Ticker text',
     category: 'content',
     defaultProps: baseDefaults({
-      text: 'Ship faster with Vibe — design once, publish everywhere — ',
+      text: 'Ship faster with Blockloom — design once, publish everywhere — ',
       seconds: 22,
       background: '#0f172a',
       accent: '#5eead4',

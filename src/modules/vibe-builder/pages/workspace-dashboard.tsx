@@ -323,7 +323,7 @@ export const WorkspaceDashboard = () => {
         <div className="relative z-10 grid gap-8 lg:grid-cols-[1fr_360px] lg:items-end">
           <div className="text-[#f7f4ea]">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-[rgba(247,244,234,0.78)]">
-              Vibe Workspace
+              Blockloom Workspace
             </p>
             <h1 className="mt-3 max-w-3xl font-display text-3xl font-semibold leading-tight tracking-tight text-[#f7f4ea] sm:text-5xl">
               Build your site, fast.
@@ -362,7 +362,7 @@ export const WorkspaceDashboard = () => {
           onClick={() => setGuideOpen(true)}
         >
           <QuestionMarkCircledIcon className="size-3.5 text-primary" />
-          Guide me through Vibe
+          Guide me through Blockloom
         </button>
       </section>
 

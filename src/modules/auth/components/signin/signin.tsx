@@ -73,7 +73,7 @@ export const Signin = () => {
           Welcome back
         </p>
         <h1 className="mt-3 text-3xl font-semibold tracking-tight text-foreground">
-          Log in to Vibe
+          Log in to Blockloom
         </h1>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">
           {t('DONT_HAVE_ACCOUNT')}{' '}

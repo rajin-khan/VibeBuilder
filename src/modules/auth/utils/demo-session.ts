@@ -2,7 +2,7 @@ import { User } from '@/types/user.type';
 import { GetOrganizationsResponse } from '@/lib/api/types/multi-orgs.types';
 
 export const LOCAL_DEMO_OWNER_ID = 'local-demo-user';
-export const LOCAL_DEMO_EMAIL = 'demo@vibebuilder.local';
+export const LOCAL_DEMO_EMAIL = 'demo@blockloom.local';
 
 type DemoPayload = {
   org_id?: string;
@@ -73,7 +73,7 @@ export const getDemoOrganizations = (): GetOrganizationsResponse => ({
       lastUpdatedBy: LOCAL_DEMO_OWNER_ID,
       organizationIds: [LOCAL_DEMO_OWNER_ID],
       tags: ['local'],
-      name: 'VibeBuilder Demo',
+      name: 'Blockloom Demo',
       isEnable: true,
     },
   ],

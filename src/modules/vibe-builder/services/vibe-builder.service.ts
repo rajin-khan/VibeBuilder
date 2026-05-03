@@ -281,7 +281,7 @@ const runWithDemoFallback = async <T,>(operation: () => Promise<T>, fallback: ()
       if (isVibeDataGatewayUnavailable(err) && !warnedVibeGatewayMissing) {
         warnedVibeGatewayMissing = true;
         console.warn(
-          '[VibeBuilder] Data Gateway has no published VibeWebsite / VibePage / VibeAsset schemas. Using browser localStorage. Define those entities in Blocks Cloud → Data → Schemas and click Publish (see DEPLOYMENT.md).'
+          '[Blockloom] Data Gateway has no published VibeWebsite / VibePage / VibeAsset schemas. Using browser localStorage. Define those entities in Blocks Cloud → Data → Schemas and click Publish (see DEPLOYMENT.md).'
         );
       }
       return fallback();

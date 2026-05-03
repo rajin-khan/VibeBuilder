@@ -819,7 +819,7 @@ export const starterTemplates: StarterTemplate[] = [
           ],
         }),
         block('hero', {
-          eyebrow: 'Vibe Summit 2026',
+          eyebrow: 'Blockloom Summit 2026',
           headline: 'One day for people who obsess over interfaces',
           body: 'Talks, live critiques, and hands-on labs for designers, founders, and frontend teams building the next decade of software.',
           cta: 'Reserve a seat',

@@ -404,7 +404,7 @@ export const SiteSettingsSheet = ({
                 </div>
               </Field>
               <Field
-                label="Made with Vibe footer"
+                label="Made with Blockloom footer"
                 hint="A small attribution link on published pages."
               >
                 <div className="flex items-center justify-between rounded-lg border border-border bg-card px-3 py-2">

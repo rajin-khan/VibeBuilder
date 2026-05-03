@@ -14,7 +14,7 @@ export const publicRoutes = [
 ] as const;
 
 /**
- * Paths that must be reachable without auth (marketing pages built in Vibe, auth screens, SSO).
+ * Paths that must be reachable without auth (published marketing pages, auth screens, SSO).
  */
 export function isPublicRoutePath(pathname: string): boolean {
   if (pathname.startsWith('/site/')) return true;

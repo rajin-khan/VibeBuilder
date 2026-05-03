@@ -69,7 +69,7 @@ export const OnboardingGuideDialog = ({
               Build a polished site in one focused pass.
             </DialogTitle>
             <DialogDescription className="leading-6">
-              Vibe is designed around a short, repeatable workflow so you can move from idea to
+              Blockloom is designed around a short, repeatable workflow so you can move from idea to
               live page without hunting through settings.
             </DialogDescription>
           </DialogHeader>

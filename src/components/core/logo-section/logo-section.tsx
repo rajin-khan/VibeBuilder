@@ -16,7 +16,7 @@ export const LogoSection = ({ open, isMobile, onClose }: Readonly<LogoSectionPro
     <div className="relative flex h-10 w-full items-center">
       <Link
         to="/app"
-        aria-label="Vibe — Build your site, fast."
+        aria-label="Blockloom — Build your site, fast."
         className="flex items-center gap-2 px-3 transition-opacity duration-300"
       >
         {showFull ? (

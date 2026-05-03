@@ -431,7 +431,7 @@ html.dark {
   @apply rounded-b-md border border-border;
 }
 
-/* === Vibe — block entrance animations === */
+/* === Blockloom — block entrance animations === */
 @keyframes vibeFadeIn {
   from {
     opacity: 0;
@@ -490,7 +490,7 @@ html.dark {
     background-color 200ms ease-out;
 }
 
-/* === Vibe brand gradient (used by hero, login showcase, etc.) === */
+/* === Blockloom brand gradient (used by hero, login showcase, etc.) === */
 .vibe-gradient {
   background-image: linear-gradient(
     115deg,

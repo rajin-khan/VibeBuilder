@@ -171,8 +171,8 @@ export function InvoicesDetail({ invoice, isPreview = false }: Readonly<Invoices
               <VibeWordmark />
             </div>
             <div className="flex flex-col border-l-none sm:border-l sm:border-medium-emphasis pl-4">
-              <h2 className="font-semibold text-high-emphasis">Vibe</h2>
-              <p className="text-medium-emphasis">hello@vibe.app</p>
+              <h2 className="font-semibold text-high-emphasis">Blockloom</h2>
+              <p className="text-medium-emphasis">hello@blockloom.app</p>
               <p className="text-medium-emphasis">+41 75 744 25 38</p>
             </div>
           </div>

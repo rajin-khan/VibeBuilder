@@ -63,7 +63,7 @@ export const PublicSitePage = () => {
           Publish from the editor to make the live website available at this route.
         </p>
         <Button asChild className="mt-6">
-          <Link to="/app">Back to Vibe</Link>
+          <Link to="/app">Back to Blockloom</Link>
         </Button>
       </div>
     );
@@ -143,7 +143,7 @@ export const PublicSitePage = () => {
             >
               <span>Made with</span>
               <VibeMark className="size-4" />
-              <span>Vibe</span>
+              <span>Blockloom</span>
             </a>
           </div>
         </footer>

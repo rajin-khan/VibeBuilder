@@ -417,7 +417,7 @@ export const BuilderCanvas = ({
                     Empty canvas
                   </p>
                   <h2 className="mt-2 font-display text-2xl font-semibold text-foreground">
-                    Drop a Vibe component here
+                    Drop a Blockloom component here
                   </h2>
                   <p className="mt-2 text-sm leading-6 text-muted-foreground">
                     Pick a quick start below, drag from the palette, or press{' '}

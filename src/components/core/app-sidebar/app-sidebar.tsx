@@ -12,7 +12,7 @@ type AppSidebarProps = {
 };
 
 /**
- * AppSidebar — Vibe app shell sidebar.
+ * AppSidebar — product app shell sidebar.
  *
  * Renders the brand wordmark + a single grouping of navigation items.
  * Items flagged `hidden: true` in `sidebar-menu.ts` are filtered out by

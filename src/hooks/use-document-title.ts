@@ -1,10 +1,10 @@
 import { useEffect } from 'react';
 
-const DEFAULT_TITLE = 'Vibe — Build your site, fast.';
-const BRAND_SUFFIX = 'Vibe';
+const DEFAULT_TITLE = 'Blockloom — Build your site, fast.';
+const BRAND_SUFFIX = 'Blockloom';
 
 /**
- * Sets `document.title` to "{title} · Vibe" while the component is mounted, and
+ * Sets `document.title` to "{title} · Blockloom" while the component is mounted, and
  * restores the previous title on unmount. Falls back to the brand default when
  * title is empty.
  */

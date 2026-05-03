@@ -37,7 +37,7 @@ describe('menuItems', () => {
     }
   });
 
-  test('Workspace (Vibe builder) is the only visible top-level item', () => {
+  test('Workspace (Blockloom builder) is the only visible top-level item', () => {
     const visibleItems = menuItems.filter((item) => !item.hidden);
     expect(visibleItems).toHaveLength(1);
     expect(visibleItems[0]).toMatchObject({

@@ -53,7 +53,7 @@ Keep [.env.example](.env.example) as a template for **local** `.env` (gitignored
 
 For **anonymous** visitors on `/site/...`, the app calls `getVibeWebsites` / `getVibePages` with **`x-blocks-key` only** (no session Bearer) when those collections allow public reads.
 
-In **Blocks Cloud → Data Gateway** ([overview](https://cloud.seliseblocks.com/services/data-gateway)), open each Vibe collection → **Schema Access** → **View** tab → set access to **Public** → confirm for the collections the **anonymous `/site/...` app actually queries**.
+In **Blocks Cloud → Data Gateway** ([overview](https://cloud.seliseblocks.com/services/data-gateway)), open each Blockloom collection (`VibeWebsite`, `VibePage`) → **Schema Access** → **View** tab → set access to **Public** → confirm for the collections the **anonymous `/site/...` app actually queries**.
 
 This app loads published sites with **`getVibeWebsites`** and **`getVibePages`** only (see `findPublishedPage` in the repo). Set **View** to **Public** for **VibeWebsite** and **VibePage** so incognito users can read those collections with **`x-blocks-key` only**.
 
@@ -114,9 +114,9 @@ If **View** is **Public** on the schemas above, leave **`VITE_VIBE_PUBLIC_READ_T
 
 **SPA routing:** Deep links like `/app/...` and `/site/...` require the host to serve `index.html` for routes that are not static files. [staticwebapp.config.json](staticwebapp.config.json) shows the expected fallback (`navigationFallback` / rewrite to `/index.html`). Configure the equivalent in Blocks if the default static hosting does not.
 
-### Data Gateway (real persistence for VibeBuilder)
+### Data Gateway (real persistence for Blockloom)
 
-GraphQL errors like **`getVibeWebsites does not exist on the type Query`** (or **`VibeWebsites` does not exist**) mean the **Data Gateway** for this environment has no published schemas that expose the Vibe collections, or the client is using the wrong **query root field** name. After publish, Blocks generates **`get*`-prefixed** list queries (same pattern as `getInventoryItems`). This app calls:
+GraphQL errors like **`getVibeWebsites does not exist on the type Query`** (or **`VibeWebsites` does not exist**) mean the **Data Gateway** for this environment has no published schemas that expose the Blockloom schema collections, or the client is using the wrong **query root field** name. After publish, Blocks generates **`get*`-prefixed** list queries (same pattern as `getInventoryItems`). This app calls:
 
 | Entity (schema) | List query (read) | Insert mutation example |
 |-----------------|-------------------|---------------------------|
@@ -142,7 +142,7 @@ Use **Data Playground → Schemas** to confirm **`getVibeWebsites` / `getVibePag
 
 **`_id` vs `ItemId`:** mutations use `filter: JSON.stringify({ _id: "<id>" })` for updates/deletes using the website/page **id** stored in `ItemId` / payload. With Blocks Database, confirm new rows use `_id` equal to `ItemId` (or change [vibe-builder.service.ts](src/modules/vibe-builder/services/vibe-builder.service.ts) filters to the field your gateway uses).
 
-Until those schemas exist, the app **falls back to `localStorage`** for Vibe data (one browser only, not shared across devices).
+Until those schemas exist, the app **falls back to `localStorage`** for Blockloom data (one browser only, not shared across devices).
 
 ---
 

@@ -31,7 +31,7 @@ const LocalDemoSignup = () => {
   const navigate = useNavigate();
   const { login, setTokens } = useAuthStore();
   const [name, setName] = useState('Demo Builder');
-  const [email, setEmail] = useState('demo@vibebuilder.local');
+  const [email, setEmail] = useState('demo@blockloom.local');
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();

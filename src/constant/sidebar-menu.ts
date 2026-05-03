@@ -31,7 +31,7 @@ const createMenuItemWithChildren = (
 });
 
 /**
- * Sidebar navigation. Vibe is a focused product so only the workspace + a
+ * Sidebar navigation. Blockloom is a focused product so only the workspace + a
  * single Settings entry are shown by default. Every other item is `hidden:
  * true` — its routes stay wired so direct navigation still works, but they
  * don't appear in the sidebar.

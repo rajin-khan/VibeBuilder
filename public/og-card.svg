@@ -6,7 +6,7 @@
       <stop offset="1" stop-color="#18211E"/>
     </linearGradient>
     <linearGradient id="accent" x1="0" x2="1">
-      <stop stop-color="#19D3B5"/>
+      <stop stop-color="#27D7C3"/>
       <stop offset=".55" stop-color="#B8F15A"/>
       <stop offset="1" stop-color="#F97362"/>
     </linearGradient>
@@ -20,24 +20,27 @@
   </defs>
   <rect width="1200" height="630" fill="url(#bg)"/>
   <rect width="1200" height="630" fill="url(#grid)"/>
-  <circle cx="1025" cy="90" r="310" fill="#19D3B5" opacity=".13"/>
+  <circle cx="1018" cy="76" r="310" fill="#27D7C3" opacity=".12"/>
   <circle cx="1080" cy="555" r="260" fill="#F97362" opacity=".11"/>
   <g filter="url(#soft)" transform="translate(700 125)">
     <rect width="390" height="312" rx="28" fill="#12141E" stroke="#F7F4EA" stroke-opacity=".12"/>
     <rect x="28" y="30" width="160" height="16" rx="8" fill="#F7F4EA" opacity=".86"/>
     <rect x="28" y="64" width="258" height="12" rx="6" fill="#F7F4EA" opacity=".36"/>
     <rect x="28" y="91" width="205" height="12" rx="6" fill="#F7F4EA" opacity=".22"/>
-    <rect x="28" y="132" width="144" height="104" rx="16" fill="#19D3B5" opacity=".92"/>
+    <rect x="28" y="132" width="144" height="104" rx="16" fill="#27D7C3" opacity=".92"/>
     <rect x="190" y="132" width="172" height="104" rx="16" fill="#1E2230" stroke="#F7F4EA" stroke-opacity=".1"/>
     <rect x="28" y="258" width="96" height="28" rx="14" fill="url(#accent)"/>
     <rect x="142" y="258" width="90" height="28" rx="14" fill="#F7F4EA" opacity=".16"/>
   </g>
   <g transform="translate(95 105)">
-    <rect width="118" height="118" rx="26" fill="#10121A" stroke="url(#accent)" stroke-width="2"/>
-    <path d="M32 31 55.8 86.4c1.2 2.8 5.18 2.8 6.38 0L86 31H70.9L59 63.2 47.35 31H32Z" fill="#F7F4EA"/>
-    <path d="M72.2 31 59 63.2 53.6 48.4 59.3 31h12.9Z" fill="#19D3B5"/>
+    <rect width="118" height="118" rx="26" fill="#080B12" stroke="#F7F4EA" stroke-opacity=".2" stroke-width="2"/>
+    <rect x="29" y="24" width="20" height="72" rx="8" fill="#F7F4EA"/>
+    <path d="M44 24h26c16 0 26 8.8 26 22.8 0 14.1-10.4 23.2-26.2 23.2H44V55.2h24c7.2 0 11.1-3.1 11.1-8.5 0-5.3-3.9-8.3-11.1-8.3H44V24Z" fill="#27D7C3"/>
+    <path d="M44 49.2h28.8C89.1 49.2 99.5 58.6 99.5 72.7c0 14.3-10.6 23.7-27.4 23.7H44V81.7h26.2c7.8 0 12.1-3.3 12.1-9.1 0-5.7-4.3-8.9-12.1-8.9H44V49.2Z" fill="#F97362"/>
+    <path d="M44 49.2h28.8c6.7 0 12.4 1.6 16.8 4.5-4.5 10-14.2 16.3-27.2 16.3H44V49.2Z" fill="#B8F15A"/>
+    <path d="M49 38.4h19c7.2 0 11.1 3 11.1 8.3 0 5.4-3.9 8.5-11.1 8.5H49V38.4Zm0 25.3h21.2c7.8 0 12.1 3.2 12.1 8.9 0 5.8-4.3 9.1-12.1 9.1H49v-18Z" fill="#080B12" fill-opacity=".62"/>
   </g>
-  <text x="95" y="305" font-family="Geist, Inter, system-ui, sans-serif" font-size="104" font-weight="720" fill="#F7F4EA" letter-spacing="-4">Vibe</text>
+  <text x="95" y="305" font-family="Geist, Inter, system-ui, sans-serif" font-size="100" font-weight="720" fill="#F7F4EA" letter-spacing="-4">Blockloom</text>
   <text x="95" y="375" font-family="Geist, Inter, system-ui, sans-serif" font-size="42" font-weight="620" fill="#F7F4EA" opacity=".9">Build your site, fast.</text>
   <text x="95" y="446" font-family="Inter, system-ui, sans-serif" font-size="26" font-weight="450" fill="#C7C5BA">A polished drag-and-drop builder with Blocks-backed data, media, drafts, and publishing.</text>
   <rect x="95" y="512" width="275" height="42" rx="21" fill="url(#accent)"/>

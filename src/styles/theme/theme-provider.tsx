@@ -2,7 +2,7 @@ import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { getThemeColors, type HSLColor } from './utils/utils';
 
 /**
- * Vibe uses a single dark chrome. Light/system modes and persistence are
+ * Blockloom uses a single dark chrome. Light/system modes and persistence are
  * intentionally disabled so marketing surfaces (gradient heroes, white text)
  * always match a dark token set.
  */
