@@ -109,12 +109,14 @@ See the root [`README.md`](../README.md) for the latest reported test counts.
 | Item | Location |
 | --- | --- |
 | Source | Repository root |
-| Install / run | [`README.md`](../README.md) |
+| Submission index | [`submission.md`](../submission.md) (start here for course grading) |
+| Install / run (detailed) | [`installation.md`](../installation.md) |
+| Product overview | [`README.md`](../README.md) |
 | Deploy / ops | [`DEPLOYMENT.md`](../DEPLOYMENT.md) |
 | This report | `docs/PROGRESS_REPORT.md` |
 | Screenshots | `docs/assets/*.png` |
+| AI interaction logs | `chat-logs/codex-side.md`, `chat-logs/cursor-side.md` |
 | Video URL | *Author adds in course submission zip* |
-| Interaction history | *Author adds in course submission zip* |
 
 ---
 

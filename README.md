@@ -59,6 +59,8 @@ npm test -- --run
 | Doc | Purpose |
 | --- | --- |
 | [`DEPLOYMENT.md`](DEPLOYMENT.md) | Build output, hosting, env, and gateway notes |
+| [`submission.md`](submission.md) | Course submission index (read first for graders) |
+| [`installation.md`](installation.md) | Detailed install & local vs deployed testing |
 | [`docs/PROGRESS_REPORT.md`](docs/PROGRESS_REPORT.md) | Deliverable summary, requirements mapping, visuals |
 | [`llm-docs/README.md`](llm-docs/README.md) | Contributor-oriented agent / recipe docs |
 
